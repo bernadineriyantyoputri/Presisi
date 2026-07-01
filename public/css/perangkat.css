@@ -1,0 +1,292 @@
+.sidebar {
+    width: 260px;
+    min-height: 100vh;
+    flex-shrink: 0;
+}
+
+.sidebar-menu {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 15px;
+    margin-bottom: 8px;
+    text-decoration: none;
+    color: #495057;
+    border-radius: 10px;
+    transition: .25s;
+    font-weight: 500;
+}
+
+.sidebar-menu:hover {
+    background: #eef4ff;
+    color: #0d6efd;
+}
+
+.sidebar-menu.active {
+    background: #0d6efd;
+    color: #fff;
+}
+
+.sidebar-menu span:first-child {
+    width: 22px;
+    font-size: 18px;
+    text-align: center;
+}
+
+/* ============================================================
+   STEP WIZARD — tambahkan ke perangkat.css
+   ============================================================ */
+
+/* ── Step Indicator (kanan atas, sejajar dengan judul) ── */
+.step-wizard-top {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    flex-shrink: 0;
+}
+
+.step-top-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+.step-top-circle {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #dee2e6;
+    color: #6c757d;
+    font-weight: 700;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.25s, color 0.25s;
+    flex-shrink: 0;
+}
+
+.step-top-item.active .step-top-circle {
+    background: #1e2d3d;
+    color: #fff;
+}
+
+.step-top-item.done .step-top-circle {
+    background: #198754;
+    color: #fff;
+    font-size: 0;
+}
+
+.step-top-item.done .step-top-circle::after {
+    content: '✓';
+    font-size: 0.8rem;
+}
+
+.step-top-label {
+    font-size: 0.8rem;
+    color: #6c757d;
+    font-weight: 500;
+}
+
+.step-top-item.active .step-top-label {
+    color: #1e2d3d;
+    font-weight: 700;
+}
+
+.step-top-item.done .step-top-label {
+    color: #198754;
+}
+
+.step-top-line {
+    width: 40px;
+    height: 1.5px;
+    background: #dee2e6;
+    margin: 0 4px 0 4px;
+    flex-shrink: 0;
+}
+
+/* ── Section Title di dalam card ── */
+.section-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #1e2d3d;
+    margin-bottom: 0;
+    padding-bottom: 0.6rem;
+    border-bottom: 1.5px solid #f0f0f0;
+}
+
+/* ── Summary Table (Step 3) ── */
+.summary-table {
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.summary-row {
+    display: flex;
+    align-items: flex-start;
+    padding: 10px 16px;
+    font-size: 0.875rem;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.summary-row:last-child {
+    border-bottom: none;
+}
+
+.summary-row:nth-child(even) {
+    background: #f8f9fa;
+}
+
+.summary-key {
+    width: 140px;
+    flex-shrink: 0;
+    color: #6c757d;
+    font-weight: 500;
+}
+
+.summary-val {
+    color: #1e2d3d;
+    font-weight: 600;
+    word-break: break-word;
+}
+
+/* ── Footer border ── */
+.border-top {
+    border-top: 1px solid #e9ecef !important;
+}
+
+.jenis-card {
+    position: relative;
+    border: 2px solid #e3e6ea;
+    border-radius: 12px;
+    padding: 1.25rem 1rem;
+    cursor: pointer;
+    text-align: center;
+    height: 100%;
+    transition: all 0.15s ease-in-out;
+    background: #fff;
+}
+
+.jenis-card:hover {
+    border-color: #7eb8f7;
+    box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.08);
+}
+
+.jenis-card.selected {
+    border-color: #0d6efd;
+    background: #f0f7ff;
+    box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.15);
+}
+
+.jenis-card-icon {
+    font-size: 1.6rem;
+    color: #0d6efd;
+    margin-bottom: 0.5rem;
+}
+
+.jenis-card-title {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #1e2d3d;
+}
+
+.jenis-card-check {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    color: #0d6efd;
+    opacity: 0;
+    transition: opacity 0.15s ease-in-out;
+}
+
+.jenis-card.selected .jenis-card-check {
+    opacity: 1;
+}
+
+/*Laporan PDF (DomPDF)*/
+
+.laporan-pdf {
+    font-family: 'Helvetica', sans-serif;
+    font-size: 12px;
+    color: #1e2d3d;
+}
+
+.laporan-pdf .header {
+    text-align: center;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #1e2d3d;
+    padding-bottom: 12px;
+}
+
+.laporan-pdf .header h2 {
+    margin: 0;
+    font-size: 16px;
+}
+
+.laporan-pdf .header p {
+    margin: 2px 0;
+    font-size: 11px;
+    color: #555;
+}
+
+.laporan-pdf table.info {
+    width: 100%;
+    margin-bottom: 16px;
+}
+
+.laporan-pdf table.info td {
+    padding: 4px 0;
+    vertical-align: top;
+}
+
+.laporan-pdf table.info .label {
+    width: 160px;
+    color: #555;
+}
+
+.laporan-pdf table.data {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.laporan-pdf table.data th,
+.laporan-pdf table.data td {
+    border: 1px solid #cbd3da;
+    padding: 8px;
+}
+
+.laporan-pdf table.data th {
+    background: #f0f4fa;
+    text-transform: uppercase;
+    font-size: 10px;
+    text-align: left;
+}
+
+.laporan-pdf table.data td.text-end,
+.laporan-pdf table.data th.text-end {
+    text-align: right;
+}
+
+.laporan-pdf tr.total td {
+    background: #f8f9fa;
+    font-weight: bold;
+}
+
+.laporan-pdf .footer-sign {
+    margin-top: 60px;
+    width: 100%;
+}
+
+.laporan-pdf .footer-sign td {
+    width: 50%;
+    text-align: center;
+    vertical-align: top;
+    font-size: 11px;
+}
+
+.laporan-pdf .sign-space {
+    height: 60px;
+}
