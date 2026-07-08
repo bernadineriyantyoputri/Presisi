@@ -19,11 +19,20 @@ class LaporanRetribusiController extends Controller
     const SESSION_KEY = 'wizard_laporan';
 
     private array $namaBulan = [
-        1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April',
-        5 => 'Mei', 6 => 'Juni', 7 => 'Juli', 8 => 'Agustus',
-        9 => 'September', 10 => 'Oktober', 11 => 'November', 12 => 'Desember',
+        1 => 'Januari',
+        2 => 'Februari',
+        3 => 'Maret',
+        4 => 'April',
+        5 => 'Mei',
+        6 => 'Juni',
+        7 => 'Juli',
+        8 => 'Agustus',
+        9 => 'September',
+        10 => 'Oktober',
+        11 => 'November',
+        12 => 'Desember',
     ];
-                             
+
     private array $laporanRelations = [
         'details.detailRetribusi.rincian.objek.jenis',
         'details.rincian.objek.jenis',
@@ -117,8 +126,12 @@ class LaporanRetribusiController extends Controller
         }
 
         return view('perangkat.laporan.create.objek', compact(
-            'jenis', 'objekList', 'rincianList', 'detailList',
-            'selectedObjekId', 'selectedRincianId'
+            'jenis',
+            'objekList',
+            'rincianList',
+            'detailList',
+            'selectedObjekId',
+            'selectedRincianId'
         ));
     }
 
@@ -186,7 +199,7 @@ class LaporanRetribusiController extends Controller
 
     public function nominalStore(Request $request)
     {
-  
+
         $request->merge([
             'detail_retribusi_id' => $request->detail_retribusi_id ?: null,
         ]);
@@ -225,7 +238,12 @@ class LaporanRetribusiController extends Controller
         $bulanNama = $this->namaBulan[$wizard['bulan']] ?? '-';
 
         return view('perangkat.laporan.confirm', compact(
-            'wizard', 'jenis', 'objek', 'rincian', 'detail', 'bulanNama'
+            'wizard',
+            'jenis',
+            'objek',
+            'rincian',
+            'detail',
+            'bulanNama'
         ));
     }
 
@@ -344,14 +362,27 @@ class LaporanRetribusiController extends Controller
 
     public function cetakPdf(Request $request, $id)
     {
-        $perangkat = $this->getPerangkat();
+        if (auth()->user()->role == 'admin_bapenda') {
 
-        $laporan = LaporanRetribusi::with(array_merge(
+            // Admin dapat melihat semua laporan
+            $laporan = LaporanRetribusi::with(array_merge(
                 $this->laporanRelations,
                 ['perangkatDaerah']
             ))
-            ->where('perangkat_daerah_id', $perangkat->id)
-            ->findOrFail($id);
+                ->findOrFail($id);
+
+        } else {
+
+            // Perangkat hanya dapat melihat laporannya sendiri
+            $perangkat = $this->getPerangkat();
+
+            $laporan = LaporanRetribusi::with(array_merge(
+                $this->laporanRelations,
+                ['perangkatDaerah']
+            ))
+                ->where('perangkat_daerah_id', $perangkat->id)
+                ->findOrFail($id);
+        }
 
         $bulanNama = $this->namaBulan[$laporan->bulan] ?? '-';
 
@@ -360,14 +391,12 @@ class LaporanRetribusiController extends Controller
 
         $filename = 'laporan-retribusi-' . $laporan->id . '.pdf';
 
-        // ?download=1 -> paksa download, default -> tampil inline (untuk iframe)
         if ($request->query('download')) {
             return $pdf->download($filename);
         }
 
         return $pdf->stream($filename);
     }
-
     public function riwayat()
     {
         $perangkat = $this->getPerangkat();

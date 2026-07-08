@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Laporan Retribusi - {{ $laporan->id }}</title>
+    <title>Laporan Realisasi Retribusi - {{ $laporan->id }}</title>
     <style>
         {!! file_get_contents(public_path('css/perangkat.css')) !!}
     </style>
@@ -11,76 +11,85 @@
 
 <body class="laporan-pdf">
 
-    <div class="header">
-        <h2>LAPORAN REALISASI RETRIBUSI DAERAH</h2>
-        <p>Badan Pendapatan Daerah Provinsi Lampung</p>
+    <div class="judul-laporan">
+        <h2>Laporan Realisasi Penerimaan Retribusi Daerah</h2>
+        <h3>{{ $laporan->perangkatDaerah->nama_perangkat ?? '-' }}</h3>
     </div>
 
-    <table class="info">
-        <tr>
-            <td class="label">Bulan Masa Retribusi</td>
-            <td>: {{ $bulanNama ?? '' }} {{ $laporan->tahun }}</td>
-            <td class="label">Jenis Retribusi</td>
-            <td>: {{ $laporan->details->first()?->detailRetribusi?->rincian?->objek?->jenis?->nama_jenis
-    ?? $laporan->details->first()?->rincian?->objek?->jenis?->nama_jenis
-    ?? '-' }}</td>
-        </tr>
-        <tr>
-            <td class="label">Perangkat Daerah</td>
-            <td colspan="3">: {{ $laporan->perangkatDaerah->nama_perangkat ?? '-' }}</td>
-        </tr>
-    </table>
+    <div class="masa-retribusi">
+        Masa Retribusi&nbsp;: {{ $bulanNama ?? '' }} {{ $laporan->tahun }}
+    </div>
 
-    <table class="data">
+    <table class="tabel-realisasi">
         <thead>
             <tr>
-                <th>Objek Retribusi</th>
-                <th class="text-end">Realisasi Bln Lalu</th>
-                <th class="text-end">Realisasi Bln Ini</th>
-                <th class="text-end">Total Realisasi</th>
+                <th class="no" rowspan="2">No.</th>
+                <th rowspan="2">Uraian</th>
+                <th colspan="4">Realisasi</th>
+            </tr>
+            <tr>
+                <th style="width:90px;">S.D. Bulan<br>Lalu (Rp)</th>
+                <th style="width:90px;">Bulan Ini<br>(Rp)</th>
+                <th style="width:100px;">Total S.D.<br>Bulan Ini (Rp)</th>
+                <th style="width:90px;">Persentase<br>S.D. Bulan Ini (%)</th>
             </tr>
         </thead>
         <tbody>
-            @php $grandTotal = 0; @endphp
+            @php
+                $grandTotal = 0;
+                $no = 1;
+            @endphp
             @foreach($laporan->details as $d)
-                @php $grandTotal += $d->total_realisasi; @endphp
+                @php
+                    $grandTotal += $d->total_realisasi;
+
+                    $namaObjekUtama = $d->detailRetribusi?->nama_detail
+                        ?? $d->rincian?->nama_rincian
+                        ?? '-';
+                    $namaRincianSub = $d->detailRetribusi ? $d->detailRetribusi?->rincian?->nama_rincian : null;
+
+                    // Persentase realisasi s.d. bulan ini terhadap target, jika tersedia
+                    $persentase = $d->realisasi_bulan_lalu > 0
+                        ? round(($d->realisasi_bulan_ini / $d->realisasi_bulan_lalu) * 100, 2)
+                        : null;
+                @endphp
                 <tr>
-                    @php
-                        $namaObjekUtama = $d->detailRetribusi?->nama_detail
-                            ?? $d->rincian?->nama_rincian
-                            ?? '-';
-                        $namaRincianSub = $d->detailRetribusi ? $d->detailRetribusi?->rincian?->nama_rincian : null;
-                    @endphp
-                    <td>
-                        <strong>{{ $namaObjekUtama }}</strong>
+                    <td class="no">{{ $no++ }}</td>
+                    <td class="uraian">
+                        {{ $namaObjekUtama }}
                         @if($namaRincianSub)
                             <br><span style="color:#777;">{{ $namaRincianSub }}</span>
                         @endif
                     </td>
-                    <td class="text-end">Rp {{ number_format($d->realisasi_bulan_lalu, 0, ',', '.') }}</td>
-                    <td class="text-end">Rp {{ number_format($d->realisasi_bulan_ini, 0, ',', '.') }}</td>
-                    <td class="text-end">Rp {{ number_format($d->total_realisasi, 0, ',', '.') }}</td>
+                    <td class="angka">{{ number_format($d->realisasi_bulan_lalu, 0, ',', '.') }}</td>
+                    <td class="angka">{{ number_format($d->realisasi_bulan_ini, 0, ',', '.') }}</td>
+                    <td class="angka">{{ number_format($d->total_realisasi, 0, ',', '.') }}</td>
+                    <td class="persen">{{ $persentase !== null ? number_format($persentase, 2, ',', '.') . ' %' : '-' }}
+                    </td>
                 </tr>
             @endforeach
             <tr class="total">
-                <td colspan="3">TOTAL REALISASI</td>
-                <td class="text-end">Rp {{ number_format($grandTotal, 0, ',', '.') }}</td>
+                <td colspan="4" class="uraian">TOTAL REALISASI</td>
+                <td class="angka">{{ number_format($grandTotal, 0, ',', '.') }}</td>
+                <td class="persen">-</td>
             </tr>
         </tbody>
     </table>
 
-    <table class="footer-sign">
+    <table class="blok-ttd">
         <tr>
             <td>
-                Dibuat oleh,<br>
-                <div class="sign-space"></div>
-                {{ auth()->user()->name ?? '-' }}
-            </td>
-            <td>
-                Lampung, {{ \Carbon\Carbon::now()->translatedFormat('d F Y') }}<br>
-                Mengetahui,<br>
-                <div class="sign-space"></div>
-                ( ..................................... )
+                <div class="kotak-ttd">
+                    {{ $lokasiLaporan ?? 'Bandar Lampung' }}, {{ \Carbon\Carbon::now()->translatedFormat('d F Y') }}<br>
+                    Kepala {{ $laporan->perangkatDaerah->nama_perangkat ?? 'Perangkat Daerah' }}
+
+                    <div class="spasi-ttd"></div>
+
+                    <span
+                        class="nama-kepala">{{ $laporan->perangkatDaerah->kepala_perangkat ?? '(.....................................)' }}</span><br>
+                    {{ $laporan->perangkatDaerah->pangkat_golongan ?? '-' }}<br>
+                    {{ $laporan->perangkatDaerah->nip ?? '-' }}
+                </div>
             </td>
         </tr>
     </table>

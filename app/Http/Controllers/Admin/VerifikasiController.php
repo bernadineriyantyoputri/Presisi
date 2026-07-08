@@ -11,7 +11,13 @@ class VerifikasiController extends Controller
     {
         $perangkat = PerangkatDaerah::latest()->get();
 
-        return view('admin.verifikasi', compact('perangkat'));
+        return view('admin.verifikasi.index', compact('perangkat'));
+    }
+    public function detail($id)
+    {
+        $perangkat = PerangkatDaerah::findOrFail($id);
+
+        return view('admin.verifikasi.detail', compact('perangkat'));
     }
 
     public function verifikasi($id)

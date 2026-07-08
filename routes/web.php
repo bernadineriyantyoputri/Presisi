@@ -3,7 +3,10 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\VerifikasiController;
+use App\Http\Controllers\Admin\LaporanController;
+use App\Http\Controllers\Admin\DataRetribusiController;
 use App\Http\Controllers\Perangkat\LaporanRetribusiController;
+use App\Http\Controllers\Perangkat\PengaturanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -68,46 +71,79 @@ Route::middleware('auth')
 
         Route::post('/verifikasi/{id}/tolak', 'tolak')
             ->name('verifikasi.tolak');
+
     });
 
-/*
-|--------------------------------------------------------------------------
-| LAPORAN RETRIBUSI PERANGKAT DAERAH
-|--------------------------------------------------------------------------
-| Wizard: create/jenis -> create/objek (cascading objek->rincian->detail)
-|         -> create/nominal (step terpisah) -> confirm -> store
-|--------------------------------------------------------------------------
-*/
+Route::middleware('auth')
+    ->prefix('admin/laporan')
+    ->name('admin.laporan.')
+    ->controller(LaporanController::class)
+    ->group(function () {
+
+        Route::get('/', 'index')->name('index');
+        Route::get('/{id}', 'detail')->name('detail');
+        Route::post('/{id}/verifikasi', 'verifikasi')->name('verifikasi');
+        Route::post('/{id}/tolak', 'tolak')->name('tolak');
+
+    });
+
+/*LAPORAN RETRIBUSI PERANGKAT DAERAH*/
 
 Route::middleware('auth')
     ->prefix('perangkat/laporan')
     ->name('perangkat.laporan.')
     ->controller(LaporanRetribusiController::class)
     ->group(function () {
-
         Route::get('/', 'index')->name('index');
         Route::get('/riwayat', 'riwayat')->name('riwayat');
-
-
         Route::get('/create', 'create')->name('create');
         Route::post('/create/jenis', 'pilihJenis')->name('create.jenis');
-
-
         Route::get('/create/objek', 'showObjek')->name('create.objek.show');
         Route::post('/create/objek', 'pilihObjek')->name('create.objek');
-
         Route::get('/create/nominal', 'nominalShow')->name('create.nominal.show');
         Route::post('/create/nominal', 'nominalStore')->name('create.nominal.store');
-
         Route::get('/create/confirm', 'confirmShow')->name('create.confirm.show');
-
         Route::post('/store', 'store')->name('store');
-
         Route::get('/{id}/selesai', 'selesai')->name('selesai');
         Route::get('/{id}/pdf', 'cetakPdf')->name('pdf');
-
         Route::get('/{id}', 'show')->name('show');
         Route::delete('/{id}', 'destroy')->name('destroy');
-
         Route::post('/{id}/submit', 'submit')->name('submit');
+    });
+/*
+|--------------------------------------------------------------------------
+| PENGATURAN PERANGKAT
+|--------------------------------------------------------------------------
+*/
+Route::middleware('auth')
+    ->prefix('perangkat/pengaturan')
+    ->name('perangkat.pengaturan.')
+    ->controller(PengaturanController::class)
+    ->group(function () {
+
+        Route::get('/profil', 'profil')
+            ->name('profil');
+        Route::put('/profil', 'updateProfil')
+            ->name('profil.update');
+        Route::get('/password', 'password')
+            ->name('password');
+        Route::put('/password', 'updatePassword')
+            ->name('password.update');
+    });
+
+Route::middleware('auth')
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
+
+        Route::get('/data-retribusi', [DataRetribusiController::class, 'index'])->name('data.index');
+        Route::get('/data-retribusi/{jenis}', [DataRetribusiController::class, 'showJenis'])->name('data.jenis');
+        Route::get('/objek/{objek}', [DataRetribusiController::class, 'showObjek'])->name('data.objek');
+        Route::get('/rincian/{rincian}', [DataRetribusiController::class, 'showRincian'])->name('data.rincian');
+
+        Route::post('/jenis', [DataRetribusiController::class, 'storeJenis'])->name('jenis.store');
+        Route::post('/objek', [DataRetribusiController::class, 'storeObjek'])->name('objek.store');
+        Route::post('/rincian', [DataRetribusiController::class, 'storeRincian'])->name('rincian.store');
+        Route::post('/detail', [DataRetribusiController::class, 'storeDetail'])->name('detail.store');
+
     });

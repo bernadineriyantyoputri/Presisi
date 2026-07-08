@@ -1,36 +1,77 @@
+
+/* ===== Style Sidebar ===== */
+ 
 .sidebar {
     width: 260px;
     min-height: 100vh;
-    flex-shrink: 0;
+    background-color: #dce8fd;
 }
-
+ 
+.sidebar-logo {
+    padding: 28px 20px 20px;
+}
+ 
+.sidebar-logo img {
+    max-width: 170px;
+}
+ 
+.sidebar-menu-wrap {
+    padding: 8px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+ 
 .sidebar-menu {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 12px 15px;
-    margin-bottom: 8px;
+    gap: 14px;
+    padding: 12px 14px;
+    border-radius: 8px;
+    color: #64748b;
+    font-size: 15px;
+    font-weight: 600;
     text-decoration: none;
-    color: #495057;
-    border-radius: 10px;
-    transition: .25s;
-    font-weight: 500;
+    border-left: 4px solid transparent;
+    transition: background-color .15s ease, color .15s ease;
 }
-
-.sidebar-menu:hover {
-    background: #eef4ff;
-    color: #0d6efd;
-}
-
-.sidebar-menu.active {
-    background: #0d6efd;
-    color: #fff;
-}
-
-.sidebar-menu span:first-child {
-    width: 22px;
+ 
+.sidebar-menu i {
     font-size: 18px;
+    width: 20px;
     text-align: center;
+}
+ 
+.sidebar-menu:hover {
+    color: #334155;
+    text-decoration: none;
+}
+ 
+.sidebar-menu.active {
+    background-color: #eef1f6;
+    border-left-color: #1d4ed8;
+    color: #0f172a;
+    font-weight: 600;
+}
+ 
+.sidebar-bottom {
+    padding: 16px 12px 24px;
+    border-top: 1px solid #c3d3f2;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+ 
+.sidebar-help {
+    color: #64748b;
+}
+ 
+.sidebar-logout {
+    color: #dc2626;
+}
+ 
+.sidebar-logout:hover {
+    color: #b91c1c;
 }
 
 /* ============================================================
@@ -204,89 +245,129 @@
 .jenis-card.selected .jenis-card-check {
     opacity: 1;
 }
+/* ===== Style Laporan Realisasi Retribusi ===== */
+/* Tambahkan blok ini ke public/css/perangkat.css */
 
-/*Laporan PDF (DomPDF)*/
-
-.laporan-pdf {
-    font-family: 'Helvetica', sans-serif;
-    font-size: 12px;
-    color: #1e2d3d;
-}
-
-.laporan-pdf .header {
+.judul-laporan {
     text-align: center;
-    margin-bottom: 20px;
-    border-bottom: 2px solid #1e2d3d;
-    padding-bottom: 12px;
+    margin-bottom: 4px;
 }
 
-.laporan-pdf .header h2 {
+.judul-laporan h2 {
+    font-size: 13px;
     margin: 0;
-    font-size: 16px;
-}
-
-.laporan-pdf .header p {
-    margin: 2px 0;
-    font-size: 11px;
-    color: #555;
-}
-
-.laporan-pdf table.info {
-    width: 100%;
-    margin-bottom: 16px;
-}
-
-.laporan-pdf table.info td {
-    padding: 4px 0;
-    vertical-align: top;
-}
-
-.laporan-pdf table.info .label {
-    width: 160px;
-    color: #555;
-}
-
-.laporan-pdf table.data {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
-}
-
-.laporan-pdf table.data th,
-.laporan-pdf table.data td {
-    border: 1px solid #cbd3da;
-    padding: 8px;
-}
-
-.laporan-pdf table.data th {
-    background: #f0f4fa;
     text-transform: uppercase;
-    font-size: 10px;
-    text-align: left;
 }
 
-.laporan-pdf table.data td.text-end,
-.laporan-pdf table.data th.text-end {
-    text-align: right;
+.judul-laporan h3 {
+    font-size: 13px;
+    margin: 2px 0 0 0;
+    text-transform: uppercase;
 }
 
-.laporan-pdf tr.total td {
-    background: #f8f9fa;
+.masa-retribusi {
+    margin: 10px 0 6px 0;
+    font-size: 11px;
     font-weight: bold;
 }
 
-.laporan-pdf .footer-sign {
-    margin-top: 60px;
+table.tabel-realisasi {
     width: 100%;
+    border-collapse: collapse;
+    font-size: 10px;
 }
 
-.laporan-pdf .footer-sign td {
-    width: 50%;
+table.tabel-realisasi th,
+table.tabel-realisasi td {
+    border: 1px solid #000;
+    padding: 4px 6px;
+    vertical-align: middle;
+}
+
+table.tabel-realisasi thead th {
     text-align: center;
-    vertical-align: top;
+    font-weight: bold;
+}
+
+table.tabel-realisasi td.no,
+table.tabel-realisasi th.no {
+    width: 30px;
+    text-align: center;
+}
+
+table.tabel-realisasi td.uraian {
+    text-align: left;
+}
+
+table.tabel-realisasi td.angka {
+    text-align: right;
+}
+
+table.tabel-realisasi td.persen {
+    text-align: center;
+}
+
+table.tabel-realisasi tr.total td {
+    font-weight: bold;
+}
+
+/* Blok tanda tangan - rata kanan, rapi */
+.blok-ttd {
+    width: 100%;
+    margin-top: 28px;
     font-size: 11px;
 }
 
-.laporan-pdf .sign-space {
+.blok-ttd td {
+    text-align: right;
+    padding: 0;
+}
+
+.blok-ttd .kotak-ttd {
+    display: inline-block;
+    width: 260px;
+    text-align: left;
+    line-height: 1.5;
+}
+
+.blok-ttd .spasi-ttd {
     height: 60px;
+}
+
+.blok-ttd .nama-kepala {
+    text-decoration: underline;
+    font-weight: bold;
+}
+
+/* Input readonly */
+.readonly-group {
+    position: relative;
+}
+
+.readonly-group .form-control {
+    background: #f8f9fa;
+    color: #6c757d;
+    padding-right: 42px;
+    cursor: not-allowed;
+}
+
+.readonly-group .lock-icon {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6c757d;
+    font-size: 16px;
+    pointer-events: none;
+}
+
+.readonly-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.readonly-label small {
+    color: #6c757d;
+    font-weight: normal;
 }
