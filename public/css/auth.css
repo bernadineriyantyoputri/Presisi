@@ -255,7 +255,6 @@ label {
     margin: 0;
 }
 
-/*  Lupa password  */
 .forgot-link {
     font-size: 0.75rem;
     color: #1565c0;
@@ -267,7 +266,6 @@ label {
     text-decoration: underline;
 }
 
-/*  Button  */
 .btn-presisi {
     display: inline-flex;
     align-items: center;
@@ -304,7 +302,6 @@ label {
     font-size: 0.82rem;
 }
 
-/*  Footer link  */
 .auth-foot {
     text-align: center;
     font-size: 0.8rem;
@@ -321,10 +318,14 @@ label {
     text-decoration: underline;
 }
 
-/*  Divider  */
 .auth-divider {
     border: none;
     border-top: 1px solid #e5e7eb;
     margin: 20px 0;
+}
+
+.invalid-feedback {
+    font-size: 12px;
+    margin-top: 2px;
 }
 

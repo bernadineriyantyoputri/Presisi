@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Models\User;
@@ -27,7 +26,7 @@ class AuthController extends Controller
             'nama_perangkat'        => 'required',
             'kepala_perangkat'      => 'required',
             'pangkat_golongan'      => 'required',
-            'nip'                   => 'required',
+            'nip'                   => 'required|min:18|',
             'bendahara_penerimaan'  => 'required',
             'no_hp'                 => 'required',
             'email'                 => 'required|email|unique:users,email',
@@ -60,10 +59,9 @@ class AuthController extends Controller
             DB::commit();
 
             return redirect('/login')
-                ->with('success', 'Pendaftaran berhasil, menunggu verifikasi Admin Bapenda');
+                ->with('success', 'Pendaftaran berhasil, menunggu verifikasi Admin');
 
         } catch (\Exception $e) {
-
             DB::rollBack();
 
             return back()
@@ -80,29 +78,20 @@ class AuthController extends Controller
         ]);
 
         if (Auth::attempt($credentials)) {
-
             $request->session()->regenerate();
-
             if (Auth::user()->role == 'admin_perangkat') {
-
                 $perangkat = Auth::user()->perangkatDaerah;
-
                 if (!$perangkat || !$perangkat->status_verifikasi) {
-
                     Auth::logout();
-
                     return back()->with(
                         'error',
                         'Akun belum diverifikasi Admin Bapenda'
                     );
                 }
-
                 return redirect('/perangkat');
             }
-
             return redirect('/admin');
         }
-
         return back()->with(
             'error',
             'Email atau Password salah'
@@ -112,10 +101,8 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         Auth::logout();
-
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-
         return redirect('/login');
     }
 }

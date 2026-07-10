@@ -94,21 +94,36 @@ Route::middleware('auth')
     ->name('perangkat.laporan.')
     ->controller(LaporanRetribusiController::class)
     ->group(function () {
+
         Route::get('/', 'index')->name('index');
-        Route::get('/riwayat', 'riwayat')->name('riwayat');
+
         Route::get('/create', 'create')->name('create');
         Route::post('/create/jenis', 'pilihJenis')->name('create.jenis');
+
         Route::get('/create/objek', 'showObjek')->name('create.objek.show');
         Route::post('/create/objek', 'pilihObjek')->name('create.objek');
+
         Route::get('/create/nominal', 'nominalShow')->name('create.nominal.show');
         Route::post('/create/nominal', 'nominalStore')->name('create.nominal.store');
+
         Route::get('/create/confirm', 'confirmShow')->name('create.confirm.show');
+
         Route::post('/store', 'store')->name('store');
+
         Route::get('/{id}/selesai', 'selesai')->name('selesai');
         Route::get('/{id}/pdf', 'cetakPdf')->name('pdf');
+
         Route::get('/{id}', 'show')->name('show');
         Route::delete('/{id}', 'destroy')->name('destroy');
         Route::post('/{id}/submit', 'submit')->name('submit');
+    });
+Route::middleware('auth')
+    ->prefix('perangkat')
+    ->name('perangkat.')
+    ->controller(LaporanRetribusiController::class)
+    ->group(function () {
+
+        Route::get('/riwayat', 'riwayat')->name('riwayat');
     });
 /*
 |--------------------------------------------------------------------------

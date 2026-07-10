@@ -51,16 +51,8 @@ class LaporanRetribusiController extends Controller
 
     public function index()
     {
-        $perangkat = $this->getPerangkat();
-
-        $laporan = LaporanRetribusi::with($this->laporanRelations)
-            ->where('perangkat_daerah_id', $perangkat->id)
-            ->latest()
-            ->paginate(10);
-
-        return view('perangkat.laporan.index', compact('laporan'));
+        return redirect()->route('perangkat.laporan.create');
     }
-
     public function create()
     {
         session()->forget(self::SESSION_KEY);
@@ -69,7 +61,6 @@ class LaporanRetribusiController extends Controller
 
         return view('perangkat.laporan.create.jenis', compact('jenisRetribusi'));
     }
-
     public function pilihJenis(Request $request)
     {
         $request->validate([
@@ -335,7 +326,7 @@ class LaporanRetribusiController extends Controller
 
             if ($isDraft) {
                 return redirect()
-                    ->route('perangkat.laporan.riwayat')
+                    ->route('perangkat.riwayat')
                     ->with('success', $message);
             }
 
@@ -406,7 +397,7 @@ class LaporanRetribusiController extends Controller
             ->latest()
             ->paginate(10);
 
-        return view('perangkat.laporan.riwayat', compact('laporan'));
+        return view('perangkat.riwayat.index', compact('laporan'));
     }
 
     public function show($id)
