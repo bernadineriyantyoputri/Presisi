@@ -4,9 +4,9 @@
 
 @section('content')
 
-    <div class="container-fluid py-4 px-4">
+    <div class="laporan-wizard-page">
 
-        <div class="d-flex justify-content-between align-items-start mb-4">
+        <div class="d-flex justify-content-between align-items-start mb-4 flex-wrap gap-3">
             <div>
                 <h4 class="fw-bold mb-1">Input Laporan Retribusi</h4>
                 <p class="text-muted small mb-0">
@@ -15,20 +15,15 @@
             </div>
 
             <div class="d-flex align-items-center step-wizard-top">
-                <div class="step-top-item done">
-                    <div class="step-top-circle"></div>
-                    <span class="step-top-label">Konfigurasi</span>
-                </div>
+                <div class="step-top-item active"><div class="step-top-circle">1</div><span class="step-top-label">Jenis</span></div>
                 <div class="step-top-line"></div>
-                <div class="step-top-item done">
-                    <div class="step-top-circle"></div>
-                    <span class="step-top-label">Rincian</span>
-                </div>
+                <div class="step-top-item active"><div class="step-top-circle">2</div><span class="step-top-label">Objek</span></div>
                 <div class="step-top-line"></div>
-                <div class="step-top-item active">
-                    <div class="step-top-circle">3</div>
-                    <span class="step-top-label">Selesai</span>
-                </div>
+                <div class="step-top-item active"><div class="step-top-circle">3</div><span class="step-top-label">Nominal</span></div>
+                <div class="step-top-line"></div>
+                <div class="step-top-item active"><div class="step-top-circle">4</div><span class="step-top-label">Ringkasan</span></div>
+                <div class="step-top-line"></div>
+                <div class="step-top-item "><div class="step-top-circle">5</div><span class="step-top-label">Selesai</span></div>
             </div>
         </div>
 
@@ -54,72 +49,67 @@
             @csrf
             <input type="hidden" name="action" id="actionInput" value="submit">
 
-            <div class="card shadow-sm border-0 mb-3">
-                <div class="card-body p-4">
+            <div class="ringkasan-final-card mb-4">
 
-                    <h5 class="fw-bold mb-1">Ringkasan Laporan</h5>
+                <div class="ringkasan-final-header">
+                    <h6 class="fw-bold mb-1">Ringkasan Laporan</h6>
                     <p class="text-muted small mb-0">
                         Mohon periksa kembali seluruh data laporan Anda sebelum melakukan pengiriman final.
                     </p>
+                </div>
 
-                    <hr class="my-4">
+                <div class="ringkasan-final-body">
 
-                    <div class="row g-4">
+                    <div class="row g-4 mb-4">
                         <div class="col-md-6">
-                            <div class="text-muted small text-uppercase mb-1">Bulan Masa Retribusi</div>
-                            <div class="fw-semibold">{{ $bulanNama }} {{ $wizard['tahun'] ?? '' }}</div>
+                            <div class="ringkasan-final-label">Bulan Masa Retribusi</div>
+                            <div class="ringkasan-final-value">{{ $bulanNama }} {{ $wizard['tahun'] ?? '' }}</div>
                         </div>
                         <div class="col-md-6">
-                            <div class="text-muted small text-uppercase mb-1">Jenis Retribusi</div>
-                            <div class="fw-semibold">{{ $jenis->nama_jenis }}</div>
+                            <div class="ringkasan-final-label">Jenis Retribusi</div>
+                            <div class="ringkasan-final-value">{{ $jenis->nama_jenis }}</div>
                         </div>
                         <div class="col-md-6">
-                            <div class="text-muted small text-uppercase mb-1">Objek Retribusi</div>
-                            <div class="fw-semibold">{{ $objek->nama_objek }}</div>
+                            <div class="ringkasan-final-label">Objek Retribusi</div>
+                            <div class="ringkasan-final-value">{{ $objek->nama_objek }}</div>
                         </div>
                         <div class="col-md-6">
-                            <div class="text-muted small text-uppercase mb-1">Rincian Objek</div>
-                            <div class="fw-semibold">{{ $rincian->nama_rincian }}</div>
+                            <div class="ringkasan-final-label">Rincian Objek</div>
+                            <div class="ringkasan-final-value">{{ $rincian->nama_rincian }}</div>
                         </div>
                         @if($detail)
                             <div class="col-md-6">
-                                <div class="text-muted small text-uppercase mb-1">Detail Objek</div>
-                                <div class="fw-semibold">{{ $detail->nama_detail }}</div>
+                                <div class="ringkasan-final-label">Detail Objek</div>
+                                <div class="ringkasan-final-value">{{ $detail->nama_detail }}</div>
                             </div>
                         @endif
                     </div>
 
-                    <div class="border rounded mt-4 overflow-hidden">
-                        <table class="table mb-0 align-middle">
-                            <thead>
-                                <tr class="text-muted small text-uppercase">
-                                    <th class="ps-3 fw-semibold">Objek Retribusi</th>
-                                    <th class="pe-3 text-end fw-semibold">Nominal Realisasi (Rp)</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td class="ps-3 py-3">
-                                        @if($detail)
-                                            <div class="fw-bold">{{ $detail->nama_detail }}</div>
-                                            <div class="text-muted small">{{ $rincian->nama_rincian }}</div>
-                                        @else
-                                            <div class="fw-bold">{{ $rincian->nama_rincian }}</div>
-                                            <div class="text-muted small">Tidak ada detail objek</div>
-                                        @endif
-                                    </td>
-                                    <td class="pe-3 text-end py-3">
-                                        {{ number_format($nominalRealisasi, 0, ',', '.') }}
-                                    </td>
-                                </tr>
-                                <tr class="bg-light">
-                                    <td class="ps-3 py-3 fw-bold">Total Realisasi</td>
-                                    <td class="pe-3 text-end py-3 fw-bold">
-                                        Rp {{ number_format($nominalRealisasi, 0, ',', '.') }}
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <div class="laporan-table-box">
+                        <div class="laporan-table-header">
+                            <div>Objek Retribusi</div>
+                            <div>Nominal Realisasi (Rp)</div>
+                        </div>
+
+                        <div class="laporan-table-row">
+                            <div>
+                                @if($detail)
+                                    <div class="laporan-table-title">{{ $detail->nama_detail }}</div>
+                                    <div class="laporan-table-sub">{{ $rincian->nama_rincian }}</div>
+                                @else
+                                    <div class="laporan-table-title">{{ $rincian->nama_rincian }}</div>
+                                    <div class="laporan-table-sub">Tidak ada detail objek</div>
+                                @endif
+                            </div>
+                            <div class="laporan-table-nominal">
+                                {{ number_format($nominalRealisasi, 0, ',', '.') }}
+                            </div>
+                        </div>
+
+                        <div class="laporan-table-total">
+                            <div>Total Realisasi</div>
+                            <div>Rp {{ number_format($nominalRealisasi, 0, ',', '.') }}</div>
+                        </div>
                     </div>
 
                     <hr class="my-4">
@@ -140,9 +130,9 @@
                 </div>
             </div>
 
-            <div class="d-flex justify-content-end gap-2 mt-4">
-                <a href="{{ route('perangkat.laporan.create') }}" class="btn btn-light border px-4">Batal</a>
-                <button type="submit" class="btn btn-primary px-4" id="btnSubmitFinal">
+            <div class="d-flex justify-content-end gap-2">
+                <a href="{{ route('perangkat.laporan.create') }}" class="btn btn-batal">Batal</a>
+                <button type="submit" class="btn btn-lanjut" id="btnSubmitFinal">
                     Submit <i class="bi bi-arrow-right ms-1"></i>
                 </button>
             </div>

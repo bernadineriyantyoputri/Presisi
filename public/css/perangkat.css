@@ -1,11 +1,14 @@
 /* ===========================
    MAIN CONTENT
 =========================== */
-.main-content {
-  margin-left: 280px;
-  min-height: 100vh;
-  padding: 30px;
-  background: #f5f7fb;
+.main-content{
+    margin-left:280px;
+    margin-top:70px;      /* tinggi topbar */
+    min-height:100vh;
+    padding:30px;
+    background:#f5f7fb;
+    flex: 1 1 auto;
+    width: calc(100% - 280px);
 }
 
 /*sidebar*/
@@ -17,18 +20,9 @@
   height: 100vh;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(180deg, #253763 0%, #1c2c52 100%);
+  background: #1e2d3d;
   overflow-y: auto;
   scrollbar-width: thin;
-  scrollbar-color: rgba(255,255,255,0.2) transparent;
-}
-
-.sidebar::-webkit-scrollbar {
-  width: 6px;
-}
-.sidebar::-webkit-scrollbar-thumb {
-  background: rgba(255,255,255,0.2);
-  border-radius: 10px;
 }
 
 /* Logo */
@@ -81,14 +75,14 @@
 }
 
 .sidebar-menu.active {
-  background: #4b5875;
+  background: rgba(255, 255, 255, 0.08);
   color: #fff;
   font-weight: 600;
 }
 
 /* Footer */
 .sidebar-footer {
-  margin-top: auto;   /* tambahkan ini, mendorong footer ke bawah */
+  margin-top: auto; 
   padding: 16px 12px 24px;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   display: flex;
@@ -119,16 +113,20 @@
 /* ===========================
    TOPBAR
 =========================== */
-.topbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: #fff;
-  padding: 12px ;
-  margin: -30px -30px 20px -30px;
-  padding-left: 30px;
-  padding-right: 30px;
-  border-bottom: 1px solid #e5e7eb;
+.topbar{
+    position: fixed;
+    top: 0;
+    left: 280px; 
+    right: 0;
+    height: 70px;
+    background: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 30px;
+    border-bottom: 1px solid #e5e7eb;
+    box-shadow: 0 2px 10px rgba(0,0,0,.05);
+    z-index: 999;
 }
 
 .topbar-text {
@@ -138,21 +136,19 @@
 }
 
 .topbar-title {
-  font-size: 20px;   /* dari 26px */
+  font-size: 20px;  
   font-weight: 700;
   color: #253763;
   margin: 0;
 }
 
 .topbar-subtitle {
-  font-size: 12px;   /* dari 14px */
+  font-size: 12px;
   color: #6b7280;
   margin: 0;
   font-weight: 400;
 }
 
-
-/* User info kanan */
 .topbar-user {
   display: flex;
   align-items: center;
@@ -181,11 +177,10 @@
    WIZARD PAGE
 =========================== */
 .laporan-wizard-page h4 {
-  color: #253763;
+  color: #1e2d3d;
   font-size: 24px;
 }
 
-/* Step wizard top */
 .step-wizard-top {
   display: flex;
   align-items: center;
@@ -221,12 +216,12 @@
 }
 
 .step-top-item.active .step-top-circle {
-  background: #253763;
+  background: #1e2d3d;
   color: #fff;
 }
 
 .step-top-item.active .step-top-label {
-  color: #253763;
+  color: #1e2d3d;
   font-weight: 700;
 }
 
@@ -248,66 +243,20 @@
   padding: 24px;
 }
 
+/*judul section*/ 
 .section-title {
   display: flex;
   align-items: center;
   gap: 10px;
   font-weight: 700;
-  color: #253763;
+  color: #1e2d3d;
   font-size: 15px;
   margin-bottom: 4px;
 }
 
 .section-title i {
-  color: #3b5bdb;
+  color: #1e2d3d;
   font-size: 18px;
-}
-
-/* Jenis retribusi card grid */
-.jenis-card {
-  position: relative;
-  border: 1.5px solid #e5e7eb;
-  border-radius: 12px;
-  padding: 20px 16px;
-  text-align: center;
-  cursor: pointer;
-  transition: 0.2s ease;
-}
-
-.jenis-card:hover {
-  border-color: #3b5bdb;
-  background: #f5f7ff;
-}
-
-.jenis-card.selected {
-  border-color: #3b5bdb;
-  background: #eef1ff;
-}
-
-.jenis-card-icon {
-  font-size: 26px;
-  color: #3b5bdb;
-  margin-bottom: 8px;
-}
-
-.jenis-card-title {
-  font-weight: 600;
-  font-size: 14px;
-  color: #253763;
-}
-
-.jenis-card-check {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  color: #3b5bdb;
-  font-size: 16px;
-  opacity: 0;
-  transition: 0.2s ease;
-}
-
-.jenis-card.selected .jenis-card-check {
-  opacity: 1;
 }
 
 /* Panduan admin card */
@@ -319,7 +268,7 @@
 }
 
 .panduan-card i {
-  color: #7eb8f7;
+  color: #a4bad3;
   font-size: 16px;
 }
 
@@ -387,19 +336,19 @@
 }
 
 .jenis-card:hover {
-    border-color: #7eb8f7;
+    border-color: #1e2d3d;
     box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.08);
 }
 
 .jenis-card.selected {
-    border-color: #0d6efd;
+    border-color: #1e2d3d;
     background: #f0f7ff;
     box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.15);
 }
 
 .jenis-card-icon {
     font-size: 1.6rem;
-    color: #0d6efd;
+    color: #1e2d3d;
     margin-bottom: 0.5rem;
 }
 
@@ -413,7 +362,7 @@
     position: absolute;
     top: 8px;
     right: 10px;
-    color: #0d6efd;
+    color: #1e2d3d;
     opacity: 0;
     transition: opacity 0.15s ease-in-out;
 }
@@ -421,6 +370,48 @@
 .jenis-card.selected .jenis-card-check {
     opacity: 1;
 }
+
+.wizard-footer{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid #e9ecef;
+}
+.btn-lanjut{
+    padding: 8px 20px;
+    font-size: 14px;
+    border-radius: 12px;
+    background: #1e2d3d;
+    border: none;
+    color: #fff;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.btn-lanjut:hover{
+    background: #2c4258;
+    color: #fff;
+}
+
+.btn-batal{
+    padding: 8px 20px;
+    font-size: 14px;
+    border-radius: 8px;
+    border: 1px solid #6c757d;
+    background: #fff;
+    color: #6c757d;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.btn-batal:hover{
+    background: #f8f9fa;
+    color: #495057;
+    border-color: #495057;
+}
+
 /* ===== Style Laporan Realisasi Retribusi ===== */
 /* Tambahkan blok ini ke public/css/perangkat.css */
 
@@ -546,4 +537,175 @@ table.tabel-realisasi tr.total td {
 .readonly-label small {
     color: #6c757d;
     font-weight: normal;
+}
+
+/* ===========================
+   RINGKASAN & NOMINAL CARD (Step Nominal)
+=========================== */
+.ringkasan-card, .nominal-card {
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+.ringkasan-card { padding: 24px; }
+
+.ringkasan-box {
+    background: #f8f9fb;
+    border-radius: 10px;
+    padding: 20px 24px;
+}
+.ringkasan-row {
+    display: flex;
+    padding: 8px 0;
+}
+.ringkasan-key {
+    width: 180px;
+    flex-shrink: 0;
+    color: #8a91a3;
+}
+.ringkasan-val {
+    color: #1e2d3d;
+    font-weight: 500;
+}
+.ringkasan-edit-link {
+    display: inline-flex;
+    align-items: center;
+    margin-top: 16px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #2563eb;
+    text-decoration: none;
+}
+.ringkasan-edit-link:hover { text-decoration: underline; color: #1d4ed8; }
+
+.nominal-card-header {
+    background: #eef1fb;
+    padding: 20px 24px;
+}
+.nominal-card-body {
+    padding: 24px;
+}
+.nominal-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 24px;
+    border: 1px solid #e9ecef;
+    border-radius: 10px;
+    padding: 20px;
+}
+.nominal-item-info { flex: 1 1 auto; }
+.nominal-item-title {
+    font-weight: 700;
+    color: #1e2d3d;
+    margin-bottom: 4px;
+}
+.nominal-item-sub {
+    font-size: 0.85rem;
+    color: #8a91a3;
+    line-height: 1.5;
+}
+.nominal-item-input {
+    flex: 0 0 340px;
+}
+.nominal-divider {
+    margin: 20px 0;
+    border-color: #eef0f3;
+}
+.btn-draft {
+    padding: 8px 20px;
+    font-size: 14px;
+    border-radius: 8px;
+    border: 1px solid #1e2d3d;
+    background: #fff;
+    color: #1e2d3d;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+.btn-draft:hover {
+    background: #f8f9fa;
+    color: #1e2d3d;
+}
+
+@media (max-width: 767px) {
+    .nominal-item { flex-direction: column; }
+    .nominal-item-input { flex-basis: auto; width: 100%; }
+}
+
+/* ===========================
+   RINGKASAN LAPORAN (Step Selesai)
+=========================== */
+.ringkasan-final-card {
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+.ringkasan-final-header {
+    background: #eef1fb;
+    padding: 24px;
+}
+.ringkasan-final-body {
+    padding: 24px;
+}
+.ringkasan-final-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: #8a91a3;
+    margin-bottom: 6px;
+}
+.ringkasan-final-value {
+    font-size: 0.9rem;
+    color: #1e2d3d;
+    font-weight: 500;
+}
+
+.laporan-table-box {
+    border: 1px solid #e9ecef;
+    border-radius: 10px;
+    overflow: hidden;
+}
+.laporan-table-header {
+    display: flex;
+    justify-content: space-between;
+    background: #eef1fb;
+    padding: 14px 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: #6b7280;
+}
+.laporan-table-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background: #fff;
+    border-top: 1px solid #f0f0f0;
+}
+.laporan-table-title {
+    font-weight: 700;
+    color: #1e2d3d;
+}
+.laporan-table-sub {
+    font-size: 0.85rem;
+    color: #8a91a3;
+}
+.laporan-table-nominal {
+    font-size: 1rem;
+    color: #1e2d3d;
+}
+.laporan-table-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background: #f1f2f5;
+    border-top: 1px solid #e9ecef;
+    font-weight: 700;
+    color: #1e2d3d;
 }

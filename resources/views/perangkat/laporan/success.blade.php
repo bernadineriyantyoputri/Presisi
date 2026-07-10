@@ -4,31 +4,26 @@
 
 @section('content')
 
-    <div class="container-fluid py-4 px-4">
+    <div class="laporan-wizard-page">
 
         <div class="d-flex justify-content-between align-items-start mb-4">
             <div>
                 <h4 class="fw-bold mb-1">Input Laporan Retribusi</h4>
                 <p class="text-muted small mb-0">
-                    Laporan berhasil dikirim. Berikut pratinjau laporan Anda.
+                    Lengkapi form berikut untuk memproses laporan retribusi daerah bulanan.
                 </p>
             </div>
 
             <div class="d-flex align-items-center step-wizard-top">
-                <div class="step-top-item done">
-                    <div class="step-top-circle"></div>
-                    <span class="step-top-label">Konfigurasi</span>
-                </div>
+                <div class="step-top-item active"><div class="step-top-circle">1</div><span class="step-top-label">Jenis</span></div>
                 <div class="step-top-line"></div>
-                <div class="step-top-item done">
-                    <div class="step-top-circle"></div>
-                    <span class="step-top-label">Rincian</span>
-                </div>
+                <div class="step-top-item active"><div class="step-top-circle">2</div><span class="step-top-label">Objek</span></div>
                 <div class="step-top-line"></div>
-                <div class="step-top-item done">
-                    <div class="step-top-circle"></div>
-                    <span class="step-top-label">Selesai</span>
-                </div>
+                <div class="step-top-item active"><div class="step-top-circle">3</div><span class="step-top-label">Nominal</span></div>
+                <div class="step-top-line"></div>
+                <div class="step-top-item active"><div class="step-top-circle">4</div><span class="step-top-label">Ringkasan</span></div>
+                <div class="step-top-line"></div>
+                <div class="step-top-item active "><div class="step-top-circle">5</div><span class="step-top-label">Selesai</span></div>
             </div>
         </div>
 
