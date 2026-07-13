@@ -5,8 +5,9 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\VerifikasiController;
 use App\Http\Controllers\Admin\LaporanController;
 use App\Http\Controllers\Admin\DataRetribusiController;
+use App\Http\Controllers\Admin\PengaturanController as AdminPengaturanController;
 use App\Http\Controllers\Perangkat\LaporanRetribusiController;
-use App\Http\Controllers\Perangkat\PengaturanController;
+use App\Http\Controllers\Perangkat\PengaturanController as PerangkatPengaturanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -133,7 +134,7 @@ Route::middleware('auth')
 Route::middleware('auth')
     ->prefix('perangkat/pengaturan')
     ->name('perangkat.pengaturan.')
-    ->controller(PengaturanController::class)
+    ->controller(PerangkatPengaturanController::class)
     ->group(function () {
 
         Route::get('/profil', 'profil')
@@ -155,10 +156,30 @@ Route::middleware('auth')
         Route::get('/data-retribusi/{jenis}', [DataRetribusiController::class, 'showJenis'])->name('data.jenis');
         Route::get('/objek/{objek}', [DataRetribusiController::class, 'showObjek'])->name('data.objek');
         Route::get('/rincian/{rincian}', [DataRetribusiController::class, 'showRincian'])->name('data.rincian');
-
         Route::post('/jenis', [DataRetribusiController::class, 'storeJenis'])->name('jenis.store');
         Route::post('/objek', [DataRetribusiController::class, 'storeObjek'])->name('objek.store');
         Route::post('/rincian', [DataRetribusiController::class, 'storeRincian'])->name('rincian.store');
         Route::post('/detail', [DataRetribusiController::class, 'storeDetail'])->name('detail.store');
 
+    });
+
+/*
+|--------------------------------------------------------------------------
+| PENGATURAN ADMIN
+|--------------------------------------------------------------------------
+*/
+Route::middleware('auth')
+    ->prefix('admin/pengaturan')
+    ->name('admin.pengaturan.')
+    ->controller(AdminPengaturanController::class)
+    ->group(function () {
+
+        Route::get('/profil', 'profil')
+            ->name('profil');
+        Route::put('/profil', 'updateProfil')
+            ->name('profil.update');
+        Route::get('/password', 'password')
+            ->name('password');
+        Route::put('/password', 'updatePassword')
+            ->name('password.update');
     });

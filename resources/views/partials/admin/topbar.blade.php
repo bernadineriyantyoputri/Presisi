@@ -1,40 +1,16 @@
 <div class="topbar">
-
-    <div class="topbar-left">
-
-        <h2>PRESISI</h2>
-
-        <div class="search-box">
-            <i class="fas fa-search"></i>
-
-            <input
-                type="text"
-                placeholder="Cari perangkat daerah..."
-            >
-        </div>
-
+    <div class="topbar-text">
+        <h1 class="topbar-title">{{ $title ?? 'PRESISI' }}</h1>
+        @if(isset($subtitle))
+            <p class="topbar-subtitle">{{ $subtitle }}</p>
+        @endif
     </div>
 
-    <div class="topbar-right">
+    <a href="{{ route('admin.pengaturan.profil') }}" class="topbar-user">
+        <span class="topbar-user-name">{{ auth()->user()->name ?? 'Admin' }}</span>
 
-        <button class="notification-btn">
-            <i class="fas fa-bell"></i>
-        </button>
-
-        <div class="user-profile">
-
-            <div>
-                <h5>Admin Pusat</h5>
-                <span>Super Admin</span>
-            </div>
-
-            <img
-                src="https://ui-avatars.com/api/?name=Admin"
-                alt="admin"
-            >
-
+        <div class="topbar-avatar">
+            {{ strtoupper(substr(auth()->user()->name ?? 'A', 0, 1)) }}
         </div>
-
-    </div>
-
+    </a>
 </div>

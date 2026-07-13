@@ -36,6 +36,11 @@
                     'title' => 'PRESISI',
                     'subtitle' => 'Realisasi Penerimaan Retribusi Daerah'
                 ])
+            @elseif(auth()->check() && auth()->user()->role == 'admin_bapenda')
+                @include('partials.admin.topbar', [
+                    'title' => 'PRESISI',
+                    'subtitle' => 'Realisasi Penerimaan Retribusi Daerah'
+                ])
             @endif
 
             @yield('content')

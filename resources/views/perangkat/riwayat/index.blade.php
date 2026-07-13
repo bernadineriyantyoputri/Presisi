@@ -8,18 +8,12 @@
 
 @section('content')
 
-<div class="container-fluid py-4 px-4">
-
     {{-- Header --}}
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <h4 class="fw-bold mb-0">Laporan Retribusi</h4>
-            <p class="text-muted small mb-0">Daftar laporan retribusi yang telah diinput.</p>
-        </div>
-        <a href="{{ route('perangkat.laporan.create') }}" class="btn btn-primary">
-            <i class="bi bi-plus-lg me-1"></i> Input Laporan
-        </a>
-    </div>
+    <div class="d-flex justify-content-between align-items-start mb-4 flex-wrap gap-3">
+            <div>
+                <h4 class="fw-bold mb-1 judul-halaman">Riwayat Laporan</h4>
+                <p class="text-muted small mb-0">Daftar laporan retribusi yang telah diinput.</p>
+            </div>
 
     {{-- Alert --}}
     @if(session('success'))
@@ -36,13 +30,13 @@
     @endif
 
     {{-- Tabel --}}
-    <div class="card shadow-sm border-0">
+    <div class="card riwayat-card shadow-sm border-0">
         <div class="card-body p-0">
             <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
-                    <thead class="table-light">
+                <table class="table riwayat-table align-middle mb-0">
+                    <thead>
                         <tr>
-                            <th class="ps-4">#</th>
+                            <th class="ps-4">No</th>
                             <th>Periode</th>
                             <th>Objek Retribusi</th>
                             <th>Realisasi</th>
@@ -58,7 +52,7 @@
                                     {{ $laporan->firstItem() + $loop->index }}
                                 </td>
                                 <td>
-                                    <span class="fw-semibold">
+                                    <span class="fw-semibold periode-text">
                                         {{ DateTime::createFromFormat('!m', $item->bulan)->format('F') }}
                                         {{ $item->tahun }}
                                     </span>
@@ -81,18 +75,20 @@
                                 </td>
                                 <td>
                                     @if($item->details->isNotEmpty())
-                                        Rp {{ number_format($item->details->sum('realisasi_bulan_ini'), 0, ',', '.') }}
+                                        <span class="fw-semibold realisasi-text">
+                                            Rp {{ number_format($item->details->sum('realisasi_bulan_ini'), 0, ',', '.') }}
+                                        </span>
                                     @else
                                         <span class="text-muted small">—</span>
                                     @endif
                                 </td>
                                 <td>
                                     @php
-                                        $badge = match($item->status) {
-                                            'submit'        => 'primary',
-                                            'terverifikasi' => 'success',
-                                            'ditolak'       => 'danger',
-                                            default         => 'secondary',
+                                        $statusClass = match($item->status) {
+                                            'submit'        => 'status-menunggu',
+                                            'terverifikasi' => 'status-terverifikasi',
+                                            'ditolak'       => 'status-ditolak',
+                                            default         => 'status-default',
                                         };
                                         $label = match($item->status) {
                                             'submit'        => 'Menunggu Verifikasi',
@@ -101,7 +97,7 @@
                                             default         => ucfirst($item->status),
                                         };
                                     @endphp
-                                    <span class="badge bg-{{ $badge }}-subtle text-{{ $badge }} border border-{{ $badge }}-subtle">
+                                    <span class="status-badge {{ $statusClass }}">
                                         {{ $label }}
                                     </span>
                                 </td>
@@ -112,7 +108,7 @@
                                 </td>
                                 <td class="text-end pe-4">
                                     <a href="{{ route('perangkat.laporan.selesai', $item->id) }}"
-                                       class="btn btn-sm btn-outline-secondary me-1" title="Detail">
+                                       class="btn-aksi-eye" title="Detail">
                                         <i class="bi bi-eye"></i>
                                     </a>
                                 </td>

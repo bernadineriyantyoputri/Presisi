@@ -5,7 +5,6 @@
 @section('content')
 
     <div class="laporan-wizard-page">
-
         <div class="d-flex justify-content-between align-items-start mb-4 flex-wrap gap-3">
             <div>
                 <h4 class="fw-bold mb-1">Input Laporan Retribusi</h4>

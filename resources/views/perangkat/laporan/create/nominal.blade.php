@@ -86,7 +86,7 @@
 
             <div class="nominal-card mb-4">
                 <div class="nominal-card-header">
-                    <h6 class="fw-bold mb-1">Nominal Realisasi</h6>
+                    <h6 class="fw-bold mb-1 judul-realisasi">Nominal Realisasi</h6>
                     <p class="text-muted small mb-0">
                         Masukkan rincian nominal realisasi untuk setiap objek retribusi yang telah dipilih.
                     </p>

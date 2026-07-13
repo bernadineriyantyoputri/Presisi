@@ -31,11 +31,6 @@
     <!-- Bottom -->
     <div class="sidebar-footer">
 
-        <a href="#" class="sidebar-menu">
-            <i class="bi bi-question-circle"></i>
-            <span>Help Center</span>
-        </a>
-
         <form action="{{ route('logout') }}" method="POST">
             @csrf
             <button class="sidebar-menu logout-btn" type="submit">
