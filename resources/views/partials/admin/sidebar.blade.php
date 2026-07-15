@@ -8,8 +8,7 @@
     <!-- Menu -->
     <div class="sidebar-menu-list">
 
-        <a href="{{ route('admin') }}"
-            class="sidebar-menu {{ request()->routeIs('admin') ? 'active' : '' }}">
+        <a href="{{ route('admin') }}" class="sidebar-menu {{ request()->routeIs('admin') ? 'active' : '' }}">
             <i class="bi bi-grid"></i>
             <span>Dashboard</span>
         </a>
@@ -30,6 +29,12 @@
             class="sidebar-menu {{ request()->routeIs('admin.data.*') ? 'active' : '' }}">
             <i class="bi bi-box-arrow-in-down"></i>
             <span>Data Retribusi</span>
+        </a>
+
+        <a href="{{ route('admin.target.index') }}"
+            class="sidebar-menu {{ request()->routeIs('admin.target.*') ? 'active' : '' }}">
+            <i class="bi bi-bullseye"></i>
+            <span>Target Retribusi</span>
         </a>
 
         <a href="#" class="sidebar-menu">

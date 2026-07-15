@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\LaporanController;
 use App\Http\Controllers\Admin\DataRetribusiController;
 use App\Http\Controllers\Admin\PengaturanController as AdminPengaturanController;
 use App\Http\Controllers\Perangkat\LaporanRetribusiController;
+use App\Http\Controllers\Admin\TargetRetribusiController;
 use App\Http\Controllers\Perangkat\PengaturanController as PerangkatPengaturanController;
 
 /*
@@ -51,7 +52,7 @@ Route::middleware('auth')->group(function () {
 
 /*
 |--------------------------------------------------------------------------
-| ADMIN
+| ADMIN - VERIFIKASI
 |--------------------------------------------------------------------------
 */
 
@@ -75,6 +76,12 @@ Route::middleware('auth')
 
     });
 
+/*
+|--------------------------------------------------------------------------
+| ADMIN - LAPORAN
+|--------------------------------------------------------------------------
+*/
+
 Route::middleware('auth')
     ->prefix('admin/laporan')
     ->name('admin.laporan.')
@@ -88,7 +95,11 @@ Route::middleware('auth')
 
     });
 
-/*LAPORAN RETRIBUSI PERANGKAT DAERAH*/
+/*
+|--------------------------------------------------------------------------
+| LAPORAN RETRIBUSI PERANGKAT DAERAH
+|--------------------------------------------------------------------------
+*/
 
 Route::middleware('auth')
     ->prefix('perangkat/laporan')
@@ -118,6 +129,7 @@ Route::middleware('auth')
         Route::delete('/{id}', 'destroy')->name('destroy');
         Route::post('/{id}/submit', 'submit')->name('submit');
     });
+
 Route::middleware('auth')
     ->prefix('perangkat')
     ->name('perangkat.')
@@ -126,6 +138,7 @@ Route::middleware('auth')
 
         Route::get('/riwayat', 'riwayat')->name('riwayat');
     });
+
 /*
 |--------------------------------------------------------------------------
 | PENGATURAN PERANGKAT
@@ -146,7 +159,11 @@ Route::middleware('auth')
         Route::put('/password', 'updatePassword')
             ->name('password.update');
     });
-
+/*
+|--------------------------------------------------------------------------
+| ADMIN - DATA RETRIBUSI
+|--------------------------------------------------------------------------
+*/
 Route::middleware('auth')
     ->prefix('admin')
     ->name('admin.')
@@ -156,11 +173,51 @@ Route::middleware('auth')
         Route::get('/data-retribusi/{jenis}', [DataRetribusiController::class, 'showJenis'])->name('data.jenis');
         Route::get('/objek/{objek}', [DataRetribusiController::class, 'showObjek'])->name('data.objek');
         Route::get('/rincian/{rincian}', [DataRetribusiController::class, 'showRincian'])->name('data.rincian');
-        Route::post('/jenis', [DataRetribusiController::class, 'storeJenis'])->name('jenis.store');
-        Route::post('/objek', [DataRetribusiController::class, 'storeObjek'])->name('objek.store');
-        Route::post('/rincian', [DataRetribusiController::class, 'storeRincian'])->name('rincian.store');
-        Route::post('/detail', [DataRetribusiController::class, 'storeDetail'])->name('detail.store');
 
+        // Jenis
+        Route::post('/jenis', [DataRetribusiController::class, 'storeJenis'])->name('jenis.store');
+        Route::get('/jenis/{jenis}/edit', [DataRetribusiController::class, 'editJenis'])->name('jenis.edit');
+        Route::put('/jenis/{jenis}', [DataRetribusiController::class, 'updateJenis'])->name('jenis.update');
+        Route::delete('/jenis/{jenis}', [DataRetribusiController::class, 'destroyJenis'])->name('jenis.destroy');
+
+        // Objek
+        Route::post('/objek', [DataRetribusiController::class, 'storeObjek'])->name('objek.store');
+        Route::post('/objek-lengkap', [DataRetribusiController::class, 'storeObjekLengkap'])->name('objek.storeFull'); // ← TAMBAHKAN INI
+    
+        // Rincian
+        Route::post('/rincian', [DataRetribusiController::class, 'storeRincian'])->name('rincian.store');
+        Route::put('/rincian/{id}', [DataRetribusiController::class, 'updateRincian'])->name('rincian.update');
+        Route::delete('/rincian/{id}', [DataRetribusiController::class, 'destroyRincian'])->name('rincian.destroy');
+
+        // Detail
+        Route::post('/detail', [DataRetribusiController::class, 'storeDetail'])->name('detail.store');
+        Route::put('/detail/{id}', [DataRetribusiController::class, 'updateDetail'])->name('detail.update');
+        Route::delete('/detail/{id}', [DataRetribusiController::class, 'destroyDetail'])->name('detail.destroy');
+
+        Route::delete('/rincian-bulk', [DataRetribusiController::class, 'bulkDestroyRincian'])->name('rincian.bulkDestroy');
+
+        // PENTING: nama diganti dari 'target.store' -> 'data.target.store'
+        // supaya TIDAK bentrok dengan 'admin.target.store' milik TargetRetribusiController di bawah.
+        // Ini form target-retribusi/index.blade.php (tabel + modal edit) memakai route ini.
+        Route::post('/target', [DataRetribusiController::class, 'storeTarget'])->name('data.target.store');
+
+        Route::get('/target-retribusi', [TargetRetribusiController::class, 'index'])
+            ->name('target.index');
+
+        Route::get('/target-retribusi/create', [TargetRetribusiController::class, 'create'])
+            ->name('target.create');
+
+        Route::post('/target-retribusi', [TargetRetribusiController::class, 'store'])
+            ->name('target.store');
+
+        Route::get('/target-retribusi/{id}/edit', [TargetRetribusiController::class, 'edit'])
+            ->name('target.edit');
+
+        Route::put('/target-retribusi/{id}', [TargetRetribusiController::class, 'update'])
+            ->name('target.update');
+
+        Route::delete('/target-retribusi/{id}', [TargetRetribusiController::class, 'destroy'])
+            ->name('target.destroy');
     });
 
 /*

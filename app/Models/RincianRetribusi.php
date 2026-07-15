@@ -22,4 +22,8 @@ class RincianRetribusi extends Model
     {
         return $this->hasMany(DetailRetribusi::class, 'rincian_id');
     }
+    public function target()
+{
+    return $this->hasMany(TargetRetribusi::class, 'rincian_id');
+}
 }

@@ -9,6 +9,7 @@ use App\Models\RincianRetribusi;
 use App\Models\DetailRetribusi;
 use App\Models\LaporanRetribusi;
 use App\Models\LaporanDetail;
+use App\Models\TargetRetribusi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -287,7 +288,10 @@ class LaporanRetribusiController extends Controller
             ]);
 
             if (isset($wizard['realisasi_bulan_ini'])) {
-                // Total realisasi bulan-bulan sebelumnya, difilter rincian + detail (kalau ada)
+                // Total realisasi bulan-bulan sebelumnya (kumulatif), difilter rincian + detail (kalau ada).
+                // Karena tiap bulan hanya menyimpan nominal bulan itu sendiri (bukan kumulatif),
+                // menjumlahkan seluruh bulan < bulan berjalan otomatis menghasilkan
+                // "total realisasi s.d. bulan lalu" (running total).
                 $bulanLalu = LaporanDetail::where('rincian_id', $rincianId)
                     ->when($detailId, function ($q) use ($detailId) {
                         $q->where('detail_retribusi_id', $detailId);
@@ -304,7 +308,22 @@ class LaporanRetribusiController extends Controller
 
                 $bulanIni = (float) $wizard['realisasi_bulan_ini'];
                 $total = $bulanLalu + $bulanIni;
-                $persentase = $total > 0 ? round(($bulanIni / $total) * 100, 2) : 0;
+
+                // Ambil target tahunan untuk rincian/detail ini, untuk hitung capaian.
+                $targetRow = TargetRetribusi::where('tahun', $wizard['tahun'])
+                    ->when($detailId, function ($q) use ($detailId) {
+                        $q->where('detail_id', $detailId);
+                    }, function ($q) use ($rincianId) {
+                        $q->where('rincian_id', $rincianId)->whereNull('detail_id');
+                    })
+                    ->first();
+
+                $targetNominal = $targetRow->target_nominal ?? 0;
+
+                // Persentase = capaian realisasi s.d. bulan ini TERHADAP TARGET tahunan.
+                $persentase = $targetNominal > 0
+                    ? round(($total / $targetNominal) * 100, 2)
+                    : 0;
 
                 LaporanDetail::create([
                     'laporan_id' => $laporan->id,

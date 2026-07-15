@@ -20,23 +20,42 @@
         Masa Retribusi&nbsp;: {{ $bulanNama ?? '' }} {{ $laporan->tahun }}
     </div>
 
+    @php
+        // Ambil semua target untuk tahun laporan sekaligus (hindari query berulang per baris)
+        $detailIds = $laporan->details->pluck('detail_retribusi_id')->filter()->unique()->values();
+        $rincianIds = $laporan->details->pluck('rincian_id')->filter()->unique()->values();
+
+        $targetByDetail = \App\Models\TargetRetribusi::whereIn('detail_id', $detailIds)
+            ->where('tahun', $laporan->tahun)
+            ->get()
+            ->keyBy('detail_id');
+
+        $targetByRincian = \App\Models\TargetRetribusi::whereIn('rincian_id', $rincianIds)
+            ->whereNull('detail_id')
+            ->where('tahun', $laporan->tahun)
+            ->get()
+            ->keyBy('rincian_id');
+    @endphp
+
     <table class="tabel-realisasi">
         <thead>
             <tr>
                 <th class="no" rowspan="2">No.</th>
                 <th rowspan="2">Uraian</th>
+                <th rowspan="2" style="width:100px;">Target Tahun Ini<br>(Rp)</th>
                 <th colspan="4">Realisasi</th>
             </tr>
             <tr>
                 <th style="width:90px;">S.D. Bulan<br>Lalu (Rp)</th>
                 <th style="width:90px;">Bulan Ini<br>(Rp)</th>
                 <th style="width:100px;">Total S.D.<br>Bulan Ini (Rp)</th>
-                <th style="width:90px;">Persentase<br>S.D. Bulan Ini (%)</th>
+                <th style="width:90px;">Capaian Thd<br>Target (%)</th>
             </tr>
         </thead>
         <tbody>
             @php
                 $grandTotal = 0;
+                $grandTarget = 0;
                 $no = 1;
             @endphp
             @foreach($laporan->details as $d)
@@ -48,9 +67,17 @@
                         ?? '-';
                     $namaRincianSub = $d->detailRetribusi ? $d->detailRetribusi?->rincian?->nama_rincian : null;
 
-                    // Persentase realisasi s.d. bulan ini terhadap target, jika tersedia
-                    $persentase = $d->realisasi_bulan_lalu > 0
-                        ? round(($d->realisasi_bulan_ini / $d->realisasi_bulan_lalu) * 100, 2)
+                    // Ambil target: prioritas dari detail_retribusi_id, fallback ke rincian_id
+                    $targetRow = $d->detail_retribusi_id
+                        ? ($targetByDetail[$d->detail_retribusi_id] ?? null)
+                        : ($targetByRincian[$d->rincian_id] ?? null);
+
+                    $targetNominal = $targetRow->target_nominal ?? 0;
+                    $grandTarget += $targetNominal;
+
+                    // Capaian realisasi s.d. bulan ini terhadap target tahunan
+                    $capaian = $targetNominal > 0
+                        ? round(($d->total_realisasi / $targetNominal) * 100, 2)
                         : null;
                 @endphp
                 <tr>
@@ -61,17 +88,25 @@
                             <br><span style="color:#777;">{{ $namaRincianSub }}</span>
                         @endif
                     </td>
+                    <td class="angka">{{ number_format($targetNominal, 0, ',', '.') }}</td>
                     <td class="angka">{{ number_format($d->realisasi_bulan_lalu, 0, ',', '.') }}</td>
                     <td class="angka">{{ number_format($d->realisasi_bulan_ini, 0, ',', '.') }}</td>
                     <td class="angka">{{ number_format($d->total_realisasi, 0, ',', '.') }}</td>
-                    <td class="persen">{{ $persentase !== null ? number_format($persentase, 2, ',', '.') . ' %' : '-' }}
+                    <td class="persen">{{ $capaian !== null ? number_format($capaian, 2, ',', '.') . ' %' : '-' }}
                     </td>
                 </tr>
             @endforeach
             <tr class="total">
-                <td colspan="4" class="uraian">TOTAL REALISASI</td>
+                <td colspan="2" class="uraian">TOTAL REALISASI</td>
+                <td class="angka">{{ number_format($grandTarget, 0, ',', '.') }}</td>
+                <td colspan="2" class="angka">&nbsp;</td>
                 <td class="angka">{{ number_format($grandTotal, 0, ',', '.') }}</td>
-                <td class="persen">-</td>
+                <td class="persen">
+                    @php
+                        $capaianTotal = $grandTarget > 0 ? round(($grandTotal / $grandTarget) * 100, 2) : null;
+                    @endphp
+                    {{ $capaianTotal !== null ? number_format($capaianTotal, 2, ',', '.') . ' %' : '-' }}
+                </td>
             </tr>
         </tbody>
     </table>

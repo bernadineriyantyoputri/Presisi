@@ -1,187 +1,164 @@
 @extends('layouts.app')
 
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
+@endpush
+
 @section('content')
 
-    <div class="container-fluid p-4">
+    {{-- Page Header --}}
+    <div class="page-header">
+        <div>
+            <h1>Verifikasi Pendaftaran Akun</h1>
+            <p>Review dan kelola permohonan pendaftaran akun baru dari Perangkat Daerah.</p>
+        </div>
+    </div>
 
-        {{-- Header --}}
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <div>
-                <small class="text-muted">Dashboard > User Verification</small>
-                <h2 class="fw-bold mt-2">Verifikasi Pendaftaran Akun</h2>
-                <p class="text-muted">
-                    Kelola dan tinjau pendaftaran akun perangkat daerah baru dalam sistem PRESISI.
-                </p>
+    {{-- Statistik --}}
+    <div class="stats-grid">
+
+        <div class="stat-card">
+            <div class="stat-card-top">
+                <h5>MENUNGGU ACC</h5>
+                <div class="stat-icon icon-yellow"><i class="bi bi-clock"></i></div>
             </div>
+            <h2>
+                {{ $perangkat->where('status_verifikasi', 'Pending')->count() }}
+                <span>Akun</span>
+            </h2>
+            <small class="text-danger-soft">Membutuhkan tindakan segera</small>
+        </div>
 
-            <div>
-                <button class="btn btn-light border me-2">
-                    Export Data
+        <div class="stat-card">
+            <div class="stat-card-top">
+                <h5>AKUN TERVERIFIKASI</h5>
+                <div class="stat-icon icon-green"><i class="bi bi-shield-check"></i></div>
+            </div>
+            <h2>
+                {{ $perangkat->where('status_verifikasi', 'Terverifikasi')->count() }}
+                <span>Akun</span>
+            </h2>
+            <small class="text-muted-soft">Total akun aktif dalam sistem</small>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-card-top">
+                <h5>PENDAFTARAN HARI INI</h5>
+                <div class="stat-icon icon-blue"><i class="bi bi-person-check"></i></div>
+            </div>
+            <h2>
+                {{ $perangkat->where('created_at', '>=', now()->startOfDay())->count() }}
+                <span>Permohonan</span>
+            </h2>
+            <small class="text-muted-soft">Update terbaru</small>
+        </div>
+
+    </div>
+
+    {{-- Tabel --}}
+    <div class="table-card">
+        <div class="table-card-header">
+            <h3>Daftar Permohonan Pendaftaran</h3>
+
+            <div class="table-card-actions">
+                <button type="button" class="btn-outline">
+                    <i class="bi bi-funnel"></i> Filter
                 </button>
-
-                <button class="btn btn-primary">
-                    Refresh Data
+                <button type="button" class="btn-outline">
+                    <i class="bi bi-download"></i> Ekspor
                 </button>
             </div>
         </div>
 
-        {{-- Statistik --}}
-        <div class="row mb-4">
+        <div class="table-scroll">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nama Perangkat Daerah</th>
+                        <th>Nama Kepala</th>
+                        <th>Nama Bendahara</th>
+                        <th>Tanggal Daftar</th>
+                        <th>Status</th>
+                        <th width="220">Aksi</th>
+                    </tr>
+                </thead>
 
-            <div class="col-md-4">
-                <div class="card shadow-sm border-0">
-                    <div class="card-body">
-                        <h6 class="text-muted">Total Menunggu ACC</h6>
-                        <h1 class="fw-bold">
-                            {{ $perangkat->where('status_verifikasi', 'Pending')->count() }}
-                        </h1>
-                        <small class="text-danger">
-                            Membutuhkan tindakan segera
-                        </small>
-                    </div>
-                </div>
-            </div>
+                <tbody>
 
-            <div class="col-md-4">
-                <div class="card shadow-sm border-0">
-                    <div class="card-body">
-                        <h6 class="text-muted">Akun Terverifikasi</h6>
-                        <h1 class="fw-bold">
-                            {{ $perangkat->where('status_verifikasi', 'Terverifikasi')->count() }}
-                        </h1>
-                        <small class="text-muted">
-                            Total akun aktif dalam sistem
-                        </small>
-                    </div>
-                </div>
-            </div>
+                    @forelse($perangkat as $item)
 
-            <div class="col-md-4">
-                <div class="card shadow-sm border-0">
-                    <div class="card-body">
-                        <h6 class="text-muted">Pendaftaran Hari Ini</h6>
-                        <h1 class="fw-bold">
-                            {{ $perangkat->where('created_at', '>=', now()->startOfDay())->count() }}
-                        </h1>
-                        <small class="text-muted">
-                            Update terbaru
-                        </small>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-        {{-- Tabel --}}
-        <div class="card border-0 shadow-sm">
-            <div class="card-body">
-
-                <div class="d-flex justify-content-between mb-3">
-                    <h5 class="fw-bold mb-0">
-                        Data Verifikasi
-                    </h5>
-
-                    <span class="text-muted">
-                        Total {{ $perangkat->count() }} Data
-                    </span>
-                </div>
-
-                <table class="table align-middle">
-
-                    <thead>
                         <tr>
-                            <th>Nama Perangkat Daerah</th>
-                            <th>Nama Kepala</th>
-                            <th>Nama Bendahara</th>
-                            <th>Tanggal Daftar</th>
-                            <th>Status</th>
-                            <th width="220">Aksi</th>
+                            <td><strong>{{ $item->nama_perangkat ?? '-' }}</strong></td>
+
+                            <td>{{ $item->kepala_perangkat ?? '-' }}</td>
+
+                            <td>{{ $item->bendahara_penerimaan ?? '-' }}</td>
+
+                            <td>{{ $item->created_at ? $item->created_at->format('d M Y, H:i') : '-' }}</td>
+
+                            <td>
+                                @if($item->status_verifikasi == 'Terverifikasi')
+                                    <span class="badge-status badge-verified"><i class="bi bi-circle-fill"></i> Terverifikasi</span>
+                                @elseif($item->status_verifikasi == 'Ditolak')
+                                    <span class="badge-status badge-rejected"><i class="bi bi-circle-fill"></i> Ditolak</span>
+                                @else
+                                    <span class="badge-status badge-pending"><i class="bi bi-circle-fill"></i> Menunggu Verifikasi</span>
+                                @endif
+                            </td>
+
+                            <td class="aksi-cell">
+                                <a href="{{ route('admin.verifikasi.detail', $item->id) }}" class="btn-detail">Detail</a>
+
+                                @if($item->status_verifikasi == 'Terverifikasi')
+                                    <button type="button" class="btn-selesai" disabled>Selesai</button>
+                                @elseif($item->status_verifikasi == 'Ditolak')
+                                    <a href="{{ route('admin.verifikasi.detail', $item->id) }}" class="btn-resubmit">Re-Submit</a>
+                                @else
+                                    <form action="{{ route('admin.verifikasi.proses', $item->id) }}" method="POST" class="d-inline">
+                                        @csrf
+                                        <button type="submit" class="btn-approve">Verifikasi</button>
+                                    </form>
+                                @endif
+                            </td>
                         </tr>
-                    </thead>
 
-                    <tbody>
+                    @empty
 
-                        @forelse($perangkat as $item)
+                        <tr>
+                            <td colspan="6" style="text-align:center;">Tidak ada data</td>
+                        </tr>
 
-                            <tr>
+                    @endforelse
 
-                                <td>
-                                    <strong>
-                                        {{ $item->nama_perangkat ?? '-' }}
-                                    </strong>
-                                </td>
-
-                                <td>
-                                    {{ $item->kepala_perangkat ?? '-' }}
-                                </td>
-
-                                <td>
-                                    {{ $item->bendahara_penerimaan ?? '-' }}
-                                </td>
-
-                                <td>
-                                    {{ $item->created_at ? $item->created_at->format('d M Y') : '-' }}
-                                </td>
-
-                                <td>
-
-                                    @if($item->status_verifikasi)
-                                        <span class="badge bg-success">Terverifikasi</span>
-                                    @else
-                                        <span class="badge bg-warning">Belum Diverifikasi</span>
-                                    @endif
-
-                                </td>
-
-                                <td>
-
-                                    <a href="{{ route('admin.verifikasi.detail', $item->id) }}"
-                                        class="btn btn-outline-secondary btn-sm">
-                                        Lihat Detail
-                                    </a>
-
-                                    @if($item->status_verifikasi != 'Terverifikasi')
-
-                                        <form action="{{ route('admin.verifikasi.proses', $item->id) }}" method="POST"
-                                            class="d-inline">
-
-                                            @csrf
-
-                                            <button type="submit" class="btn btn-primary btn-sm">
-                                                Verifikasi (ACC)
-                                            </button>
-
-                                        </form>
-
-                                    @else
-
-                                        <button class="btn btn-success btn-sm" disabled>
-                                            Verified
-                                        </button>
-
-                                    @endif
-
-                                </td>
-
-                            </tr>
-
-                        @empty
-
-                            <tr>
-                                <td colspan="6" class="text-center">
-                                    Tidak ada data
-                                </td>
-                            </tr>
-
-                        @endforelse
-
-                    </tbody>
-
-                </table>
-
-            </div>
+                </tbody>
+            </table>
         </div>
 
+        <div class="table-footer">
+            @if(method_exists($perangkat, 'total'))
+                <span>Menampilkan {{ $perangkat->count() }} dari {{ $perangkat->total() }} permohonan</span>
+            @else
+                <span>Menampilkan {{ $perangkat->count() }} permohonan</span>
+            @endif
+
+            @if(method_exists($perangkat, 'links'))
+                <div class="pagination-wrap">
+                    {{ $perangkat->links() }}
+                </div>
+            @endif
+        </div>
+    </div>
+
+    {{-- Footer Info --}}
+    <div class="audit-banner">
+        <div class="audit-left">
+            <div class="audit-icon"><i class="bi bi-patch-check-fill"></i></div>
+            <div>
+                <h4>Integritas Data Terjamin</h4>
+                <p>Seluruh pendaftaran diproses melalui enkripsi 256-bit dan validasi NIP Kepala Daerah.</p>
+            </div>
+        </div>
+        <button type="button" class="btn-audit">Lihat Laporan Audit</button>
     </div>
 
 @endsection

@@ -22,4 +22,9 @@ class DetailRetribusi extends Model
     {
         return $this->hasMany(LaporanDetail::class, 'detail_retribusi_id');
     }
+
+    public function target()
+    {
+        return $this->hasMany(TargetRetribusi::class, 'detail_id');
+    }
 }
