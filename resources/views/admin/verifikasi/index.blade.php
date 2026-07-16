@@ -75,8 +75,6 @@
                 <thead>
                     <tr>
                         <th>Nama Perangkat Daerah</th>
-                        <th>Nama Kepala</th>
-                        <th>Nama Bendahara</th>
                         <th>Tanggal Daftar</th>
                         <th>Status</th>
                         <th width="220">Aksi</th>
@@ -90,10 +88,6 @@
                         <tr>
                             <td><strong>{{ $item->nama_perangkat ?? '-' }}</strong></td>
 
-                            <td>{{ $item->kepala_perangkat ?? '-' }}</td>
-
-                            <td>{{ $item->bendahara_penerimaan ?? '-' }}</td>
-
                             <td>{{ $item->created_at ? $item->created_at->format('d M Y, H:i') : '-' }}</td>
 
                             <td>
@@ -102,7 +96,8 @@
                                 @elseif($item->status_verifikasi == 'Ditolak')
                                     <span class="badge-status badge-rejected"><i class="bi bi-circle-fill"></i> Ditolak</span>
                                 @else
-                                    <span class="badge-status badge-pending"><i class="bi bi-circle-fill"></i> Menunggu Verifikasi</span>
+                                    <span class="badge-status badge-pending"><i class="bi bi-circle-fill"></i> Menunggu
+                                        Verifikasi</span>
                                 @endif
                             </td>
 
@@ -110,13 +105,32 @@
                                 <a href="{{ route('admin.verifikasi.detail', $item->id) }}" class="btn-detail">Detail</a>
 
                                 @if($item->status_verifikasi == 'Terverifikasi')
-                                    <button type="button" class="btn-selesai" disabled>Selesai</button>
+                                    @if($item->is_active)
+                                        <form action="{{ route('admin.verifikasi.nonaktifkan', $item->id) }}" method="POST"
+                                            class="d-inline"
+                                            onsubmit="return confirm('Nonaktifkan akun ini? Perangkat Daerah tidak akan bisa login.')">
+                                            @csrf
+                                            <button type="submit" class="btn-reject">Nonaktifkan</button>
+                                        </form>
+                                    @else
+                                        <form action="{{ route('admin.verifikasi.aktifkan', $item->id) }}" method="POST"
+                                            class="d-inline" onsubmit="return confirm('Aktifkan kembali akun ini?')">
+                                            @csrf
+                                            <button type="submit" class="btn-approve">Aktifkan</button>
+                                        </form>
+                                    @endif
                                 @elseif($item->status_verifikasi == 'Ditolak')
-                                    <a href="{{ route('admin.verifikasi.detail', $item->id) }}" class="btn-resubmit">Re-Submit</a>
+                                    {{-- tidak ada aksi tambahan --}}
                                 @else
                                     <form action="{{ route('admin.verifikasi.proses', $item->id) }}" method="POST" class="d-inline">
                                         @csrf
                                         <button type="submit" class="btn-approve">Verifikasi</button>
+                                    </form>
+
+                                    <form action="{{ route('admin.verifikasi.tolak', $item->id) }}" method="POST" class="d-inline"
+                                        onsubmit="return confirm('Tolak permohonan ini?')">
+                                        @csrf
+                                        <button type="submit" class="btn-reject">Tolak</button>
                                     </form>
                                 @endif
                             </td>
@@ -125,7 +139,7 @@
                     @empty
 
                         <tr>
-                            <td colspan="6" style="text-align:center;">Tidak ada data</td>
+                            <td colspan="4" style="text-align:center;">Tidak ada data</td>
                         </tr>
 
                     @endforelse

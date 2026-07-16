@@ -127,23 +127,53 @@ class DataRetribusiController extends Controller
     {
         $request->validate([
             'nama_rincian' => 'required|string|max:255',
-            'nama_detail' => 'nullable|string',
+            'nama_detail' => 'nullable|string|max:255',
         ]);
 
         $rincian = RincianRetribusi::with('detail')->findOrFail($id);
 
+        // Update nama rincian
         $rincian->update([
             'nama_rincian' => $request->nama_rincian,
         ]);
 
-        if ($request->filled('nama_detail')) {
-            $firstDetail = $rincian->detail->first();
+        $namaDetail = trim($request->nama_detail ?? '');
 
-            if ($firstDetail) {
-                $firstDetail->update(['nama_detail' => $request->nama_detail]);
-            } else {
-                $rincian->detail()->create(['nama_detail' => $request->nama_detail]);
+        // Ambil semua detail milik rincian
+        $detailList = $rincian->detail;
+
+        if ($namaDetail === '') {
+
+            // Tidak memiliki detail
+            // Hapus semua detail lama jika ada
+            if ($detailList->isNotEmpty()) {
+                $rincian->detail()->delete();
             }
+
+        } else {
+
+            // Memiliki detail
+            if ($detailList->isNotEmpty()) {
+
+                // Update detail pertama
+                $detailList->first()->update([
+                    'nama_detail' => $namaDetail,
+                ]);
+
+                // Hapus detail lainnya jika ada
+                if ($detailList->count() > 1) {
+                    $detailList->slice(1)->each->delete();
+                }
+
+            } else {
+
+                // Belum ada detail, buat baru
+                $rincian->detail()->create([
+                    'nama_detail' => $namaDetail,
+                ]);
+
+            }
+
         }
 
         return back()->with('success', 'Rincian berhasil diperbarui.');
@@ -171,7 +201,7 @@ class DataRetribusiController extends Controller
     public function bulkDestroyRincian(Request $request)
     {
         $request->validate([
-            'ids'   => 'required|array|min:1',
+            'ids' => 'required|array|min:1',
             'ids.*' => 'exists:rincian_retribusi,id', // sesuaikan nama tabel jika berbeda
         ]);
 
@@ -267,20 +297,12 @@ class DataRetribusiController extends Controller
         return back()->with('success', 'Objek retribusi berhasil ditambahkan.');
     }
 
-    /**
-     * Simpan target retribusi untuk SATU PERIODE (per tahun).
-     * Skema punya 2 unique constraint terpisah:
-     *  - (detail_id, tahun)  -> dipakai kalau rincian punya detail
-     *  - (rincian_id, tahun) -> dipakai kalau rincian TIDAK punya detail
-     * Karena itu hanya salah satu dari rincian_id/detail_id yang diisi per baris,
-     * yang lain harus null supaya tidak bentrok antar constraint.
-     */
     public function storeTarget(Request $request)
     {
         $request->validate([
-            'rincian_id'     => 'required|exists:rincian_retribusi,id',
-            'detail_id'      => 'nullable|exists:detail_retribusi,id',
-            'tahun'          => 'required|integer|min:2000|max:2100',
+            'rincian_id' => 'required|exists:rincian_retribusi,id',
+            'detail_id' => 'nullable|exists:detail_retribusi,id',
+            'tahun' => 'required|integer|min:2000|max:2100',
             'target_nominal' => 'required|numeric|min:0',
         ]);
 
@@ -288,10 +310,10 @@ class DataRetribusiController extends Controller
             TargetRetribusi::updateOrCreate(
                 [
                     'detail_id' => $request->detail_id,
-                    'tahun'     => $request->tahun,
+                    'tahun' => $request->tahun,
                 ],
                 [
-                    'rincian_id'     => null,
+                    'rincian_id' => null,
                     'target_nominal' => $request->target_nominal,
                 ]
             );
@@ -299,10 +321,10 @@ class DataRetribusiController extends Controller
             TargetRetribusi::updateOrCreate(
                 [
                     'rincian_id' => $request->rincian_id,
-                    'tahun'      => $request->tahun,
+                    'tahun' => $request->tahun,
                 ],
                 [
-                    'detail_id'      => null,
+                    'detail_id' => null,
                     'target_nominal' => $request->target_nominal,
                 ]
             );

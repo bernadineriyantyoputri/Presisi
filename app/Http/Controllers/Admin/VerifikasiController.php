@@ -21,14 +21,47 @@ class VerifikasiController extends Controller
     }
 
     public function verifikasi($id)
-{
-    $perangkat = PerangkatDaerah::findOrFail($id);
+    {
+        $perangkat = PerangkatDaerah::findOrFail($id);
 
-    $perangkat->status_verifikasi = true;
-    $perangkat->save();
+        $perangkat->status_verifikasi = 'Terverifikasi';
+        $perangkat->save();
 
-    return redirect()->back()
-        ->with('success', 'Data berhasil diverifikasi');
-}
-    
+        return redirect()->back()
+            ->with('success', 'Data berhasil diverifikasi');
+    }
+
+    public function tolak($id)
+    {
+        $perangkat = PerangkatDaerah::findOrFail($id);
+
+        $perangkat->status_verifikasi = 'Ditolak';
+        $perangkat->save();
+
+        return redirect()->back()
+            ->with('success', 'Permohonan berhasil ditolak');
+    }
+
+    public function nonaktifkan($id)
+    {
+        $perangkat = PerangkatDaerah::findOrFail($id);
+
+        $perangkat->is_active = false;
+        $perangkat->save();
+
+        return redirect()->back()
+            ->with('success', 'Akun berhasil dinonaktifkan');
+    }
+
+    public function aktifkan($id)
+    {
+        $perangkat = PerangkatDaerah::findOrFail($id);
+
+        $perangkat->is_active = true;
+        $perangkat->save();
+
+        return redirect()->back()
+            ->with('success', 'Akun berhasil diaktifkan kembali');
+    }
+
 }

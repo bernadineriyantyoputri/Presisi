@@ -22,26 +22,70 @@
             </p>
         </div>
 
-        <div>
+        <div class="d-flex gap-2">
 
-            @if(!$perangkat->status_verifikasi)
+            @if($perangkat->status_verifikasi === 'Pending')
 
-            <form action="{{ route('admin.verifikasi.proses',$perangkat->id) }}"
-                  method="POST"
-                  class="d-inline">
-                @csrf
+                <form action="{{ route('admin.verifikasi.proses', $perangkat->id) }}"
+                      method="POST"
+                      class="d-inline">
+                    @csrf
 
-                <button class="btn btn-primary">
-                    Verifikasi (ACC)
+                    <button class="btn btn-primary">
+                        Verifikasi (ACC)
+                    </button>
+
+                </form>
+
+                <form action="{{ route('admin.verifikasi.tolak', $perangkat->id) }}"
+                      method="POST"
+                      class="d-inline"
+                      onsubmit="return confirm('Tolak permohonan ini?')">
+                    @csrf
+
+                    <button class="btn btn-danger">
+                        Tolak
+                    </button>
+
+                </form>
+
+            @elseif($perangkat->status_verifikasi === 'Terverifikasi')
+
+                @if($perangkat->is_active)
+
+                    <form action="{{ route('admin.verifikasi.nonaktifkan', $perangkat->id) }}"
+                          method="POST"
+                          class="d-inline"
+                          onsubmit="return confirm('Nonaktifkan akun ini? Perangkat Daerah tidak akan bisa login.')">
+                        @csrf
+
+                        <button class="btn btn-outline-danger">
+                            Nonaktifkan Akun
+                        </button>
+
+                    </form>
+
+                @else
+
+                    <form action="{{ route('admin.verifikasi.aktifkan', $perangkat->id) }}"
+                          method="POST"
+                          class="d-inline"
+                          onsubmit="return confirm('Aktifkan kembali akun ini?')">
+                        @csrf
+
+                        <button class="btn btn-outline-success">
+                            Aktifkan Akun
+                        </button>
+
+                    </form>
+
+                @endif
+
+            @elseif($perangkat->status_verifikasi === 'Ditolak')
+
+                <button class="btn btn-danger" disabled>
+                    Permohonan Ditolak
                 </button>
-
-            </form>
-
-            @else
-
-            <button class="btn btn-success" disabled>
-                Sudah Terverifikasi
-            </button>
 
             @endif
 
@@ -79,19 +123,31 @@
 
                 </div>
 
-                <div>
+                <div class="d-flex gap-2">
 
-                    @if($perangkat->status_verifikasi)
+                    @if($perangkat->status_verifikasi === 'Terverifikasi')
 
-                    <span class="badge bg-success fs-6">
-                        Terverifikasi
-                    </span>
+                        <span class="badge bg-success fs-6">
+                            Terverifikasi
+                        </span>
+
+                        @if(!$perangkat->is_active)
+                            <span class="badge bg-secondary fs-6">
+                                Nonaktif
+                            </span>
+                        @endif
+
+                    @elseif($perangkat->status_verifikasi === 'Ditolak')
+
+                        <span class="badge bg-danger fs-6">
+                            Ditolak
+                        </span>
 
                     @else
 
-                    <span class="badge bg-warning text-dark fs-6">
-                        Menunggu Verifikasi
-                    </span>
+                        <span class="badge bg-warning text-dark fs-6">
+                            Menunggu Verifikasi
+                        </span>
 
                     @endif
 

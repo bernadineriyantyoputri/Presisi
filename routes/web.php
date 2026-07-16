@@ -74,6 +74,12 @@ Route::middleware('auth')
         Route::post('/verifikasi/{id}/tolak', 'tolak')
             ->name('verifikasi.tolak');
 
+        Route::post('/verifikasi/{id}/nonaktifkan', 'nonaktifkan')
+            ->name('verifikasi.nonaktifkan');
+
+        Route::post('/verifikasi/{id}/aktifkan', 'aktifkan')
+            ->name('verifikasi.aktifkan');
+
     });
 
 /*

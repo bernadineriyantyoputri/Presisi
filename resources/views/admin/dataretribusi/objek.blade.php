@@ -126,9 +126,23 @@
                                                 <input type="text" name="nama_rincian" class="form-control"
                                                     value="{{ $rincian->nama_rincian }}" required>
 
-                                                <label class="form-label mt-3">Detail</label>
-                                                <textarea name="nama_detail" class="form-control"
-                                                    rows="4">{{ $rincian->detail->first()->nama_detail ?? '' }}</textarea>
+                                                <label class="form-label mt-3">
+                                                    Detail Objek
+                                                </label>
+
+                                                <div class="form-check mb-2">
+
+                                                    <input class="form-check-input" type="checkbox"
+                                                        id="punyaDetail{{ $rincian->id }}" {{ $rincian->detail->isNotEmpty() ? 'checked' : '' }}>
+
+                                                    <label class="form-check-label">
+                                                        Memiliki Detail Objek
+                                                    </label>
+
+                                                </div>
+
+                                                <textarea id="detail{{ $rincian->id }}" name="nama_detail" class="form-control"
+                                                    rows="4" {{ $rincian->detail->isEmpty() ? 'style=display:none;' : '' }}>{{ optional($rincian->detail->first())->nama_detail }}</textarea>
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary"
@@ -192,39 +206,111 @@
         </div>
 
     </div>
-{{-- ================= MODAL: TAMBAH OBJEK RETRIBUSI ================= --}}
-<div class="modal fade" id="modalObjek" tabindex="-1">
-    <div class="modal-dialog">
-        <form action="{{ route('admin.objek.storeFull') }}" method="POST">
-            @csrf
-            <input type="hidden" name="jenis_id" value="{{ $jenis->id }}">
-            <div class="modal-content jr-modal-content">
-                <div class="modal-header">
-                    <div>
-                        <h5 class="modal-title">Tambah Objek Retribusi</h5>
-                        <p class="jr-modal-subtitle mb-0">Tambahkan jenis objek retribusi daerah baru.</p>
+    {{-- ================= MODAL: TAMBAH OBJEK RETRIBUSI ================= --}}
+    <div class="modal fade" id="modalObjek" tabindex="-1">
+        <div class="modal-dialog">
+            <form action="{{ route('admin.objek.storeFull') }}" method="POST">
+                @csrf
+                <input type="hidden" name="jenis_id" value="{{ $jenis->id }}">
+                <div class="modal-content jr-modal-content">
+                    <div class="modal-header">
+                        <div>
+                            <h5 class="modal-title">Tambah Objek Retribusi</h5>
+                            <p class="jr-modal-subtitle mb-0">Tambahkan jenis objek retribusi daerah baru.</p>
+                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <label class="form-label">Nama Objek Retribusi <span class="text-danger">*</span></label>
-                    <input type="text" name="nama_objek" class="form-control"
-                           placeholder="Masukkan nama objek retribusi" required>
+                    <div class="modal-body">
+                        <label class="form-label">Nama Objek Retribusi <span class="text-danger">*</span></label>
+                        <input type="text" name="nama_objek" class="form-control"
+                            placeholder="Masukkan nama objek retribusi" required>
 
-                    <label class="form-label mt-3">Nama Rincian <span class="text-danger">*</span></label>
-                    <input type="text" name="nama_rincian" class="form-control"
-                           placeholder="Masukkan nama rincian" required>
+                        <label class="form-label mt-3">Nama Rincian <span class="text-danger">*</span></label>
+                        <input type="text" name="nama_rincian" class="form-control" placeholder="Masukkan nama rincian"
+                            required>
 
-                    <label class="form-label mt-3">Detail Objek <span class="text-danger">*</span></label>
-                    <input type="text" name="nama_detail" class="form-control"
-                           placeholder="Masukkan detail objek" required>
+                        <label class="form-label mt-3">
+                            Detail Objek
+                        </label>
+
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" id="punyaDetailTambah">
+
+                            <label class="form-check-label">
+                                Rincian ini memiliki detail
+                            </label>
+                        </div>
+
+                        <input type="text" id="nama_detail_tambah" name="nama_detail" class="form-control"
+                            placeholder="Masukkan detail objek" style="display:none;">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-primary">Simpan</button>
+                    </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-primary">Simpan</button>
-                </div>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
-</div>
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function () {
+
+            // Tambah
+            const tambah = document.getElementById('punyaDetailTambah');
+
+            if (tambah) {
+
+                tambah.addEventListener('change', function () {
+
+                    let input = document.getElementById('nama_detail_tambah');
+
+                    if (this.checked) {
+
+                        input.style.display = 'block';
+                        input.required = true;
+
+                    } else {
+
+                        input.style.display = 'none';
+                        input.required = false;
+                        input.value = '';
+
+                    }
+
+                });
+
+            }
+
+            // Edit
+            document.querySelectorAll('.form-check-input').forEach(function (item) {
+
+                item.addEventListener('change', function () {
+
+                    let id = this.id.replace('punyaDetail', '');
+
+                    let textarea = document.getElementById('detail' + id);
+
+                    if (!textarea) return;
+
+                    if (this.checked) {
+
+                        textarea.style.display = 'block';
+                        textarea.required = true;
+
+                    } else {
+
+                        textarea.style.display = 'none';
+                        textarea.required = false;
+                        textarea.value = '';
+
+                    }
+
+                });
+
+            });
+
+        });
+
+    </script>
 @endsection

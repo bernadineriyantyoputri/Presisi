@@ -20,6 +20,11 @@ class LaporanRetribusi extends Model
         'tanggal_submit' => 'date'
     ];
 
+    public function laporanDetail()
+    {
+        return $this->hasMany(LaporanDetail::class, 'laporan_id');
+    }
+
     public function perangkatDaerah()
     {
         return $this->belongsTo(PerangkatDaerah::class);
