@@ -54,6 +54,7 @@ class LaporanRetribusiController extends Controller
     {
         return redirect()->route('perangkat.laporan.create');
     }
+
     public function create()
     {
         session()->forget(self::SESSION_KEY);
@@ -62,6 +63,7 @@ class LaporanRetribusiController extends Controller
 
         return view('perangkat.laporan.create.jenis', compact('jenisRetribusi'));
     }
+
     public function pilihJenis(Request $request)
     {
         $request->validate([
@@ -127,7 +129,6 @@ class LaporanRetribusiController extends Controller
         ));
     }
 
-
     public function pilihObjek(Request $request)
     {
         // Sama seperti di nominalStore(): normalisasi string kosong jadi null
@@ -191,7 +192,6 @@ class LaporanRetribusiController extends Controller
 
     public function nominalStore(Request $request)
     {
-
         $request->merge([
             'detail_retribusi_id' => $request->detail_retribusi_id ?: null,
         ]);
@@ -221,6 +221,21 @@ class LaporanRetribusiController extends Controller
 
         session([self::SESSION_KEY => $wizard]);
 
+        // Post-Redirect-Get: arahkan ke route GET khusus halaman ringkasan,
+        // supaya halaman ini punya URL sendiri dan back() tidak salah arah
+        // ke step nominal saat submit final gagal (mis. duplikat).
+        return redirect()->route('perangkat.laporan.create.confirm.show');
+    }
+
+    public function confirmShow()
+    {
+        $wizard = session(self::SESSION_KEY, []);
+
+        if (empty($wizard['rincian_id']) || !isset($wizard['realisasi_bulan_ini'])) {
+            return redirect()->route('perangkat.laporan.create.nominal.show')
+                ->with('error', 'Silakan lengkapi nominal realisasi terlebih dahulu.');
+        }
+
         $jenis = JenisRetribusi::find($wizard['jenis_retribusi_id']);
         $objek = ObjekRetribusi::find($wizard['objek_id']);
         $rincian = RincianRetribusi::find($wizard['rincian_id']);
@@ -238,7 +253,6 @@ class LaporanRetribusiController extends Controller
             'bulanNama'
         ));
     }
-
 
     public function store(Request $request)
     {
@@ -275,7 +289,10 @@ class LaporanRetribusiController extends Controller
                     ->exists();
 
                 if ($exists) {
-                    return back()->with('error', 'Laporan untuk periode dan objek ini sudah ada.');
+                    DB::rollBack();
+                    return redirect()
+                        ->route('perangkat.laporan.create.confirm.show')
+                        ->with('error', 'Laporan untuk periode dan objek ini sudah ada.');
                 }
             }
 
@@ -288,10 +305,6 @@ class LaporanRetribusiController extends Controller
             ]);
 
             if (isset($wizard['realisasi_bulan_ini'])) {
-                // Total realisasi bulan-bulan sebelumnya (kumulatif), difilter rincian + detail (kalau ada).
-                // Karena tiap bulan hanya menyimpan nominal bulan itu sendiri (bukan kumulatif),
-                // menjumlahkan seluruh bulan < bulan berjalan otomatis menghasilkan
-                // "total realisasi s.d. bulan lalu" (running total).
                 $bulanLalu = LaporanDetail::where('rincian_id', $rincianId)
                     ->when($detailId, function ($q) use ($detailId) {
                         $q->where('detail_retribusi_id', $detailId);
@@ -318,9 +331,13 @@ class LaporanRetribusiController extends Controller
                     })
                     ->first();
 
-                $targetNominal = $targetRow->target_nominal ?? 0;
+                // Bulan 1-6 (Jan-Jun) pakai target Murni (2026)
+                // Bulan 7-12 (Jul-Des) pakai target Perubahan (2026P)
+                $targetNominal = $wizard['bulan'] >= 7
+                    ? ($targetRow->target_perubahan ?? 0)
+                    : ($targetRow->target_nominal ?? 0);
 
-                // Persentase = capaian realisasi s.d. bulan ini TERHADAP TARGET tahunan.
+                // Persentase = capaian realisasi s.d. bulan ini TERHADAP TARGET yang berlaku.
                 $persentase = $targetNominal > 0
                     ? round(($total / $targetNominal) * 100, 2)
                     : 0;
@@ -355,7 +372,9 @@ class LaporanRetribusiController extends Controller
 
         } catch (\Exception $e) {
             DB::rollBack();
-            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+            return redirect()
+                ->route('perangkat.laporan.create.confirm.show')
+                ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
 
@@ -407,6 +426,7 @@ class LaporanRetribusiController extends Controller
 
         return $pdf->stream($filename);
     }
+
     public function riwayat()
     {
         $perangkat = $this->getPerangkat();

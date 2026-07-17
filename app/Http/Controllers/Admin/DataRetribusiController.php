@@ -299,36 +299,33 @@ class DataRetribusiController extends Controller
 
     public function storeTarget(Request $request)
     {
-        $request->validate([
-            'rincian_id' => 'required|exists:rincian_retribusi,id',
-            'detail_id' => 'nullable|exists:detail_retribusi,id',
+        // Normalisasi "" -> null SEBELUM validasi
+        $request->merge([
+            'rincian_id' => $request->rincian_id ?: null,
+            'detail_id' => $request->detail_id ?: null,
+        ]);
+
+        $validated = $request->validate([
+            'rincian_id' => 'nullable|required_without:detail_id|exists:rincian_retribusi,id',
+            'detail_id' => 'nullable|required_without:rincian_id|exists:detail_retribusi,id',
             'tahun' => 'required|integer|min:2000|max:2100',
+            'jenis' => 'required|in:murni,perubahan',
             'target_nominal' => 'required|numeric|min:0',
         ]);
 
-        if ($request->filled('detail_id')) {
-            TargetRetribusi::updateOrCreate(
-                [
-                    'detail_id' => $request->detail_id,
-                    'tahun' => $request->tahun,
-                ],
-                [
-                    'rincian_id' => null,
-                    'target_nominal' => $request->target_nominal,
-                ]
-            );
-        } else {
-            TargetRetribusi::updateOrCreate(
-                [
-                    'rincian_id' => $request->rincian_id,
-                    'tahun' => $request->tahun,
-                ],
-                [
-                    'detail_id' => null,
-                    'target_nominal' => $request->target_nominal,
-                ]
-            );
-        }
+        // Sesuaikan nama kolom ini dengan yang benar di migration ('target' atau 'target_nominal')
+        $kolom = $validated['jenis'] === 'perubahan' ? 'target_perubahan' : 'target_nominal';
+
+        TargetRetribusi::updateOrCreate(
+            [
+                'rincian_id' => $validated['rincian_id'] ?? null,
+                'detail_id' => $validated['detail_id'] ?? null,
+                'tahun' => $validated['tahun'],
+            ],
+            [
+                $kolom => $validated['target_nominal'],
+            ]
+        );
 
         return back()->with('success', 'Target berhasil disimpan.');
     }

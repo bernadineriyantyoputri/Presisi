@@ -12,10 +12,11 @@ class TargetRetribusi extends Model
     protected $table = 'target_retribusi';
 
     protected $fillable = [
-        'rincian_id',
         'detail_id',
+        'rincian_id',
         'tahun',
         'target_nominal',
+        'target_perubahan',
     ];
 
     public function rincian()

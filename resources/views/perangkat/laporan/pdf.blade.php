@@ -60,25 +60,29 @@
             @endphp
             @foreach($laporan->details as $d)
                 @php
-                    $grandTotal += $d->total_realisasi;
+                        $grandTotal += $d->total_realisasi;
 
-                    $namaObjekUtama = $d->detailRetribusi?->nama_detail
-                        ?? $d->rincian?->nama_rincian
-                        ?? '-';
-                    $namaRincianSub = $d->detailRetribusi ? $d->detailRetribusi?->rincian?->nama_rincian : null;
+                        $namaObjekUtama = $d->detailRetribusi?->nama_detail
+                            ?? $d->rincian?->nama_rincian
+                            ?? '-';
+                        $namaRincianSub = $d->detailRetribusi ? $d->detailRetribusi?->rincian?->nama_rincian : null;
 
-                    // Ambil target: prioritas dari detail_retribusi_id, fallback ke rincian_id
-                    $targetRow = $d->detail_retribusi_id
-                        ? ($targetByDetail[$d->detail_retribusi_id] ?? null)
-                        : ($targetByRincian[$d->rincian_id] ?? null);
+                        // Ambil target: prioritas dari detail_retribusi_id, fallback ke rincian_id
+                        $targetRow = $d->detail_retribusi_id
+                            ? ($targetByDetail[$d->detail_retribusi_id] ?? null)
+                            : ($targetByRincian[$d->rincian_id] ?? null);
 
-                    $targetNominal = $targetRow->target_nominal ?? 0;
-                    $grandTarget += $targetNominal;
+                        // Bulan 1-6 (Jan-Jun) pakai target Murni (2026)
+                        // Bulan 7-12 (Jul-Des) pakai target Perubahan (2026P)
+                        $targetNominal = $laporan->bulan >= 7
+                            ? ($targetRow->target_perubahan ?? 0)
+                            : ($targetRow->target_nominal ?? 0);
+                        $grandTarget += $targetNominal;
 
-                    // Capaian realisasi s.d. bulan ini terhadap target tahunan
-                    $capaian = $targetNominal > 0
-                        ? round(($d->total_realisasi / $targetNominal) * 100, 2)
-                        : null;
+                        // Capaian realisasi s.d. bulan ini terhadap target tahunan
+                        $capaian = $targetNominal > 0
+                            ? round(($d->total_realisasi / $targetNominal) * 100, 2)
+                            : null;
                 @endphp
                 <tr>
                     <td class="no">{{ $no++ }}</td>
