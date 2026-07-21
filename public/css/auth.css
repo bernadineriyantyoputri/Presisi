@@ -48,12 +48,15 @@ body::after {
     z-index: 0;
 }
 
-/*  Logo  */
+/* Logo */
 .logo {
     position: absolute;
     top: 24px;
     left: 32px;
-    height: 48px;
+
+    height: 200px;
+    width: auto;
+
     z-index: 10;
 }
 
@@ -328,4 +331,3 @@ label {
     font-size: 12px;
     margin-top: 2px;
 }
-

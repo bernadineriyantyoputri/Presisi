@@ -32,10 +32,15 @@
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.sidebar .logo {
-    width: 110px;
-    height: auto;
+.sidebar-header{
+    padding: 20px 0;
 }
+
+.sidebar-header .logo{
+    width: 100px;
+    height: auto;
+    transform: scale(1.9);
+} 
 
 /* Menu */
 .sidebar-menu-list {
@@ -1037,4 +1042,32 @@ table.tabel-realisasi tr.total td {
 
 .form-label {
     font-size: 14px;
+}
+
+/* =========================
+   Panduan Admin
+========================= */
+
+.admin-guide-list{
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.admin-guide-item{
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.admin-guide-item i{
+    font-size: 18px;
+    color: #fff;
+    margin-top: 4px;
+    flex-shrink: 0;
+}
+
+.admin-guide-item span{
+    color: #fff;
+    line-height: 1.6;
 }

@@ -55,14 +55,10 @@
         </li>
         <li class="nav-item">
             <a class="nav-link-custom active" href="{{ route('perangkat.pengaturan.password') }}">
-                <i class="bi bi-key-fill me-1"></i> Ganti Password
+                <i class="bi bi-lock me-1"></i> Ganti Password
             </a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link-custom" href="#">
-                <i class="bi bi-bell me-1"></i> Notifikasi
-            </a>
-        </li>
+    
     </ul>
 
     <div class="wizard-card">

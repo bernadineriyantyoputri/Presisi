@@ -16,8 +16,9 @@ use App\Http\Controllers\Perangkat\PengaturanController as PerangkatPengaturanCo
 |--------------------------------------------------------------------------
 */
 
-Route::redirect('/', '/login');
-
+Route::get('/', function () {
+    return view('welcome');
+});
 /*
 |--------------------------------------------------------------------------
 | AUTH

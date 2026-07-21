@@ -23,6 +23,30 @@ ul{
     list-style:none;
 }
 
+html, body {
+    width: 100%;
+    overflow-x: hidden;
+    overflow-y: scroll; /* scrollbar selalu muncul */
+}
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 260px; /* samakan dengan sidebar user */
+    height: 100vh;
+    background: #1e2c54;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-right: 1px solid rgba(255,255,255,.08);
+}
+
+.main-content {
+    margin-left: 260px; /* HARUS sama dengan width sidebar */
+    min-height: 100vh;
+}
+
 /* ===================================================
    PAGE HEADER
 =================================================== */
