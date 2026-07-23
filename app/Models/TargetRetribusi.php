@@ -17,6 +17,7 @@ class TargetRetribusi extends Model
         'tahun',
         'target_nominal',
         'target_perubahan',
+        'target_aktif',
     ];
 
     public function rincian()

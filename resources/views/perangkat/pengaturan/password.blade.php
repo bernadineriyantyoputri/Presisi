@@ -151,24 +151,10 @@
                 </div>
             </div>
 
-            {{-- Ketentuan --}}
-            <div class="ketentuan-box mb-4">
-                <div class="d-flex">
-                    <div>
-                        <h6 class="fw-bold mb-2">Ketentuan Password</h6>
-                        <ul class="mb-0 text-muted">
-                            <li>Minimal 8 karakter</li>
-                            <li>Mengandung huruf besar, huruf kecil, angka dan simbol.</li>
-                            <li>Tidak boleh sama dengan password sebelumnya.</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <button type="submit" class="btn-lanjut">
-                <i class="bi bi-lock-fill me-2"></i>
-                Simpan Password
-            </button>
+            <button type="submit" class="btn-lanjut ms-auto d-block">
+    <i class="bi bi-lock-fill me-2"></i>
+    Simpan Password
+</button>
         </form>
     </div>
 </div>

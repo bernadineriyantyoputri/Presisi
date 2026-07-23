@@ -4,182 +4,194 @@
 
 @section('content')
 
-    <div class="container-fluid py-4">
-
-        {{-- Header --}}
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <div>
-                <h3 class="fw-bold mb-1">Manajemen Target Retribusi</h3>
-                <p class="text-muted mb-0">
-                    Kelola target penerimaan retribusi daerah (Murni & Perubahan) setiap semester.
-                </p>
-            </div>
+    {{-- Header --}}
+    <div class="page-header">
+        <div>
+            <h1>Manajemen Target Retribusi</h1>
+            <p>Kelola target penerimaan retribusi daerah (Murni & Perubahan) setiap tahun.
+            </p>
         </div>
+    </div>
 
-        {{-- Alert sukses / error --}}
-        @if(session('success'))
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                {{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-        @endif
+    {{-- Alert sukses / error --}}
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    @endif
 
-        @if(session('error'))
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                {{ session('error') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-        @endif
+    @if(session('error'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    @endif
 
-        @if($errors->any())
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <strong>Gagal menyimpan target:</strong>
-                <ul class="mb-0">
-                    @foreach($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-        @endif
+    @if($errors->any())
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>Gagal menyimpan target:</strong>
+            <ul class="mb-0">
+                @foreach($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    @endif
 
-        {{-- Statistik --}}
-        <div class="row mb-4">
+    {{-- Statistik --}}
+    <div class="row mb-4">
 
-            <div class="col-md-6">
-                <div class="card shadow-sm border-0">
-                    <div class="card-body">
-                        <small class="text-muted text-uppercase">
-                            Total Target {{ $tahun }}{{ $jenisAnggaran === 'perubahan' ? 'P (Perubahan)' : ' (Murni)' }}
-                        </small>
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <small class="text-muted text-uppercase">
+                        Total Target Murni {{ $tahun }}
+                    </small>
 
-                        @php
-                            $kolomTarget = $jenisAnggaran === 'perubahan' ? 'target_perubahan' : 'target_nominal';
-                            $totalTarget = $targets->sum($kolomTarget);
-                        @endphp
+                    @php
+                        $totalMurni = $targets->sum('target_nominal');
+                        $totalPerubahan = $targets->sum('target_perubahan');
+                    @endphp
 
-                        <h3 class="fw-bold text-primary mt-2 mb-0">
-                            Rp {{ number_format($totalTarget, 0, ',', '.') }}
-                        </h3>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-6">
-                <div class="card shadow-sm border-0">
-                    <div class="card-body">
-                        <small class="text-muted text-uppercase">Jumlah Item Rincian</small>
-
-                        <h3 class="fw-bold text-success mt-2 mb-0">
-                            {{ $targets->count() }} Item
-                        </h3>
-                    </div>
+                    <h4 class="fw-bold text-primary mt-2 mb-0">
+                        Rp {{ number_format($totalMurni, 0, ',', '.') }}
+                    </h4>
                 </div>
             </div>
         </div>
 
-        {{-- Card Tabel --}}
-        <div class="card shadow-sm border-0">
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <small class="text-muted text-uppercase">
+                        Total Target Perubahan {{ $tahun }}
+                    </small>
 
-            <div class="card-header bg-white">
+                    <h4 class="fw-bold text-info-emphasis mt-2 mb-0">
+                        Rp {{ number_format($totalPerubahan, 0, ',', '.') }}
+                    </h4>
+                </div>
+            </div>
+        </div>
 
-                <form method="GET">
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <small class="text-muted text-uppercase">Jumlah Item Rincian</small>
 
-                    <div class="row align-items-end g-3">
+                    <h4 class="fw-bold text-success mt-2 mb-0">
+                        {{ $targets->count() }} Item
+                    </h4>
+                </div>
+            </div>
+        </div>
+    </div>
 
-                        <div class="col-md-4">
-                            <label class="form-label fw-semibold">
-                                Jenis Retribusi
-                            </label>
+    {{-- Card Tabel --}}
+    <div class="card shadow-sm border-0">
 
-                            <select name="jenis_id" class="form-select" onchange="this.form.submit()">
+        <div class="card-header bg-white">
 
-                                <option value="">
-                                    Semua Jenis Retribusi
+            <form method="GET">
+
+                <div class="row align-items-end g-3">
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">
+                            Jenis Retribusi
+                        </label>
+
+                        <select name="jenis_id" class="form-select" onchange="this.form.submit()">
+
+                            <option value="">
+                                Semua Jenis Retribusi
+                            </option>
+
+                            @foreach($jenisRetribusi as $jenis)
+
+                                <option value="{{ $jenis->id }}" {{ $jenisId == $jenis->id ? 'selected' : '' }}>
+
+                                    {{ $jenis->nama_jenis }}
+
                                 </option>
 
-                                @foreach($jenisRetribusi as $jenis)
+                            @endforeach
 
-                                    <option value="{{ $jenis->id }}" {{ $jenisId == $jenis->id ? 'selected' : '' }}>
-
-                                        {{ $jenis->nama_jenis }}
-
-                                    </option>
-
-                                @endforeach
-
-                            </select>
-                        </div>
-
-                        <div class="col-md-4">
-                            <label class="form-label fw-semibold">
-                                Tahun Anggaran
-                            </label>
-
-                            {{-- Dropdown gabungan Tahun + Jenis: 2026 (Murni) & 2026P (Perubahan) --}}
-                            <select name="tahun_anggaran" class="form-select" onchange="this.form.submit()">
-
-                                @php
-                                    $tahunSekarang = (int) date('Y');
-                                    $tahunMulai = $tahunSekarang + 1;
-                                    $tahunSelesai = $tahunSekarang - 5;
-                                @endphp
-
-                                @for($tahunOpt = $tahunMulai; $tahunOpt >= $tahunSelesai; $tahunOpt--)
-
-                                    @php
-                                        $valueMurni = $tahunOpt . '|murni';
-                                        $valuePerubahan = $tahunOpt . '|perubahan';
-                                        $selectedMurni = ($tahun == $tahunOpt && $jenisAnggaran === 'murni');
-                                        $selectedPerubahan = ($tahun == $tahunOpt && $jenisAnggaran === 'perubahan');
-                                    @endphp
-
-                                    <option value="{{ $valueMurni }}" {{ $selectedMurni ? 'selected' : '' }}>
-                                        {{ $tahunOpt }}
-                                    </option>
-
-                                    <option value="{{ $valuePerubahan }}" {{ $selectedPerubahan ? 'selected' : '' }}>
-                                        {{ $tahunOpt }}P (Perubahan)
-                                    </option>
-
-                                @endfor
-
-                            </select>
-                        </div>
-
-                        <div class="col-md-4">
-                            <label class="form-label fw-semibold">
-                                Cari
-                            </label>
-
-                            <input type="text" name="search" class="form-control" placeholder="Cari rincian objek..."
-                                value="{{ request('search') }}">
-                        </div>
-
+                        </select>
                     </div>
 
-                </form>
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">
+                            Tahun Anggaran
+                        </label>
 
-            </div>
-            <div class="card-body p-0">
+                        {{-- Dropdown tahun saja, tabel di bawah otomatis menampilkan Murni & Perubahan berdampingan --}}
+                        <select name="tahun" class="form-select" onchange="this.form.submit()">
 
+                            @php
+                                $tahunSekarang = (int) date('Y');
+                                $tahunMulai = $tahunSekarang + 1;
+                                $tahunSelesai = $tahunSekarang - 5;
+                            @endphp
+
+                            @for($tahunOpt = $tahunMulai; $tahunOpt >= $tahunSelesai; $tahunOpt--)
+
+                                <option value="{{ $tahunOpt }}" {{ $tahun == $tahunOpt ? 'selected' : '' }}>
+                                    {{ $tahunOpt }}
+                                </option>
+
+                            @endfor
+
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">
+                            Cari
+                        </label>
+
+                        <div class="input-group">
+                            <input type="text" name="search" class="form-control" placeholder="Cari rincian objek..."
+                                value="{{ request('search') }}">
+
+                            <button type="submit" class="btn btn-outline-primary" title="Cari">
+                                <i class="bi bi-search"></i>
+                            </button>
+
+                            <a href="{{ route('admin.target.index') }}" class="btn btn-outline-secondary"
+                                title="Reset filter">
+                                <i class="bi bi-arrow-counterclockwise"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+        <div class="card-body p-0">
+
+            <div class="table-responsive">
                 <table class="table table-hover align-middle mb-0">
 
-                    <thead class="table-light">
+                    <tr>
 
-                        <tr>
+                        <th width="50">No</th>
 
-                            <th width="60">No</th>
+                        <th>Rincian Objek Retribusi</th>
 
-                            <th>Rincian Objek Retribusi</th>
+                        <th width="200">Target Murni {{ $tahun }}</th>
 
-                            <th width="260">
-                                Target {{ $tahun }}{{ $jenisAnggaran === 'perubahan' ? 'P' : '' }}
-                            </th>
+                        <th width="200">Target Perubahan {{ $tahun }}</th>
 
-                            <th width="100" class="text-center">Aksi</th>
+                        <th width="120" class="text-center">Status Aktif</th>
 
-                        </tr>
+                        <th width="90" class="text-center">Aksi</th>
+
+                    </tr>
 
                     </thead>
 
@@ -196,27 +208,14 @@
                                     @php
                                         $no++;
 
-                                        // Satu baris per (detail, tahun) menyimpan 2 kolom: target (Murni) & target_perubahan
+                                        // Satu baris per (detail, tahun) menyimpan 2 kolom: target_nominal (Murni) & target_perubahan
                                         $targetRow = $detail->target->where('tahun', $tahun)->first();
 
-                                        $nominalSekarang = $jenisAnggaran === 'perubahan'
-                                            ? ($targetRow->target_perubahan ?? 0)
-                                            : ($targetRow->target_nominal ?? 0);
+                                        $nominalMurni = $targetRow->target_nominal ?? 0;
+                                        $nominalPerubahan = $targetRow->target_perubahan ?? 0;
 
-                                        if ($jenisAnggaran === 'perubahan') {
-                                            // Perubahan dibandingkan dengan Murni pada tahun yang sama
-                                            $nominalLalu = $targetRow->target_nominal ?? 0;
-                                            $labelPembanding = 'Target Murni ' . $tahun;
-                                        } else {
-                                            // Murni dibandingkan dengan Murni tahun sebelumnya
-                                            $targetRowLalu = $detail->target->where('tahun', $tahun - 1)->first();
-                                            $nominalLalu = $targetRowLalu->target_nominal ?? 0;
-                                            $labelPembanding = 'Target Tahun Lalu (' . ($tahun - 1) . ')';
-                                        }
-
-                                        $persenPerubahan = $nominalLalu > 0
-                                            ? round((($nominalSekarang - $nominalLalu) / $nominalLalu) * 100, 1)
-                                            : null;
+                                        // Jenis yang sedang ditandai aktif untuk baris tahun ini (default 'murni' jika belum diset)
+                                        $targetAktifRow = $targetRow->target_aktif ?? 'murni';
                                     @endphp
 
                                     <tr>
@@ -233,9 +232,22 @@
                                         </td>
 
                                         <td>
-                                            <div class="fw-bold">
-                                                Rp {{ number_format($nominalSekarang, 0, ',', '.') }}
+                                            <div class="fw-bold {{ $targetAktifRow === 'murni' ? '' : 'text-muted' }}">
+                                                Rp {{ number_format($nominalMurni, 0, ',', '.') }}
                                             </div>
+                                        </td>
+
+                                        <td>
+                                            <div class="fw-bold {{ $targetAktifRow === 'perubahan' ? '' : 'text-muted' }}">
+                                                Rp {{ number_format($nominalPerubahan, 0, ',', '.') }}
+                                            </div>
+                                        </td>
+
+                                        <td class="text-center">
+                                            <span
+                                                class="badge {{ $targetAktifRow === 'perubahan' ? 'bg-warning-subtle text-warning-emphasis' : 'bg-primary-subtle text-primary' }}">
+                                                {{ $targetAktifRow === 'perubahan' ? 'Perubahan' : 'Murni' }}
+                                            </span>
                                         </td>
 
                                         <td class="text-center">
@@ -243,10 +255,10 @@
                                             <button type="button" class="btn btn-link btn-sm text-decoration-none btn-edit-target"
                                                 data-bs-toggle="modal" data-bs-target="#editTargetModal"
                                                 data-rincian-id="{{ $rincian->id }}" data-detail-id="{{ $detail->id }}"
-                                                data-tahun="{{ $tahun }}" data-jenis-anggaran="{{ $jenisAnggaran }}"
-                                                data-nama="{{ $rincian->nama_rincian }}" data-detail="{{ $detail->nama_detail }}"
-                                                data-label-pembanding="{{ $labelPembanding }}" data-nominal-lalu="{{ $nominalLalu }}"
-                                                data-nominal-sekarang="{{ $nominalSekarang }}" data-persen="{{ $persenPerubahan }}">
+                                                data-tahun="{{ $tahun }}" data-nama="{{ $rincian->nama_rincian }}"
+                                                data-detail="{{ $detail->nama_detail }}" data-nominal-murni="{{ $nominalMurni }}"
+                                                data-nominal-perubahan="{{ $nominalPerubahan }}"
+                                                data-target-aktif="{{ $targetAktifRow }}">
                                                 <i class="bi bi-pencil me-1"></i>Edit
                                             </button>
 
@@ -263,22 +275,10 @@
 
                                     $targetRow = $rincian->target->where('tahun', $tahun)->first();
 
-                                    $nominalSekarang = $jenisAnggaran === 'perubahan'
-                                        ? ($targetRow->target_perubahan ?? 0)
-                                        : ($targetRow->target_nominal ?? 0);
+                                    $nominalMurni = $targetRow->target_nominal ?? 0;
+                                    $nominalPerubahan = $targetRow->target_perubahan ?? 0;
 
-                                    if ($jenisAnggaran === 'perubahan') {
-                                        $nominalLalu = $targetRow->target_nominal ?? 0;
-                                        $labelPembanding = 'Target Murni ' . $tahun;
-                                    } else {
-                                        $targetRowLalu = $rincian->target->where('tahun', $tahun - 1)->first();
-                                        $nominalLalu = $targetRowLalu->target_nominal ?? 0;
-                                        $labelPembanding = 'Target Tahun Lalu (' . ($tahun - 1) . ')';
-                                    }
-
-                                    $persenPerubahan = $nominalLalu > 0
-                                        ? round((($nominalSekarang - $nominalLalu) / $nominalLalu) * 100, 1)
-                                        : null;
+                                    $targetAktifRow = $targetRow->target_aktif ?? 'murni';
                                 @endphp
 
                                 <tr>
@@ -292,9 +292,22 @@
                                     </td>
 
                                     <td>
-                                        <div class="fw-bold">
-                                            Rp {{ number_format($nominalSekarang, 0, ',', '.') }}
+                                        <div class="fw-bold {{ $targetAktifRow === 'murni' ? '' : 'text-muted' }}">
+                                            Rp {{ number_format($nominalMurni, 0, ',', '.') }}
                                         </div>
+                                    </td>
+
+                                    <td>
+                                        <div class="fw-bold {{ $targetAktifRow === 'perubahan' ? '' : 'text-muted' }}">
+                                            Rp {{ number_format($nominalPerubahan, 0, ',', '.') }}
+                                        </div>
+                                    </td>
+
+                                    <td class="text-center">
+                                        <span
+                                            class="badge {{ $targetAktifRow === 'perubahan' ? 'bg-warning-subtle text-warning-emphasis' : 'bg-primary-subtle text-primary' }}">
+                                            {{ $targetAktifRow === 'perubahan' ? 'Perubahan' : 'Murni' }}
+                                        </span>
                                     </td>
 
                                     <td class="text-center">
@@ -302,10 +315,10 @@
                                         <button type="button" class="btn btn-link btn-sm text-decoration-none btn-edit-target"
                                             data-bs-toggle="modal" data-bs-target="#editTargetModal"
                                             data-rincian-id="{{ $rincian->id }}" data-detail-id="" data-tahun="{{ $tahun }}"
-                                            data-jenis-anggaran="{{ $jenisAnggaran }}" data-nama="{{ $rincian->nama_rincian }}"
-                                            data-detail="" data-label-pembanding="{{ $labelPembanding }}"
-                                            data-nominal-lalu="{{ $nominalLalu }}" data-nominal-sekarang="{{ $nominalSekarang }}"
-                                            data-persen="{{ $persenPerubahan }}">
+                                            data-nama="{{ $rincian->nama_rincian }}" data-detail=""
+                                            data-nominal-murni="{{ $nominalMurni }}"
+                                            data-nominal-perubahan="{{ $nominalPerubahan }}"
+                                            data-target-aktif="{{ $targetAktifRow }}">
                                             <i class="bi bi-pencil me-1"></i>Edit
                                         </button>
 
@@ -318,7 +331,7 @@
                         @empty
 
                             <tr>
-                                <td colspan="4" class="text-center text-muted py-4">
+                                <td colspan="6" class="text-center text-muted py-4">
                                     Tidak ada data rincian retribusi.
                                 </td>
                             </tr>
@@ -340,15 +353,16 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
 
-                <form action="{{ route('admin.data.target.store') }}" method="POST" id="formEditTarget">
+                <form action="{{ route('admin.target.store') }}" method="POST" id="formEditTarget">
 
                     @csrf
 
                     <input type="hidden" name="rincian_id" id="input_rincian_id">
                     <input type="hidden" name="detail_id" id="input_detail_id">
                     <input type="hidden" name="tahun" id="input_tahun">
-                    <input type="hidden" name="jenis" id="input_jenis_anggaran">
-                    <input type="hidden" name="target_nominal" id="input_target_nominal_raw">
+                    <input type="hidden" name="target_nominal" id="input_target_murni_raw">
+                    <input type="hidden" name="target_perubahan" id="input_target_perubahan_raw">
+                    <input type="hidden" name="target_aktif" id="input_target_aktif">
 
                     <div class="modal-header">
                         <h5 class="modal-title fw-bold">
@@ -359,42 +373,62 @@
 
                     <div class="modal-body">
 
-                        <p class="text-muted mb-3">Update parameter target penerimaan retribusi.</p>
+                        <p class="text-muted mb-3">Update target penerimaan retribusi untuk tahun berjalan.</p>
 
                         <div class="bg-light rounded p-3 mb-3">
 
                             <small class="text-muted text-uppercase">Item Retribusi</small>
 
                             <div class="fw-bold fs-5" id="modal_nama_rincian">-</div>
-                            <div class="text-muted small mb-2" id="modal_nama_detail"></div>
+                            <div class="text-muted small" id="modal_nama_detail"></div>
 
-                            <hr class="my-2">
+                        </div>
 
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <small class="text-muted" id="modal_label_pembanding">Target Pembanding</small>
-                                    <div class="fw-semibold" id="modal_nominal_lalu">Rp 0</div>
+                        <div class="row g-3 mb-3">
+
+                            <div class="col-6">
+                                <label class="form-label fw-semibold">Target Murni</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">Rp</span>
+                                    <input type="text" inputmode="numeric" class="form-control text-end"
+                                        id="input_target_murni_display" placeholder="0" autocomplete="off">
                                 </div>
+                            </div>
 
-                                <span class="badge" id="modal_badge_persen"></span>
+                            <div class="col-6">
+                                <label class="form-label fw-semibold">Target Perubahan</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">Rp</span>
+                                    <input type="text" inputmode="numeric" class="form-control text-end"
+                                        id="input_target_perubahan_display" placeholder="0" autocomplete="off">
+                                </div>
                             </div>
 
                         </div>
 
-                        <label class="form-label fw-semibold" id="modal_label_tahun_baru">
-                            Target Baru
+                        <div class="form-text mb-3">
+                            Kedua kolom bisa diisi/diubah sekaligus. Kosongkan salah satu jika tidak ingin
+                            mengubah nilainya.
+                        </div>
+
+                        {{-- Kontrol Target Aktif --}}
+                        <label class="form-label fw-semibold">
+                            Target Aktif
                         </label>
 
-                        <div class="input-group">
-                            <span class="input-group-text">Rp</span>
-                            <input type="text" inputmode="numeric" class="form-control form-control-lg text-end"
-                                id="input_target_nominal_display" placeholder="0" autocomplete="off">
+                        <div class="btn-group w-100" role="group" aria-label="Pilih target aktif">
+                            <input type="radio" class="btn-check" name="target_aktif_radio" id="radio_aktif_murni"
+                                value="murni" autocomplete="off">
+                            <label class="btn btn-outline-primary" for="radio_aktif_murni">Murni</label>
+
+                            <input type="radio" class="btn-check" name="target_aktif_radio" id="radio_aktif_perubahan"
+                                value="perubahan" autocomplete="off">
+                            <label class="btn btn-outline-warning" for="radio_aktif_perubahan">Perubahan</label>
                         </div>
 
                         <div class="form-text">
-                            Masukkan nominal target dalam satuan Rupiah (IDR). Jika jenis "Perubahan" dipilih,
-                            nilai akan disimpan di kolom <code>target_perubahan</code> pada baris tahun yang sama
-                            (kolom <code>target</code> Murni tidak akan tertimpa).
+                            Tentukan target mana yang dipakai sebagai <strong>target aktif</strong> untuk
+                            perhitungan/realisasi tahun ini.
                         </div>
 
                     </div>
@@ -421,21 +455,47 @@
                 const inputRincianId = document.getElementById('input_rincian_id');
                 const inputDetailId = document.getElementById('input_detail_id');
                 const inputTahun = document.getElementById('input_tahun');
-                const inputJenisAnggaran = document.getElementById('input_jenis_anggaran');
-                const inputRaw = document.getElementById('input_target_nominal_raw');
-                const inputDisplay = document.getElementById('input_target_nominal_display');
+
+                const inputMurniRaw = document.getElementById('input_target_murni_raw');
+                const inputMurniDisplay = document.getElementById('input_target_murni_display');
+
+                const inputPerubahanRaw = document.getElementById('input_target_perubahan_raw');
+                const inputPerubahanDisplay = document.getElementById('input_target_perubahan_display');
+
+                const inputTargetAktif = document.getElementById('input_target_aktif');
+                const radioAktifMurni = document.getElementById('radio_aktif_murni');
+                const radioAktifPerubahan = document.getElementById('radio_aktif_perubahan');
 
                 const modalNamaRincian = document.getElementById('modal_nama_rincian');
                 const modalNamaDetail = document.getElementById('modal_nama_detail');
-                const modalLabelPembanding = document.getElementById('modal_label_pembanding');
-                const modalNominalLalu = document.getElementById('modal_nominal_lalu');
-                const modalBadgePersen = document.getElementById('modal_badge_persen');
-                const modalLabelTahunBaru = document.getElementById('modal_label_tahun_baru');
 
                 function formatRupiah(angka) {
                     angka = parseInt(angka || 0, 10);
                     return angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
                 }
+
+                function setTargetAktifRadio(value) {
+                    inputTargetAktif.value = value;
+                    radioAktifMurni.checked = (value !== 'perubahan');
+                    radioAktifPerubahan.checked = (value === 'perubahan');
+                }
+
+                [radioAktifMurni, radioAktifPerubahan].forEach(function (radio) {
+                    radio.addEventListener('change', function () {
+                        inputTargetAktif.value = this.value;
+                    });
+                });
+
+                function bindRupiahInput(displayEl, rawEl) {
+                    displayEl.addEventListener('input', function () {
+                        const digits = displayEl.value.replace(/[^0-9]/g, '');
+                        displayEl.value = formatRupiah(digits);
+                        rawEl.value = digits || '0';
+                    });
+                }
+
+                bindRupiahInput(inputMurniDisplay, inputMurniRaw);
+                bindRupiahInput(inputPerubahanDisplay, inputPerubahanRaw);
 
                 // Isi data modal saat tombol Edit diklik
                 document.querySelectorAll('.btn-edit-target').forEach(function (btn) {
@@ -445,13 +505,11 @@
                         const rincianId = btn.dataset.rincianId;
                         const detailId = btn.dataset.detailId;
                         const tahun = btn.dataset.tahun;
-                        const jenisAnggaran = btn.dataset.jenisAnggaran; // 'murni' atau 'perubahan'
                         const nama = btn.dataset.nama;
                         const detail = btn.dataset.detail;
-                        const labelPembanding = btn.dataset.labelPembanding;
-                        const nominalLalu = btn.dataset.nominalLalu;
-                        const nominalSekarang = btn.dataset.nominalSekarang;
-                        const persen = btn.dataset.persen;
+                        const nominalMurni = btn.dataset.nominalMurni || '0';
+                        const nominalPerubahan = btn.dataset.nominalPerubahan || '0';
+                        const targetAktif = btn.dataset.targetAktif || 'murni';
 
                         if (detailId) {
                             // Item level detail: ikuti konvensi data lama, rincian_id dikosongkan
@@ -463,41 +521,24 @@
                             inputDetailId.value = '';
                         }
                         inputTahun.value = tahun;
-                        inputJenisAnggaran.value = jenisAnggaran;
-                        inputRaw.value = nominalSekarang;
-                        inputDisplay.value = formatRupiah(nominalSekarang);
+
+                        inputMurniRaw.value = nominalMurni;
+                        inputMurniDisplay.value = formatRupiah(nominalMurni);
+
+                        inputPerubahanRaw.value = nominalPerubahan;
+                        inputPerubahanDisplay.value = formatRupiah(nominalPerubahan);
+
+                        setTargetAktifRadio(targetAktif);
 
                         modalNamaRincian.textContent = nama;
                         modalNamaDetail.textContent = detail || '';
-                        modalLabelPembanding.textContent = labelPembanding;
-                        modalNominalLalu.textContent = 'Rp ' + formatRupiah(nominalLalu);
-
-                        const labelTahun = jenisAnggaran === 'perubahan' ? (tahun + 'P (Perubahan)') : tahun;
-                        modalLabelTahunBaru.textContent = 'Target Baru (' + labelTahun + ')';
-
-                        if (persen !== '' && persen !== 'null' && persen !== undefined) {
-                            const persenNum = parseFloat(persen);
-                            const naik = persenNum >= 0;
-
-                            modalBadgePersen.textContent = (naik ? '+' : '') + persenNum + '%';
-                            modalBadgePersen.className = 'badge ' + (naik ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger');
-                            modalBadgePersen.style.display = 'inline-block';
-                        } else {
-                            modalBadgePersen.style.display = 'none';
-                        }
                     });
-                });
-
-                // Format ribuan otomatis saat mengetik nominal baru
-                inputDisplay.addEventListener('input', function () {
-                    const digits = inputDisplay.value.replace(/[^0-9]/g, '');
-                    inputDisplay.value = formatRupiah(digits);
-                    inputRaw.value = digits || '0';
                 });
 
                 // Jaga-jaga sebelum submit
                 document.getElementById('formEditTarget').addEventListener('submit', function () {
-                    inputRaw.value = inputDisplay.value.replace(/[^0-9]/g, '') || '0';
+                    inputMurniRaw.value = inputMurniDisplay.value.replace(/[^0-9]/g, '') || '0';
+                    inputPerubahanRaw.value = inputPerubahanDisplay.value.replace(/[^0-9]/g, '') || '0';
                 });
 
             });

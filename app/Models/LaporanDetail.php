@@ -16,6 +16,8 @@ class LaporanDetail extends Model
         'realisasi_bulan_ini',
         'total_realisasi',
         'persentase',
+        'target_snapshot',
+        'target_aktif_snapshot',
     ];
 
     public function laporan()

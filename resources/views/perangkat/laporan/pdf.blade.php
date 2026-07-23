@@ -20,23 +20,6 @@
         Masa Retribusi&nbsp;: {{ $bulanNama ?? '' }} {{ $laporan->tahun }}
     </div>
 
-    @php
-        // Ambil semua target untuk tahun laporan sekaligus (hindari query berulang per baris)
-        $detailIds = $laporan->details->pluck('detail_retribusi_id')->filter()->unique()->values();
-        $rincianIds = $laporan->details->pluck('rincian_id')->filter()->unique()->values();
-
-        $targetByDetail = \App\Models\TargetRetribusi::whereIn('detail_id', $detailIds)
-            ->where('tahun', $laporan->tahun)
-            ->get()
-            ->keyBy('detail_id');
-
-        $targetByRincian = \App\Models\TargetRetribusi::whereIn('rincian_id', $rincianIds)
-            ->whereNull('detail_id')
-            ->where('tahun', $laporan->tahun)
-            ->get()
-            ->keyBy('rincian_id');
-    @endphp
-
     <table class="tabel-realisasi">
         <thead>
             <tr>
@@ -60,29 +43,21 @@
             @endphp
             @foreach($laporan->details as $d)
                 @php
-                        $grandTotal += $d->total_realisasi;
+                    $grandTotal += $d->total_realisasi;
 
-                        $namaObjekUtama = $d->detailRetribusi?->nama_detail
-                            ?? $d->rincian?->nama_rincian
-                            ?? '-';
-                        $namaRincianSub = $d->detailRetribusi ? $d->detailRetribusi?->rincian?->nama_rincian : null;
+                    $namaObjekUtama = $d->detailRetribusi?->nama_detail
+                        ?? $d->rincian?->nama_rincian
+                        ?? '-';
+                    $namaRincianSub = $d->detailRetribusi ? $d->detailRetribusi?->rincian?->nama_rincian : null;
 
-                        // Ambil target: prioritas dari detail_retribusi_id, fallback ke rincian_id
-                        $targetRow = $d->detail_retribusi_id
-                            ? ($targetByDetail[$d->detail_retribusi_id] ?? null)
-                            : ($targetByRincian[$d->rincian_id] ?? null);
+                    // Ambil target: prioritas dari detail_retribusi_id, fallback ke rincian_id
+                    $targetNominal = $d->target_snapshot ?? 0;
 
-                        // Bulan 1-6 (Jan-Jun) pakai target Murni (2026)
-                        // Bulan 7-12 (Jul-Des) pakai target Perubahan (2026P)
-                        $targetNominal = $laporan->bulan >= 7
-                            ? ($targetRow->target_perubahan ?? 0)
-                            : ($targetRow->target_nominal ?? 0);
-                        $grandTarget += $targetNominal;
+                    $grandTarget += $targetNominal;
 
-                        // Capaian realisasi s.d. bulan ini terhadap target tahunan
-                        $capaian = $targetNominal > 0
-                            ? round(($d->total_realisasi / $targetNominal) * 100, 2)
-                            : null;
+                    $capaian = $targetNominal > 0
+                        ? round(($d->total_realisasi / $targetNominal) * 100, 2)
+                        : null;
                 @endphp
                 <tr>
                     <td class="no">{{ $no++ }}</td>

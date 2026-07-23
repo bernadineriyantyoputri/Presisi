@@ -1,10 +1,3 @@
-{{-- ============================================================
-     FILE: resources/views/admin/laporan/index.blade.php
-     Halaman: Verifikasi Laporan Realisasi (Daftar Laporan Masuk)
-     Catatan: CSS ada di file terpisah (public/css/admin.css),
-              cari blok "VERIFIKASI LAPORAN" di file admin.css Anda.
-     ============================================================ --}}
-
 @extends('layouts.app')
 
 @section('title', 'Verifikasi Laporan')

@@ -12,13 +12,8 @@ class TargetRetribusiController extends Controller
 {
     public function index(Request $request)
     {
-        // Dropdown "tahun_anggaran" mengirim value gabungan, contoh: "2026|murni" atau "2026|perubahan"
-        // Default: tahun berjalan, jenis murni
-        $tahunAnggaranRaw = $request->input('tahun_anggaran', now()->year . '|murni');
-        [$tahun, $jenisAnggaran] = array_pad(explode('|', $tahunAnggaranRaw), 2, 'murni');
-
-        $tahun = (int) $tahun;
-        $jenisAnggaran = in_array($jenisAnggaran, ['murni', 'perubahan']) ? $jenisAnggaran : 'murni';
+        // Dropdown "Tahun Anggaran" sekarang cukup kirim tahun saja (mis. "2026")
+        $tahun = (int) $request->input('tahun', now()->year);
 
         $jenisId = $request->jenis_id;
         $search = $request->search;
@@ -55,16 +50,11 @@ class TargetRetribusiController extends Controller
             'rincians',
             'targets',
             'tahun',
-            'jenisAnggaran',
             'jenisRetribusi',
             'jenisId'
         ));
     }
 
-    /**
-     * Simpan / update target (kolom 'target_nominal' untuk Murni, 'target_perubahan' untuk Perubahan)
-     * pada baris tahun yang sama.
-     */
     public function store(Request $request)
     {
         // Normalisasi "" -> null SEBELUM validasi, supaya rule tidak menolak/salah baca nilai kosong
@@ -77,11 +67,24 @@ class TargetRetribusiController extends Controller
             'rincian_id' => 'nullable|required_without:detail_id|exists:rincian_retribusi,id',
             'detail_id' => 'nullable|required_without:rincian_id|exists:detail_retribusi,id',
             'tahun' => 'required|integer|min:2000|max:2100',
-            'jenis' => 'required|in:murni,perubahan',
-            'target_nominal' => 'required|numeric|min:0',
+            'target_nominal' => 'nullable|required_without:target_perubahan|numeric|min:0',
+            'target_perubahan' => 'nullable|required_without:target_nominal|numeric|min:0',
+            'target_aktif' => 'nullable|in:murni,perubahan',
         ]);
 
-        $kolom = $validated['jenis'] === 'perubahan' ? 'target_perubahan' : 'target'; // sesuaikan nama kolom aslinya
+        $dataUpdate = [];
+
+        if ($request->filled('target_nominal')) {
+            $dataUpdate['target_nominal'] = $validated['target_nominal'];
+        }
+
+        if ($request->filled('target_perubahan')) {
+            $dataUpdate['target_perubahan'] = $validated['target_perubahan'];
+        }
+
+        if (!empty($validated['target_aktif'])) {
+            $dataUpdate['target_aktif'] = $validated['target_aktif'];
+        }
 
         $row = TargetRetribusi::updateOrCreate(
             [
@@ -89,17 +92,32 @@ class TargetRetribusiController extends Controller
                 'detail_id' => $validated['detail_id'] ?? null,
                 'tahun' => $validated['tahun'],
             ],
-            [
-                $kolom => $validated['target_nominal'],
-            ]
+            $dataUpdate
         );
 
         \Log::info('Target retribusi disimpan', [
             'id' => $row->id,
-            'kolom' => $kolom,
-            'nilai' => $validated['target_nominal'],
+            'data' => $dataUpdate,
         ]);
 
         return back()->with('success', 'Target berhasil disimpan.');
+    }
+
+    public function aktifkanPerubahan(TargetRetribusi $target)
+    {
+        $target->update([
+            'target_aktif' => 'perubahan',
+        ]);
+
+        return back()->with('success', 'Target Perubahan berhasil diaktifkan.');
+    }
+
+    public function aktifkanMurni(TargetRetribusi $target)
+    {
+        $target->update([
+            'target_aktif' => 'murni',
+        ]);
+
+        return back()->with('success', 'Target Murni berhasil diaktifkan.');
     }
 }

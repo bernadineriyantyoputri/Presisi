@@ -331,9 +331,7 @@ class LaporanRetribusiController extends Controller
                     })
                     ->first();
 
-                // Bulan 1-6 (Jan-Jun) pakai target Murni (2026)
-                // Bulan 7-12 (Jul-Des) pakai target Perubahan (2026P)
-                $targetNominal = $wizard['bulan'] >= 7
+                $targetNominal = $targetRow->target_aktif == 'perubahan'
                     ? ($targetRow->target_perubahan ?? 0)
                     : ($targetRow->target_nominal ?? 0);
 
@@ -350,6 +348,10 @@ class LaporanRetribusiController extends Controller
                     'realisasi_bulan_ini' => $bulanIni,
                     'total_realisasi' => $total,
                     'persentase' => $persentase,
+
+                    // Snapshot target
+                    'target_snapshot' => $targetNominal,
+                    'target_aktif_snapshot' => $targetRow->target_aktif,
                 ]);
             }
 
