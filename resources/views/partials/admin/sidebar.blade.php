@@ -2,7 +2,7 @@
 
     <!-- Logo -->
     <div class="sidebar-header text-center">
-        <img src="{{ asset('images/logopresisi.png') }}" alt="Logo" class="logo">
+        <img src="{{ asset('images/logo-presisi.png') }}" alt="Logo" class="logo">
     </div>
 
     <!-- Menu -->

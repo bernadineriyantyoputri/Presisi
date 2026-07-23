@@ -1,69 +1,70 @@
+{{-- ============================================================
+     FILE: resources/views/admin/laporan/index.blade.php
+     Halaman: Verifikasi Laporan Realisasi (Daftar Laporan Masuk)
+     Catatan: CSS ada di file terpisah (public/css/admin.css),
+              cari blok "VERIFIKASI LAPORAN" di file admin.css Anda.
+     ============================================================ --}}
+
 @extends('layouts.app')
 
 @section('title', 'Verifikasi Laporan')
 
 @push('styles')
-    <link rel="stylesheet" href="{{ asset('css/admin/laporan.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin.css') }}?v={{ filemtime(public_path('css/admin.css')) }}">
 @endpush
 
 @section('content')
 
-    <div class="container-fluid p-4">
+<div class="lap-page">
+    <div class="lap-container">
 
-        {{-- Header --}}
-        <div class="d-flex justify-content-between align-items-center mb-4">
-
+        {{-- ============ HEADER ============ --}}
+        <div class="lap-header">
             <div>
-                <h2 class="fw-bold mb-1">
-                    Verifikasi Laporan Realisasi
-                </h2>
-
-                <p class="text-muted mb-0">
+                <h1 class="lap-title">Verifikasi Laporan Realisasi</h1>
+                <p class="lap-subtitle">
                     Review dan kelola laporan retribusi dari berbagai Perangkat Daerah di lingkungan
                     Pemerintah Provinsi Lampung secara terintegrasi.
                 </p>
             </div>
 
-            <div>
-                <button class="btn btn-outline-secondary me-2">
+            <div class="lap-actions">
+                <button class="lap-btn lap-btn-outline">
                     <i class="bi bi-download"></i>
                     Export Data
                 </button>
 
-                <a href="{{ route('admin.laporan.index') }}" class="btn btn-navy">
+                <a href="{{ route('admin.laporan.index') }}" class="lap-btn lap-btn-navy">
                     <i class="bi bi-arrow-clockwise"></i>
                     Refresh Data
                 </a>
             </div>
-
         </div>
 
-        {{-- Filter --}}
-        <div class="card shadow-sm border-0 mb-4">
-
-            <div class="card-body">
+        {{-- ============ FILTER ============ --}}
+        <div class="lap-card lap-filter-card">
+            <div class="lap-card-body">
 
                 <form method="GET" id="filterForm">
-
                     <div class="row g-3 align-items-end">
 
-                        <div class="col-md-4">
-                            <div class="filter-label">Cari Perangkat Daerah</div>
+                        <div class="col-12 col-lg-4">
+                            <div class="lap-filter-label">Cari Perangkat Daerah</div>
 
                             <div class="input-group">
-                                <input type="text" class="form-control" name="search"
+                                <input type="text" class="form-control lap-input" name="search"
                                     id="searchInput"
                                     placeholder="Masukkan nama perangkat..." value="{{ request('search') }}">
-                                <button type="submit" class="btn btn-outline-secondary">
+                                <button type="submit" class="lap-btn lap-btn-outline lap-btn-icon">
                                     <i class="bi bi-search"></i>
                                 </button>
                             </div>
                         </div>
 
-                        <div class="col-md-3">
-                            <div class="filter-label">Jenis Retribusi</div>
+                        <div class="col-6 col-lg-3">
+                            <div class="lap-filter-label">Jenis Retribusi</div>
 
-                            <select class="form-select filter-auto" name="jenis_retribusi">
+                            <select class="form-select lap-input filter-auto" name="jenis_retribusi">
                                 <option value="">Semua Jenis Retribusi</option>
                                 @foreach($jenisRetribusiList ?? [] as $jenis)
                                     <option value="{{ $jenis->id }}" {{ request('jenis_retribusi') == $jenis->id ? 'selected' : '' }}>
@@ -73,10 +74,10 @@
                             </select>
                         </div>
 
-                        <div class="col-md-2">
-                            <div class="filter-label">Bulan</div>
+                        <div class="col-6 col-lg-2">
+                            <div class="lap-filter-label">Bulan</div>
 
-                            <select class="form-select filter-auto" name="bulan">
+                            <select class="form-select lap-input filter-auto" name="bulan">
                                 <option value="">Semua Bulan</option>
                                 @php
                                     $namaBulan = [
@@ -93,10 +94,10 @@
                             </select>
                         </div>
 
-                        <div class="col-md-2">
-                            <div class="filter-label">Tahun</div>
+                        <div class="col-6 col-lg-2">
+                            <div class="lap-filter-label">Tahun</div>
 
-                            <select class="form-select filter-auto" name="tahun">
+                            <select class="form-select lap-input filter-auto" name="tahun">
                                 <option value="">Semua Tahun</option>
                                 @for($i = date('Y'); $i >= 2024; $i--)
                                     <option value="{{ $i }}" {{ request('tahun') == $i ? 'selected' : '' }}>
@@ -106,36 +107,32 @@
                             </select>
                         </div>
 
-                        <div class="col-md-1">
-                            <a href="{{ route('admin.laporan.index') }}" class="btn btn-outline-secondary w-100">
+                        <div class="col-6 col-lg-1">
+                            <a href="{{ route('admin.laporan.index') }}" class="lap-btn lap-btn-outline w-100 btn-reset-filter">
                                 Reset
                             </a>
                         </div>
 
                     </div>
-
                 </form>
 
             </div>
-
         </div>
 
-        {{-- Data --}}
-        <div class="card shadow-sm border-0">
+        {{-- ============ DATA ============ --}}
+        <div class="lap-card">
 
-            <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                <span class="fw-bold">Daftar Laporan Masuk</span>
-                <span class="text-muted small">
+            <div class="lap-card-header">
+                <span class="lap-card-header-title">Daftar Laporan Masuk</span>
+                <span class="lap-card-header-meta">
                     Menampilkan {{ $laporan->count() }} dari {{ $laporan->total() ?? $laporan->count() }} laporan
                 </span>
             </div>
 
-            <div class="card-body p-0">
+            <div class="lap-table-wrap">
+                <table class="table lap-table align-middle mb-0">
 
-                <table class="table table-hover align-middle mb-0">
-
-                    <thead class="table-light">
-
+                    <thead>
                         <tr>
                             <th width="60">No</th>
                             <th>Nama Perangkat Daerah</th>
@@ -144,9 +141,8 @@
                             <th>Jenis Retribusi</th>
                             <th>Status</th>
                             <th>PDF</th>
-                            <th width="140">Aksi</th>
+                            <th width="150">Aksi</th>
                         </tr>
-
                     </thead>
 
                     <tbody>
@@ -155,16 +151,16 @@
 
                             <tr>
 
-                                <td class="text-muted">{{ $loop->iteration }}</td>
+                                <td class="lap-cell-muted">{{ $loop->iteration }}</td>
 
                                 <td>
-                                    <strong>{{ $item->perangkatDaerah->nama_perangkat ?? '-' }}</strong>
-                                    <div class="id-label">
+                                    <strong class="lap-cell-strong">{{ $item->perangkatDaerah->nama_perangkat ?? '-' }}</strong>
+                                    <div class="lap-id-label">
                                         ID: PD-{{ $item->tahun }}-{{ str_pad($item->perangkatDaerah->id ?? $item->id, 3, '0', STR_PAD_LEFT) }}
                                     </div>
                                 </td>
 
-                                <td>{{ $item->perangkatDaerah->email ?? '-' }}</td>
+                                <td class="lap-cell-muted">{{ $item->perangkatDaerah->email ?? '-' }}</td>
 
                                 <td>{{ $item->bulan }} / {{ $item->tahun }}</td>
 
@@ -177,9 +173,9 @@
                                     @endphp
 
                                     @forelse($namaJenis as $nj)
-                                        <span class="badge-kategori">{{ $nj }}</span>
+                                        <span class="lap-badge-kategori">{{ $nj }}</span>
                                     @empty
-                                        <span class="text-muted">-</span>
+                                        <span class="lap-cell-muted">-</span>
                                     @endforelse
                                 </td>
 
@@ -193,15 +189,15 @@
                                         $statusInfo = $statusMap[$item->status] ?? ['label' => $item->status, 'class' => 'pending'];
                                     @endphp
 
-                                    <span class="badge-status {{ $statusInfo['class'] }}">
-                                        <span class="dot"></span>
+                                    <span class="lap-badge-status {{ $statusInfo['class'] }}">
+                                        <span class="lap-dot"></span>
                                         {{ $statusInfo['label'] }}
                                     </span>
                                 </td>
 
                                 <td>
                                     <a href="{{ route('perangkat.laporan.pdf', $item->id) }}" target="_blank"
-                                        class="btn btn-outline-primary btn-sm">
+                                        class="lap-btn lap-btn-outline lap-btn-sm">
                                         <i class="bi bi-file-earmark-pdf"></i>
                                         Lihat PDF
                                     </a>
@@ -210,19 +206,19 @@
                                 <td>
                                     @if($item->status === 'pending')
                                         <a href="{{ route('admin.laporan.detail', $item->id) }}"
-                                            class="btn btn-navy btn-sm">
+                                            class="lap-btn lap-btn-navy lap-btn-sm">
                                             <i class="bi bi-eye"></i>
                                             Detail &amp; Verifikasi
                                         </a>
                                     @elseif($item->status === 'ditolak')
                                         <a href="{{ route('admin.laporan.detail', $item->id) }}"
-                                            class="btn btn-navy btn-sm">
+                                            class="lap-btn lap-btn-navy lap-btn-sm">
                                             <i class="bi bi-pencil"></i>
                                             Detail &amp; Revisi
                                         </a>
                                     @else
                                         <a href="{{ route('admin.laporan.detail', $item->id) }}"
-                                            class="btn btn-outline-secondary btn-sm">
+                                            class="lap-btn lap-btn-outline lap-btn-sm">
                                             Lihat Detail
                                         </a>
                                     @endif
@@ -233,7 +229,7 @@
                         @empty
 
                             <tr>
-                                <td colspan="8" class="text-center py-5">
+                                <td colspan="8" class="lap-empty">
                                     Tidak ada data laporan.
                                 </td>
                             </tr>
@@ -243,26 +239,25 @@
                     </tbody>
 
                 </table>
-
             </div>
 
             @if(method_exists($laporan, 'links'))
 
-                <div class="card-footer bg-white d-flex justify-content-between align-items-center">
+                <div class="lap-card-footer">
 
-                    <span class="text-muted small">
+                    <span class="lap-footer-meta">
                         Menampilkan {{ $laporan->firstItem() }} - {{ $laporan->lastItem() }} dari {{ $laporan->total() }} data
                     </span>
 
-                    <div class="d-flex gap-2">
+                    <div class="lap-pagination">
 
                         {{-- Previous --}}
                         @if($laporan->onFirstPage())
-                            <span class="page-link-custom disabled opacity-50">
+                            <span class="lap-page-link disabled">
                                 <i class="bi bi-chevron-left"></i>
                             </span>
                         @else
-                            <a href="{{ $laporan->previousPageUrl() }}" class="page-link-custom">
+                            <a href="{{ $laporan->previousPageUrl() }}" class="lap-page-link">
                                 <i class="bi bi-chevron-left"></i>
                             </a>
                         @endif
@@ -271,21 +266,21 @@
                         @foreach($laporan->getUrlRange(1, $laporan->lastPage()) as $page => $url)
                             @if($page == 1 || $page == $laporan->lastPage() || abs($page - $laporan->currentPage()) <= 1)
                                 <a href="{{ $url }}"
-                                    class="page-link-custom {{ $page == $laporan->currentPage() ? 'active' : '' }}">
+                                    class="lap-page-link {{ $page == $laporan->currentPage() ? 'active' : '' }}">
                                     {{ $page }}
                                 </a>
                             @elseif(abs($page - $laporan->currentPage()) == 2)
-                                <span class="page-link-custom border-0">...</span>
+                                <span class="lap-page-link lap-page-ellipsis">...</span>
                             @endif
                         @endforeach
 
                         {{-- Next --}}
                         @if($laporan->hasMorePages())
-                            <a href="{{ $laporan->nextPageUrl() }}" class="page-link-custom">
+                            <a href="{{ $laporan->nextPageUrl() }}" class="lap-page-link">
                                 <i class="bi bi-chevron-right"></i>
                             </a>
                         @else
-                            <span class="page-link-custom disabled opacity-50">
+                            <span class="lap-page-link disabled">
                                 <i class="bi bi-chevron-right"></i>
                             </span>
                         @endif
@@ -299,6 +294,7 @@
         </div>
 
     </div>
+</div>
 
 @endsection
 

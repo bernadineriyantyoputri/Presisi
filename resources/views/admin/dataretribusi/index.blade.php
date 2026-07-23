@@ -41,9 +41,18 @@
                     <div class="jr-card">
 
                         <div class="jr-card-top">
-                            <div class="jr-icon-box" style="background-color: {{ $jenis->warna ?? '#EAF1FB' }};">
-                                <i class="bi {{ $jenis->icon ?? 'bi-check2-square' }}"
-                                    style="color: {{ $jenis->warna_icon ?? '#2F6FED' }};"></i>
+                            <div class="jr-icon-box" style="background-color: {{ $jenis->warna ?? '#E7EAF3' }};">
+                            <i class="bi
+@if($jenis->nama_jenis == 'Jasa Umum')
+    bi-bank2
+@elseif($jenis->nama_jenis == 'Jasa Usaha')
+    bi-shop-window
+@elseif($jenis->nama_jenis == 'Jasa Perizinan Tertentu')
+    bi-patch-check
+@else
+    bi-grid
+@endif"
+style="color: {{ $jenis->warna_icon ?? '#22345A' }};"></i>
                             </div>
 
                             <div class="jr-card-actions">
@@ -65,40 +74,93 @@
                             {{ \Illuminate\Support\Str::limit($jenis->deskripsi, 90) }}
                         </p>
 
-                        <a href="{{ route('admin.data.jenis', $jenis->id) }}" class="jr-card-link">
-                            Kelola <i class="bi bi-arrow-right"></i>
-                        </a>
+                        <a href="{{ route('admin.data.jenis', $jenis->id) }}"
+   class="jr-manage-btn">
+    Kelola
+    <i class="bi bi-arrow-right"></i>
+</a>
 
                     </div>
 
                     {{-- Modal Edit Jenis --}}
-                    <div class="modal fade" id="modalEditJenis{{ $jenis->id }}" tabindex="-1">
-                        <div class="modal-dialog">
-                            <form action="{{ route('admin.jenis.update', $jenis->id) }}" method="POST">
-                                @csrf
-                                @method('PUT')
-                                <div class="modal-content jr-modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title">Edit Jenis Retribusi</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <label class="form-label">Nama Jenis Retribusi</label>
-                                        <input type="text" name="nama_jenis" class="form-control"
-                                            value="{{ $jenis->nama_jenis }}" required>
+<div class="modal fade" id="modalEditJenis{{ $jenis->id }}" tabindex="-1">
+<div class="modal-dialog modal-dialog-centered modal-lg">
 
-                                        <label class="form-label mt-3">Deskripsi</label>
-                                        <textarea name="deskripsi" class="form-control"
-                                            rows="3">{{ $jenis->deskripsi }}</textarea>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                                        <button type="submit" class="btn btn-primary">Simpan</button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
+        <form action="{{ route('admin.jenis.update', $jenis->id) }}" method="POST">
+            @csrf
+            @method('PUT')
+
+            <div class="modal-content jr-modal-content">
+
+                {{-- Header --}}
+                <div class="modal-header">
+
+                    <div>
+                        <h5 class="modal-title mb-1">
+                            Edit Jenis Retribusi
+                        </h5>
+
+                        <small class="text-muted">
+                            Perbarui informasi jenis retribusi.
+                        </small>
                     </div>
+
+                    <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal">
+                    </button>
+
+                </div>
+
+                {{-- Body --}}
+                <div class="modal-body">
+
+                    <div class="mb-4">
+
+                        <label class="form-label">
+                            Nama Jenis Retribusi
+                        </label>
+
+                        <input
+                            type="text"
+                            name="nama_jenis"
+                            class="form-control"
+                            value="{{ $jenis->nama_jenis }}"
+                            required>
+
+                    </div>
+
+                    
+
+                </div>
+
+                {{-- Footer --}}
+                <div class="modal-footer">
+
+                    <button
+                        type="button"
+                        class="btn jr-btn-cancel"
+                        data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle me-1"></i>
+                        Batal
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="btn jr-btn-save">
+                        <i class="bi bi-check-circle me-1"></i>
+                        Simpan
+                    </button>
+
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+</div>
 
                     {{-- Modal Hapus Jenis --}}
                     <div class="modal fade" id="modalDeleteJenis{{ $jenis->id }}" tabindex="-1">
@@ -133,7 +195,7 @@
 
             <div class="jr-footer-action">
                 <button class="btn jr-btn-add" data-bs-toggle="modal" data-bs-target="#modalJenis">
-                    <i class="bi bi-plus-lg"></i> Jasa Baru
+                    <i class="bi bi-plus-lg"></i> Jenis Retribusi
                 </button>
             </div>
 
@@ -141,30 +203,72 @@
 
     </div>
 
-    {{-- ================= MODAL: TAMBAH JENIS ================= --}}
-    <div class="modal fade" id="modalJenis" tabindex="-1">
-        <div class="modal-dialog">
-            <form action="{{ route('admin.jenis.store') }}" method="POST">
-                @csrf
-                <div class="modal-content jr-modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Tambah Jenis Retribusi</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-                    <div class="modal-body">
-                        <label class="form-label">Nama Jenis Retribusi</label>
-                        <input type="text" name="nama_jenis" class="form-control" required>
 
-                        <label class="form-label mt-3">Deskripsi</label>
-                        <textarea name="deskripsi" class="form-control" rows="3"></textarea>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-primary">Simpan</button>
-                    </div>
-                </div>
-            </form>
-        </div>
+    {{-- ================= MODAL: TAMBAH JENIS ================= --}}
+<div class="modal fade" id="modalJenis" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <form action="{{ route('admin.jenis.store') }}" method="POST">
+            @csrf
+
+            <div class="modal-content jr-modal-content">
+
+                {{-- Header --}}
+                <div class="modal-header">
+    <div>
+        <h5 class="modal-title mb-1">Tambah Jenis Retribusi</h5>
+        <small class="text-muted">
+            Tambahkan kategori retribusi baru ke dalam sistem.
+        </small>
     </div>
 
+    <button type="button"
+        class="btn-close"
+        data-bs-dismiss="modal">
+    </button>
+</div>
+
+                {{-- Body --}}
+                <div class="modal-body">
+
+                    <div class="mb-4">
+                        <label class="form-label">
+                            Nama Jenis Retribusi
+                        </label>
+
+                        <input
+                            type="text"
+                            name="nama_jenis"
+                            class="form-control"
+                            placeholder="Contoh : Jasa Umum"
+                            required>
+                    </div>
+
+            
+                </div>
+
+                {{-- Footer --}}
+                <div class="modal-footer">
+
+                    <button
+                        type="button"
+                        class="btn jr-btn-cancel"
+                        data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle me-1"></i>
+                        Batal
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="btn jr-btn-save">
+                        <i class="bi bi-check-circle me-1"></i>
+                        Simpan
+                    </button>
+
+                </div>
+
+            </div>
+
+        </form>
+    </div>
+</div> 
 @endsection
