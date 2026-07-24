@@ -8,6 +8,11 @@
 
     <div class="jr-page">
 
+        {{-- ================= BACK LINK ================= --}}
+        <a href="{{ route('admin.data.index') }}" class="jr-back-link">
+            <i class="bi bi-arrow-left"></i> Kembali ke Jenis Retribusi
+        </a>
+
         {{-- ================= HEADER ================= --}}
         <div class="jr-header">
             <h3 class="jr-title">{{ $jenis->nama_jenis }}</h3>
@@ -31,7 +36,10 @@
 
             <div class="jr-table-card-header">
                 <div>
-                    <h5 class="jr-table-title">Objek Retribusi</h5>
+                    <h5 class="jr-table-title">
+                        Objek Retribusi
+                        <span class="jr-table-badge">{{ $data->total() ?? $data->count() }} rincian</span>
+                    </h5>
                     <p class="jr-table-subtitle">Menampilkan sub-kategori dari objek retribusi aktif.</p>
                 </div>
 
@@ -44,12 +52,12 @@
             @if($objekList->isNotEmpty())
                 <div class="jr-filter-dropdown dropdown mb-3">
                     <button class="btn jr-dropdown-toggle dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                        {{ $selectedObjek->nama_objek ?? 'Pilih Objek Retribusi' }}
+                        <span><i class="bi bi-funnel me-1"></i> {{ $selectedObjek->nama_objek ?? 'Pilih Objek Retribusi' }}</span>
                     </button>
                     <ul class="dropdown-menu">
                         @foreach($objekList as $objek)
                             <li>
-                                <a class="dropdown-item"
+                                <a class="dropdown-item {{ ($selectedObjek->id ?? null) == $objek->id ? 'active' : '' }}"
                                     href="{{ route('admin.data.jenis', ['jenis' => $jenis->id, 'objek' => $objek->id]) }}">
                                     {{ $objek->nama_objek }}
                                 </a>
@@ -61,7 +69,7 @@
 
             {{-- Tabel Rincian & Detail --}}
             <div class="table-responsive">
-                <table class="table jr-table align-middle">
+                <table class="table jr-table align-middle mb-0">
                     <thead>
                         <tr>
                             <th>NO</th>
@@ -86,7 +94,7 @@
                                     @if($rincian->detail->isNotEmpty())
                                         {{ $rincian->detail->pluck('nama_detail')->implode(', ') }}
                                     @else
-                                        -
+                                        <span class="text-muted">-</span>
                                     @endif
                                 </td>
                                 <td class="text-end">
@@ -101,7 +109,6 @@
                                 </td>
                             </tr>
 
-                            {{-- Modal Edit Rincian --}}
                             {{-- Modal Edit Rincian --}}
                             <div class="modal fade" id="modalEditRincian{{ $rincian->id }}" tabindex="-1">
                                 <div class="modal-dialog">
@@ -131,24 +138,23 @@
                                                 </label>
 
                                                 <div class="form-check mb-2">
-
                                                     <input class="form-check-input" type="checkbox"
                                                         id="punyaDetail{{ $rincian->id }}" {{ $rincian->detail->isNotEmpty() ? 'checked' : '' }}>
-
                                                     <label class="form-check-label">
                                                         Memiliki Detail Objek
                                                     </label>
-
                                                 </div>
 
                                                 <textarea id="detail{{ $rincian->id }}" name="nama_detail" class="form-control"
                                                     rows="4" {{ $rincian->detail->isEmpty() ? 'style=display:none;' : '' }}>{{ optional($rincian->detail->first())->nama_detail }}</textarea>
                                             </div>
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary"
-                                                    data-bs-dismiss="modal">Batal</button>
-                                                <button type="submit" class="btn btn-primary">
-                                                    <i class="bi bi-save"></i> Simpan Perubahan
+                                                <button type="button" class="btn jr-btn-cancel"
+                                                    data-bs-dismiss="modal">
+                                                    <i class="bi bi-x-circle me-1"></i> Batal
+                                                </button>
+                                                <button type="submit" class="btn jr-btn-save">
+                                                    <i class="bi bi-check-circle me-1"></i> Simpan Perubahan
                                                 </button>
                                             </div>
                                         </div>
@@ -164,7 +170,10 @@
                                         @method('DELETE')
                                         <div class="modal-content jr-modal-content">
                                             <div class="modal-header">
-                                                <h5 class="modal-title">Hapus Rincian</h5>
+                                                <div>
+                                                    <h5 class="modal-title">Hapus Rincian</h5>
+                                                    <p class="jr-modal-subtitle mb-0">Tindakan ini tidak dapat dibatalkan.</p>
+                                                </div>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                             </div>
                                             <div class="modal-body">
@@ -176,9 +185,13 @@
                                                 </p>
                                             </div>
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary"
-                                                    data-bs-dismiss="modal">Batal</button>
-                                                <button type="submit" class="btn btn-danger">Ya, Hapus</button>
+                                                <button type="button" class="btn jr-btn-cancel"
+                                                    data-bs-dismiss="modal">
+                                                    <i class="bi bi-x-circle me-1"></i> Batal
+                                                </button>
+                                                <button type="submit" class="btn btn-danger">
+                                                    <i class="bi bi-trash me-1"></i> Ya, Hapus
+                                                </button>
                                             </div>
                                         </div>
                                     </form>
@@ -187,8 +200,9 @@
 
                         @empty
                             <tr>
-                                <td colspan="5" class="text-center text-muted py-4">
-                                    Belum ada data untuk objek ini.
+                                <td colspan="5" class="jr-empty-state">
+                                    <i class="bi bi-inbox"></i>
+                                    <span>Belum ada data untuk objek ini.</span>
                                 </td>
                             </tr>
                         @endforelse
@@ -206,6 +220,7 @@
         </div>
 
     </div>
+
     {{-- ================= MODAL: TAMBAH OBJEK RETRIBUSI ================= --}}
     <div class="modal fade" id="modalObjek" tabindex="-1">
         <div class="modal-dialog">
@@ -235,7 +250,6 @@
 
                         <div class="form-check mb-2">
                             <input class="form-check-input" type="checkbox" id="punyaDetailTambah">
-
                             <label class="form-check-label">
                                 Rincian ini memiliki detail
                             </label>
@@ -245,72 +259,58 @@
                             placeholder="Masukkan detail objek" style="display:none;">
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-primary">Simpan</button>
+                        <button type="button" class="btn jr-btn-cancel" data-bs-dismiss="modal">
+                            <i class="bi bi-x-circle me-1"></i> Batal
+                        </button>
+                        <button type="submit" class="btn jr-btn-save">
+                            <i class="bi bi-check-circle me-1"></i> Simpan
+                        </button>
                     </div>
                 </div>
             </form>
         </div>
     </div>
-    <script>
 
+    <script>
         document.addEventListener('DOMContentLoaded', function () {
 
             // Tambah
             const tambah = document.getElementById('punyaDetailTambah');
 
             if (tambah) {
-
                 tambah.addEventListener('change', function () {
-
                     let input = document.getElementById('nama_detail_tambah');
 
                     if (this.checked) {
-
                         input.style.display = 'block';
                         input.required = true;
-
                     } else {
-
                         input.style.display = 'none';
                         input.required = false;
                         input.value = '';
-
                     }
-
                 });
-
             }
 
             // Edit
             document.querySelectorAll('.form-check-input').forEach(function (item) {
-
                 item.addEventListener('change', function () {
-
                     let id = this.id.replace('punyaDetail', '');
-
                     let textarea = document.getElementById('detail' + id);
 
                     if (!textarea) return;
 
                     if (this.checked) {
-
                         textarea.style.display = 'block';
                         textarea.required = true;
-
                     } else {
-
                         textarea.style.display = 'none';
                         textarea.required = false;
                         textarea.value = '';
-
                     }
-
                 });
-
             });
 
         });
-
     </script>
 @endsection

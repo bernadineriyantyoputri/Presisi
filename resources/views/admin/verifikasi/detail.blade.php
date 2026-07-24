@@ -118,7 +118,6 @@
 
             </div>
 
-            <div class="verif-letterhead-rule"></div>
         </div>
 
         {{-- ============ INFORMASI LENGKAP ============ --}}

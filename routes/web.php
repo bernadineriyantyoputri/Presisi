@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\PengaturanController as AdminPengaturanController
 use App\Http\Controllers\Perangkat\LaporanRetribusiController;
 use App\Http\Controllers\Admin\TargetRetribusiController;
 use App\Http\Controllers\Perangkat\PengaturanController as PerangkatPengaturanController;
+use App\Http\Controllers\Admin\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -47,7 +48,7 @@ Route::middleware('auth')->group(function () {
     Route::view('/perangkat', 'perangkat.dashboard')
         ->name('perangkat');
 
-    Route::redirect('/admin', '/admin/verifikasi')
+    Route::get('/admin', [DashboardController::class, 'index'])
         ->name('admin');
 });
 

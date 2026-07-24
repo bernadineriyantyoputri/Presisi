@@ -19,7 +19,7 @@ class DataRetribusiController extends Controller
             ->orderBy('nama_jenis')
             ->get();
 
-        return view('admin.dataretribusi.index', compact('data'));
+        return view('admin.dataretribusi.index', compact('data')); 
     }
 
     public function showJenis(Request $request, $id)
