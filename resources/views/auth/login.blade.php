@@ -41,7 +41,7 @@
                         </div>
                     @endif
 
-                    <div class="mb-3">
+                    <div class="mb-2">
                         <label>Nama Pengguna (Username)</label>
                         <div class="input-icon-wrap has-icon-l">
                             <i class="ti ti-user icon-left"></i>
@@ -53,13 +53,8 @@
                         </div>
                     </div>
 
-                    <div class="mb-4">
-                        <div class="label-row">
-                            <label>Kata Sandi (Password)</label>
-                            @if (Route::has('password.request'))
-                                <a href="{{ route('password.request') }}" class="forgot-link">Lupa Kata Sandi?</a>
-                            @endif
-                        </div>
+                    <div class="mb-2">
+                        <label>Kata Sandi (Password)</label>
                         <div class="input-icon-wrap has-icon-l">
                             <i class="ti ti-lock icon-left"></i>
                             <input type="password" name="password" id="passwordInput" class="form-control"
@@ -68,9 +63,13 @@
                                 <i class="ti ti-eye" id="eyeIcon"></i>
                             </button>
                         </div>
+                        <div class="forgot-wrap">
+                            <button type="button" class="forgot-link" data-bs-toggle="modal"
+                                data-bs-target="#lupaPasswordModal">Lupa Kata Sandi?</button>
+                        </div>
                     </div>
 
-                    <button type="submit" class="btn btn-presisi w-100">
+                    <button type="submit" class="btn btn-presisi w-100 ">
                         Masuk ke Sistem
                     </button>
                 </form>
@@ -84,6 +83,37 @@
         </div>
     </div>
 
+    {{-- Modal Lupa Password --}}
+    <div class="modal fade" id="lupaPasswordModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="ti ti-lock-question me-2"></i>
+                        Lupa Kata Sandi
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <p class="mb-2">
+                        Untuk saat ini, reset kata sandi hanya dapat dilakukan oleh Admin.
+                    </p>
+                    <p class="mb-0">
+                        Silakan hubungi Admin sistem untuk melakukan reset kata sandi akun Anda.
+                    </p>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         function togglePassword() {
             const input = document.getElementById('passwordInput');

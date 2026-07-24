@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\PerangkatDaerah;
 use App\Models\ActivityLog;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+use App\Models\User;
 
 class VerifikasiController extends Controller
 {
@@ -72,6 +75,27 @@ class VerifikasiController extends Controller
 
         return redirect()->back()
             ->with('success', 'Akun berhasil diaktifkan kembali');
+    }
+    public function resetPassword($id)
+    {
+        $perangkat = PerangkatDaerah::findOrFail($id);
+
+        $user = User::findOrFail($perangkat->user_id);
+
+        $passwordBaru = 'Password123';
+
+        $user->password = Hash::make($passwordBaru);
+        $user->save();
+
+        ActivityLog::create([
+            'aktivitas' => 'Reset Password',
+            'deskripsi' => 'Password akun ' . $perangkat->nama_perangkat . ' berhasil direset.',
+        ]);
+
+        return back()->with([
+            'success' => 'Password berhasil direset.',
+            'password_baru' => $passwordBaru,
+        ]);
     }
 
 }

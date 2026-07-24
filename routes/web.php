@@ -81,6 +81,10 @@ Route::middleware('auth')
 
         Route::post('/verifikasi/{id}/aktifkan', 'aktifkan')
             ->name('verifikasi.aktifkan');
+        Route::post('/verifikasi/{id}/reset-password', 'resetPassword')
+            ->name('verifikasi.reset-password');
+
+
 
     });
 
@@ -248,3 +252,4 @@ Route::middleware('auth')
         Route::put('/password', 'updatePassword')
             ->name('password.update');
     });
+

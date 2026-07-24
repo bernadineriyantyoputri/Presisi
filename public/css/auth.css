@@ -258,15 +258,95 @@ label {
     margin: 0;
 }
 
+.forgot-wrap {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 5px;
+}
+
 .forgot-link {
-    font-size: 0.75rem;
+    background: none;
+    border: none;
+    padding: 0;
+    font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+    font-size: 0.74rem;
     color: #1565c0;
     text-decoration: none;
     font-weight: 500;
+    cursor: pointer;
+    line-height: 1.2;
 }
 
 .forgot-link:hover {
     text-decoration: underline;
+}
+
+/*  Modal (Lupa Password, dsb)  */
+.modal-dialog {
+    max-width: 400px;
+}
+
+.modal-content {
+    border: none;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(13, 71, 161, 0.25);
+}
+
+.modal-header {
+    background: #1a2f5e;
+    color: #ffffff;
+    border-bottom: none;
+    padding: 14px 20px;
+}
+
+.modal-header .modal-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.modal-header .btn-close {
+    filter: invert(1) grayscale(100%) brightness(200%);
+    opacity: 0.85;
+    font-size: 0.7rem;
+}
+
+.modal-header .btn-close:hover {
+    opacity: 1;
+}
+
+.modal-body {
+    padding: 20px 22px;
+    font-size: 0.82rem;
+    color: #374151;
+    line-height: 1.65;
+}
+
+.modal-body p + p {
+    margin-top: 8px;
+}
+
+.modal-footer {
+    border-top: 1px solid #e5e7eb;
+    padding: 12px 20px;
+    justify-content: flex-end;
+}
+
+.modal-footer .btn-secondary {
+    background: #f3f4f6;
+    color: #374151;
+    border: 1.5px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    padding: 7px 18px;
+}
+
+.modal-footer .btn-secondary:hover {
+    background: #e5e7eb;
 }
 
 .btn-presisi {
