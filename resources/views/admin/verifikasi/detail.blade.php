@@ -23,39 +23,24 @@
             <div class="verif-actions">
                 @if($perangkat->status_verifikasi === 'Pending')
 
-                    <form action="{{ route('admin.verifikasi.proses', $perangkat->id) }}" method="POST" class="d-inline">
-                        @csrf
-                        <button class="verif-btn verif-btn-primary">
-                            <i class="bi bi-check2-circle"></i> Verifikasi (ACC)
-                        </button>
-                    </form>
+                    <button type="button" class="verif-btn verif-btn-primary" data-bs-toggle="modal" data-bs-target="#accModal">
+                        <i class="bi bi-check2-circle"></i> Verifikasi (ACC)
+                    </button>
 
-                    <form action="{{ route('admin.verifikasi.tolak', $perangkat->id) }}" method="POST" class="d-inline"
-                        onsubmit="return confirm('Tolak permohonan ini?')">
-                        @csrf
-                        <button class="verif-btn verif-btn-danger">
-                            <i class="bi bi-x-circle"></i> Tolak
-                        </button>
-                    </form>
+                    <button type="button" class="verif-btn verif-btn-danger" data-bs-toggle="modal" data-bs-target="#tolakModal">
+                        <i class="bi bi-x-circle"></i> Tolak
+                    </button>
 
                 @elseif($perangkat->status_verifikasi === 'Terverifikasi')
 
                     @if($perangkat->is_active)
-                        <form action="{{ route('admin.verifikasi.nonaktifkan', $perangkat->id) }}" method="POST" class="d-inline"
-                            onsubmit="return confirm('Nonaktifkan akun ini? Perangkat Daerah tidak akan bisa login.')">
-                            @csrf
-                            <button class="verif-btn verif-btn-outline-danger">
-                                <i class="bi bi-slash-circle"></i> Nonaktifkan Akun
-                            </button>
-                        </form>
+                        <button type="button" class="verif-btn verif-btn-outline-danger" data-bs-toggle="modal" data-bs-target="#nonaktifModal">
+                            <i class="bi bi-slash-circle"></i> Nonaktifkan Akun
+                        </button>
                     @else
-                        <form action="{{ route('admin.verifikasi.aktifkan', $perangkat->id) }}" method="POST" class="d-inline"
-                            onsubmit="return confirm('Aktifkan kembali akun ini?')">
-                            @csrf
-                            <button class="verif-btn verif-btn-outline-success">
-                                <i class="bi bi-play-circle"></i> Aktifkan Akun
-                            </button>
-                        </form>
+                        <button type="button" class="verif-btn verif-btn-outline-success" data-bs-toggle="modal" data-bs-target="#aktifModal">
+                            <i class="bi bi-play-circle"></i> Aktifkan Akun
+                        </button>
                     @endif
 
                     <button type="button" class="verif-btn verif-btn-outline-warning d-inline" data-bs-toggle="modal"
@@ -73,16 +58,25 @@
             </div>
         </div>
 
-        {{-- ============ PASSWORD BARU (tampil sekali saja, setelah aksi apa pun yang menghasilkannya) ============ --}}
+        {{-- ============ PASSWORD BARU (tampil sekali saja, setelah reset) ============ --}}
         @if(session('password_baru'))
-            <div class="alert alert-success">
-                <h6 class="fw-bold mb-2">Password berhasil direset</h6>
-                <p class="mb-2">Password sementara:</p>
-                <div class="fs-4 fw-bold text-primary">{{ session('password_baru') }}</div>
-                <small class="text-muted">
-                    Catat password ini dan berikan kepada Perangkat Daerah. Setelah login, mereka dapat
-                    menggantinya melalui menu Pengaturan.
-                </small>
+            <div class="verif-card mb-4">
+                <div class="verif-card-header is-success">
+                    <i class="bi bi-check-circle-fill"></i>
+                    Password Berhasil Direset
+                </div>
+                <div class="verif-card-body" style="padding-bottom:24px;">
+                    <p class="mb-3" style="color:var(--verif-text-muted); font-size:0.92rem;">
+                        Sampaikan password sementara berikut kepada Perangkat Daerah secara langsung dan aman.
+                    </p>
+                    <div class="verif-password-box">
+                        <label>Password Sementara</label>
+                        <div class="verif-password-value">{{ session('password_baru') }}</div>
+                    </div>
+                    <small class="d-block mt-3" style="color:var(--verif-text-muted);">
+                        Pengguna wajib menggantinya melalui menu Pengaturan setelah berhasil login.
+                    </small>
+                </div>
             </div>
         @endif
 
@@ -101,7 +95,6 @@
                     </div>
                 </div>
 
-                {{-- Official "stamp" style status indicator --}}
                 <div class="verif-stamp-wrap">
                     @if($perangkat->status_verifikasi === 'Terverifikasi')
                         @if(!$perangkat->is_active)
@@ -128,7 +121,6 @@
             <div class="verif-card-body">
                 <div class="verif-grid">
 
-                    {{-- Kolom Kiri --}}
                     <div class="verif-section">
                         <h3 class="verif-section-title">
                             <span class="verif-section-number">01</span>
@@ -158,7 +150,6 @@
 
                     <div class="verif-divider"></div>
 
-                    {{-- Kolom Kanan --}}
                     <div class="verif-section">
                         <h3 class="verif-section-title">
                             <span class="verif-section-number">02</span>
@@ -198,47 +189,210 @@
     </div>
 </div>
 
-{{-- Modal Reset Password --}}
-<div class="modal fade" id="resetPasswordModal" tabindex="-1">
+{{-- ================================================================
+     MODAL: Verifikasi (ACC)
+================================================================ --}}
+<div class="modal fade" id="accModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-
+        <div class="modal-content verif-modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">
-                    <i class="bi bi-key-fill me-2"></i>
-                    Reset Password
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <div>
+                    <div class="verif-modal-icon is-navy"><i class="bi bi-check2-circle"></i></div>
+                    <h5 class="modal-title">Verifikasi Pendaftaran</h5>
+                    <p class="verif-modal-subtitle">Setujui permohonan akun perangkat daerah berikut.</p>
+                </div>
+                <button type="button" class="verif-modal-close" data-bs-dismiss="modal" aria-label="Tutup">
+                    <i class="bi bi-x-lg"></i>
+                </button>
             </div>
 
             <div class="modal-body">
-                <p class="mb-3">Password akun berikut akan direset:</p>
-
-                <div class="alert alert-light border">
+                <div class="verif-modal-infobox">
                     <strong>{{ $perangkat->nama_perangkat }}</strong>
-                    <br>
                     <small>{{ $perangkat->email }}</small>
                 </div>
-
-                <div class="alert alert-warning mb-0">
-                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
-                    Password sementara akan dibuat otomatis. Pengguna diwajibkan mengganti password
-                    setelah berhasil login.
+                <div class="verif-modal-warning">
+                    <i class="bi bi-info-circle-fill"></i>
+                    <span>Setelah diverifikasi, akun akan otomatis aktif dan Perangkat Daerah dapat login menggunakan email terdaftar.</span>
                 </div>
             </div>
 
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-
-                <form action="{{ route('admin.verifikasi.reset-password', $perangkat->id) }}" method="POST">
+                <button type="button" class="verif-modal-btn-cancel" data-bs-dismiss="modal">
+                    <i class="bi bi-x-circle"></i> Batal
+                </button>
+                <form action="{{ route('admin.verifikasi.proses', $perangkat->id) }}" method="POST">
                     @csrf
-                    <button class="btn btn-warning">
-                        <i class="bi bi-key-fill me-1"></i>
-                        Reset Password
+                    <button type="submit" class="verif-modal-btn-confirm is-success">
+                        <i class="bi bi-check2-circle"></i> Verifikasi Sekarang
                     </button>
                 </form>
             </div>
+        </div>
+    </div>
+</div>
 
+{{-- ================================================================
+     MODAL: Tolak Permohonan
+================================================================ --}}
+<div class="modal fade" id="tolakModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content verif-modal-content">
+            <div class="modal-header">
+                <div>
+                    <div class="verif-modal-icon is-danger"><i class="bi bi-x-circle"></i></div>
+                    <h5 class="modal-title">Tolak Permohonan</h5>
+                    <p class="verif-modal-subtitle">Tindakan ini akan menolak pendaftaran akun berikut.</p>
+                </div>
+                <button type="button" class="verif-modal-close" data-bs-dismiss="modal" aria-label="Tutup">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="verif-modal-infobox">
+                    <strong>{{ $perangkat->nama_perangkat }}</strong>
+                    <small>{{ $perangkat->email }}</small>
+                </div>
+                <div class="verif-modal-warning is-danger">
+                    <i class="bi bi-exclamation-triangle-fill"></i>
+                    <span>Tindakan ini tidak dapat dibatalkan. Perangkat Daerah harus mengajukan pendaftaran ulang jika ditolak.</span>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="verif-modal-btn-cancel" data-bs-dismiss="modal">
+                    <i class="bi bi-x-circle"></i> Batal
+                </button>
+                <form action="{{ route('admin.verifikasi.tolak', $perangkat->id) }}" method="POST">
+                    @csrf
+                    <button type="submit" class="verif-modal-btn-confirm is-danger">
+                        <i class="bi bi-check2-circle"></i> Ya, Tolak Permohonan
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{-- ================================================================
+     MODAL: Nonaktifkan Akun
+================================================================ --}}
+<div class="modal fade" id="nonaktifModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content verif-modal-content">
+            <div class="modal-header">
+                <div>
+                    <h5 class="modal-title">Nonaktifkan Akun</h5>
+                    <p class="verif-modal-subtitle">Akun tidak akan bisa digunakan untuk login sampai diaktifkan kembali.</p>
+                </div>
+                <button type="button" class="verif-modal-close" data-bs-dismiss="modal" aria-label="Tutup">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="verif-modal-infobox">
+                    <strong>{{ $perangkat->nama_perangkat }}</strong>
+                    <small>{{ $perangkat->email }}</small>
+                </div>
+                <div class="verif-modal-warning is-danger">
+                    <i class="bi bi-exclamation-triangle-fill"></i>
+                    <span>Perangkat Daerah tidak akan bisa login selama akun berstatus nonaktif.</span>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="verif-modal-btn-cancel" data-bs-dismiss="modal">
+                    <i class="bi bi-x-circle"></i> Batal
+                </button>
+                <form action="{{ route('admin.verifikasi.nonaktifkan', $perangkat->id) }}" method="POST">
+                    @csrf
+                    <button type="submit" class="verif-modal-btn-confirm is-danger">
+                        <i class="bi bi-check2-circle"></i> Nonaktifkan
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{-- ================================================================
+     MODAL: Aktifkan Kembali Akun
+================================================================ --}}
+<div class="modal fade" id="aktifModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content verif-modal-content">
+            <div class="modal-header">
+                <div>
+                    <h5 class="modal-title">Aktifkan Kembali Akun</h5>
+                    <p class="verif-modal-subtitle">Akun akan dapat digunakan untuk login kembali.</p>
+                </div>
+                <button type="button" class="verif-modal-close" data-bs-dismiss="modal" aria-label="Tutup">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="verif-modal-infobox">
+                    <strong>{{ $perangkat->nama_perangkat }}</strong>
+                    <small>{{ $perangkat->email }}</small>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="verif-modal-btn-cancel" data-bs-dismiss="modal">
+                    <i class="bi bi-x-circle"></i> Batal
+                </button>
+                <form action="{{ route('admin.verifikasi.aktifkan', $perangkat->id) }}" method="POST">
+                    @csrf
+                    <button type="submit" class="verif-modal-btn-confirm is-success">
+                        <i class="bi bi-check2-circle"></i> Aktifkan Akun
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{-- ================================================================
+     MODAL: Reset Password
+================================================================ --}}
+<div class="modal fade" id="resetPasswordModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content verif-modal-content">
+            <div class="modal-header">
+                <div>
+                    <h5 class="modal-title">Reset Password</h5>
+                    <p class="verif-modal-subtitle">Password akun berikut akan direset secara otomatis.</p>
+                </div>
+                <button type="button" class="verif-modal-close" data-bs-dismiss="modal" aria-label="Tutup">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="verif-modal-infobox">
+                    <strong>{{ $perangkat->nama_perangkat }}</strong>
+                    <small>{{ $perangkat->email }}</small>
+                </div>
+                <div class="verif-modal-warning">
+                    <i class="bi bi-exclamation-triangle-fill"></i>
+                    <span>Pengguna wajib mengganti password ini setelah berhasil login. Sampaikan password baru secara langsung dan aman.</span>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="verif-modal-btn-cancel" data-bs-dismiss="modal">
+                    <i class="bi bi-x-circle"></i> Batal
+                </button>
+                <form action="{{ route('admin.verifikasi.reset-password', $perangkat->id) }}" method="POST">
+                    @csrf
+                    <button type="submit" class="verif-modal-btn-confirm is-navy">
+                        <i class="bi bi-check2-circle"></i> Reset Password
+                    </button>
+                </form>
+            </div>
         </div>
     </div>
 </div>

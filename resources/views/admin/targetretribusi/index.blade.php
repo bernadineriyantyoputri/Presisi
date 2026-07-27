@@ -223,6 +223,8 @@
 
                                     <td>
                                         <div class="tgt-cell-strong">{{ $rincian->nama_rincian }}</div>
+                                        <div class="tgt-cell-muted">{{ $rincian->objek->nama_objek ?? '-' }}</div>
+                                        
                                     </td>
 
                                     <td>
@@ -294,16 +296,17 @@
                     <input type="hidden" name="target_perubahan" id="input_target_perubahan_raw">
                     <input type="hidden" name="target_aktif" id="input_target_aktif">
 
-                    <div class="modal-header">
-                        <h5 class="modal-title">
-                            <i class="bi bi-pencil-square me-2"></i>Edit Target Anggaran
-                        </h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
+                    <div class="modal-header tgt-modal-header">
+    <div>
+        <h5 class="modal-title">Edit Target Anggaran</h5>
+        <p class="tgt-modal-subtitle">Update target penerimaan retribusi untuk tahun berjalan.</p>
+    </div>
+    <button type="button" class="tgt-modal-close" data-bs-dismiss="modal" aria-label="Tutup">
+        <i class="bi bi-x-lg"></i>
+    </button>
+</div>
 
-                    <div class="modal-body">
-
-                        <p class="text-muted mb-3">Update target penerimaan retribusi untuk tahun berjalan.</p>
+<div class="modal-body">
 
                         <div class="tgt-item-box">
                             <small>Item Retribusi</small>

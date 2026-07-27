@@ -3,45 +3,60 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Login PRESISI</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" rel="stylesheet">
-    <link href="{{ asset('css/auth.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/auth.css') }}?v={{ filemtime(public_path('css/auth.css')) }}" rel="stylesheet">
 </head>
 
 <body>
 
-    <img src="{{ asset('images/logo-presisi.png') }}" class="logo" alt="Logo PRESISI">
-
-    <div class="d-flex justify-content-center align-items-center min-vh-100 py-5">
+    <div class="auth-wrap">
         <div class="auth-card">
 
-            <div class="auth-header">
-                <i></i>
-                Masuk ke Sistem
+            {{-- Panel kiri: branding --}}
+            <div class="auth-brand">
+                <div class="auth-brand-circle auth-brand-circle-1"></div>
+                <div class="auth-brand-circle auth-brand-circle-2"></div>
+
+                <div class="auth-brand-top">
+                    <div class="auth-brand-logo">
+                        <img src="{{ asset('images/logo-presisi.png') }}" alt="Logo PRESISI">
+                        <span>PRESISI</span>
+                    </div>
+
+                    <div class="auth-brand-title">Realisasi Penerimaan<br>Retribusi Daerah</div>
+                    <div class="auth-brand-sub">
+                        Kelola dan pantau pelaporan retribusi daerah secara digital, akurat, dan transparan.
+                    </div>
+                </div>
+
+                <div class="auth-brand-foot">© 2026 Bapenda Provinsi Lampung</div>
             </div>
 
-            <div class="auth-body">
+            {{-- Panel kanan: form login --}}
+            <div class="auth-form-side">
 
-                <div class="auth-title">Selamat Datang</div>
-                <div class="auth-sub">Silakan masuk menggunakan akun resmi Anda</div>
+                <div class="auth-title">Masuk ke Akun</div>
+                <div class="auth-sub">Gunakan akun resmi perangkat daerah Anda.</div>
+
+                @if (session('success'))
+                    <div class="alert alert-success py-2 px-3 mb-3" style="font-size: 13px;">
+                        <i class="ti ti-circle-check me-1"></i>{{ session('success') }}
+                    </div>
+                @endif
+
+                @if (session('error'))
+                    <div class="alert alert-danger py-2 px-3 mb-3" style="font-size: 13px;">
+                        <i class="ti ti-alert-circle me-1"></i>{{ session('error') }}
+                    </div>
+                @endif
 
                 <form method="POST" action="{{ route('login') }}">
                     @csrf
 
-                    @if (session('success'))
-                        <div class="alert alert-success py-2 px-3 mb-3" style="font-size: 13px;">
-                            <i class="ti ti-circle-check me-1"></i>{{ session('success') }}
-                        </div>
-                    @endif
-
-                    @if (session('error'))
-                        <div class="alert alert-danger py-2 px-3 mb-3" style="font-size: 13px;">
-                            <i class="ti ti-alert-circle me-1"></i>{{ session('error') }}
-                        </div>
-                    @endif
-
-                    <div class="mb-2">
+                    <div class="mb-3">
                         <label>Nama Pengguna (Username)</label>
                         <div class="input-icon-wrap has-icon-l">
                             <i class="ti ti-user icon-left"></i>
@@ -69,10 +84,11 @@
                         </div>
                     </div>
 
-                    <button type="submit" class="btn btn-presisi w-100 ">
+                    <button type="submit" class="btn btn-presisi w-100">
                         Masuk ke Sistem
                     </button>
                 </form>
+
                 <hr class="auth-divider">
 
                 <div class="auth-foot">
@@ -80,6 +96,7 @@
                     <a href="{{ route('register') }}">Daftar Akun Baru</a>
                 </div>
             </div>
+
         </div>
     </div>
 

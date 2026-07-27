@@ -12,11 +12,18 @@ use App\Models\User;
 class VerifikasiController extends Controller
 {
     public function index()
-    {
-        $perangkat = PerangkatDaerah::latest()->get();
+{
+    $sort = request('sort', 'terbaru'); // default: terbaru
 
-        return view('admin.verifikasi.index', compact('perangkat'));
-    }
+    $perangkat = PerangkatDaerah::when($sort === 'terlama', function ($query) {
+            $query->oldest(); // created_at asc
+        }, function ($query) {
+            $query->latest(); // created_at desc
+        })
+        ->get();
+
+    return view('admin.verifikasi.index', compact('perangkat', 'sort'));
+}
     public function detail($id)
     {
         $perangkat = PerangkatDaerah::findOrFail($id);

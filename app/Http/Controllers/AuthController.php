@@ -116,7 +116,7 @@ class AuthController extends Controller
                     );
                 }
 
-                return redirect('/perangkat');
+                return redirect()->route('perangkat.dashboard');
             }
 
             return redirect('/admin');

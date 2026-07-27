@@ -37,7 +37,8 @@
             <span>Target Retribusi</span>
         </a>
 
-        <a href="#" class="sidebar-menu">
+        <a href="{{ route('admin.pengaturan.profil') }}"
+            class="sidebar-menu {{ request()->routeIs('admin.pengaturan.*') ? 'active' : '' }}">
             <i class="bi bi-gear"></i>
             <span>Pengaturan</span>
         </a>

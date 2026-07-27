@@ -3,7 +3,7 @@
 @section('title', 'Laporan Retribusi')
 
 @push('styles')
-    <link rel="stylesheet" href="{{ asset('css/perangkat.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/perangkat.css') }}?v={{ filemtime(public_path('css/perangkat.css')) }}">
 @endpush
 
 @section('content')
@@ -41,7 +41,6 @@
                             <th>Periode</th>
                             <th>Objek Retribusi</th>
                             <th>Realisasi</th>
-                            <th>Status</th>
                             <th>Tanggal Submit</th>
                             <th class="text-end pe-4">Aksi</th>
                         </tr>
@@ -83,25 +82,6 @@
                                         <span class="text-muted small">—</span>
                                     @endif
                                 </td>
-                                <td>
-                                    @php
-                                        $statusClass = match($item->status) {
-                                            'submit'        => 'status-menunggu',
-                                            'terverifikasi' => 'status-terverifikasi',
-                                            'ditolak'       => 'status-ditolak',
-                                            default         => 'status-default',
-                                        };
-                                        $label = match($item->status) {
-                                            'submit'        => 'Menunggu Verifikasi',
-                                            'terverifikasi' => 'Terverifikasi',
-                                            'ditolak'       => 'Ditolak',
-                                            default         => ucfirst($item->status),
-                                        };
-                                    @endphp
-                                    <span class="status-badge {{ $statusClass }}">
-                                        {{ $label }}
-                                    </span>
-                                </td>
                                 <td class="text-muted small">
                                     {{ $item->tanggal_submit
                                         ? \Carbon\Carbon::parse($item->tanggal_submit)->format('d M Y')
@@ -116,7 +96,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="7" class="text-center py-5 text-muted">
+                                <td colspan="6" class="text-center py-5 text-muted">
                                     <i class="bi bi-inbox fs-3 d-block mb-2"></i>
                                     Belum ada laporan.
                                     <a href="{{ route('perangkat.laporan.create') }}">Input sekarang</a>.

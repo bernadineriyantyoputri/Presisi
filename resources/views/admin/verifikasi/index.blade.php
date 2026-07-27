@@ -60,14 +60,26 @@
         <div class="table-card-header">
             <h3>Daftar Permohonan Pendaftaran</h3>
 
-            <div class="table-card-actions">
-                <button type="button" class="btn-outline">
-                    <i class="bi bi-funnel"></i> Filter
-                </button>
-                <button type="button" class="btn-outline">
-                    <i class="bi bi-download"></i> Ekspor
-                </button>
-            </div>
+            <div class="dropdown filter-sort-dropdown">
+    <button type="button" class="btn-outline dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="bi bi-funnel"></i>
+        Urutkan: {{ $sort === 'terlama' ? 'Terlama' : 'Terbaru' }}
+    </button>
+    <ul class="dropdown-menu dropdown-menu-end">
+        <li>
+            <a class="dropdown-item {{ $sort !== 'terlama' ? 'active' : '' }}"
+               href="{{ request()->fullUrlWithQuery(['sort' => 'terbaru']) }}">
+                <i class="bi bi-arrow-down-short"></i> Terbaru
+            </a>
+        </li>
+        <li>
+            <a class="dropdown-item {{ $sort === 'terlama' ? 'active' : '' }}"
+               href="{{ request()->fullUrlWithQuery(['sort' => 'terlama']) }}">
+                <i class="bi bi-arrow-up-short"></i> Terlama
+            </a>
+        </li>
+    </ul>
+</div>
         </div>
 
         <div class="table-scroll">

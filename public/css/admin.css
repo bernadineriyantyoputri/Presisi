@@ -1,3 +1,17 @@
+html, body{
+    overflow-x: hidden;
+}
+
+.d-flex{
+    min-width: 0;
+}
+
+.main-content{
+    min-width: 0;
+    flex: 1 1 0%;
+    overflow-x: hidden;
+}
+
 /* ===================================================
    GLOBAL
 =================================================== */
@@ -1266,7 +1280,14 @@ td{
        border-color: var(--verif-success);
        color: var(--verif-success);
    }
-   .verif-btn-outline-success:hover { background: var(--verif-success-bg); }
+   .verif-btn-outline-success:hover { background: var(--verif-success-bg); } 
+
+   .verif-btn-outline-warning {
+    background: transparent;
+    border-color: var(--verif-warning);
+    color: var(--verif-warning);
+}
+.verif-btn-outline-warning:hover { background: var(--verif-warning-bg); }
    
    .verif-btn-disabled {
        background: #EDEFF2;
@@ -3425,8 +3446,1544 @@ table.jr-table{
        .tgt-filter-card .row > div{
            margin-bottom:12px;
        }
-   }
+   } 
+
+   /* ================================================================
+   ==========   PERBAIKAN: MODAL EDIT TARGET (selaras verif-modal-*)
+   ================================================================
+   Override tambahan — tidak menghapus style lama di atas.
+   ================================================================ */
+
+/* Header putih, bukan navy solid — selaras modal verifikasi */
+.tgt-page .modal-header.tgt-modal-header{
+    background: #fff;
+    color: var(--tgt-text);
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 26px 28px 6px;
+    border-bottom: none;
+}
+
+.tgt-page .modal-header.tgt-modal-header .modal-title{
+    font-family: 'Inter', sans-serif;
+    font-weight: 800;
+    font-size: 1.3rem;
+    color: #101828;
+    margin: 0 0 4px;
+}
+
+.tgt-modal-subtitle{
+    color: var(--tgt-text-muted);
+    font-size: 0.88rem;
+    line-height: 1.5;
+    margin: 0;
+    max-width: 26rem;
+}
+
+/* Tombol close custom, ganti dari .btn-close bawaan bootstrap */
+.tgt-modal-close{
+    background: none;
+    border: none;
+    color: #94A3B8;
+    font-size: 1.15rem;
+    line-height: 1;
+    padding: 6px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background .15s ease, color .15s ease;
+    flex-shrink: 0;
+}
+
+.tgt-modal-close:hover{
+    background: #F1F5F9;
+    color: #334155;
+}
+
+.tgt-page .modal-body{
+    padding: 12px 28px 4px;
+}
+
+.tgt-page .modal-footer{
+    padding: 20px 28px 28px;
+    border-top: 1px solid #EEF1F6;
+}
+
+.tgt-item-box{
+    margin-bottom: 18px;
+}
+
+/* ---------- Toggle "Target Aktif": navy vs biru muda, tanpa gold ---------- */
+
+.tgt-page .btn-outline-primary,
+.tgt-page .btn-outline-warning{
+    background: var(--tgt-navy-050);
+    border-color: var(--tgt-navy-050);
+    color: var(--tgt-navy-700);
+    font-weight: 600;
+}
+
+.tgt-page .btn-outline-primary:hover,
+.tgt-page .btn-outline-warning:hover{
+    background: #DCE4F1;
+    border-color: #DCE4F1;
+    color: var(--tgt-navy-900);
+}
+
+.tgt-page .btn-check:checked + .btn-outline-primary,
+.tgt-page .btn-check:checked + .btn-outline-warning{
+    background: var(--tgt-navy-900);
+    border-color: var(--tgt-navy-900);
+    color: #fff;
+}
+
+/* ================================================================
+   ==========   SELESAI: PERBAIKAN MODAL EDIT TARGET   ==============
+   ================================================================ */
 
    /* ================================================================
       ==========   SELESAI: MANAJEMEN TARGET RETRIBUSI   ==============
       ================================================================ */
+
+/* ================================================================
+   ================================================================
+   ==========   MULAI: MODAL KONFIRMASI VERIFIKASI ADMIN(verif-modal-*)  =
+   ================================================================
+   Dipakai oleh : resources/views/admin/verifikasi/detail.blade.php
+   Modal        : #accModal, #tolakModal, #nonaktifModal, #aktifModal,
+                  #resetPasswordModal
+   Konsisten dgn desain "Tambah Jenis Retribusi" (jr-modal-content):
+   rounded 22px, header ikon + judul + subtitle, footer 2 tombol pill
+   dengan ikon (Batal / Aksi Utama).
+   ================================================================ */
+
+   .verif-modal-content{
+    border: 0;
+    border-radius: 22px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(15, 44, 76, .18);
+}
+
+.verif-modal-content .modal-header{
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 26px 28px 6px;
+    border-bottom: none;
+}
+
+.verif-modal-content .modal-title{
+    font-family: 'Inter', sans-serif;
+    font-weight: 800;
+    font-size: 1.3rem;
+    color: #101828;
+    margin: 0 0 4px;
+}
+
+.verif-modal-subtitle{
+    color: #64748B;
+    font-size: 0.88rem;
+    line-height: 1.5;
+    margin: 0;
+    max-width: 26rem;
+}
+
+.verif-modal-content .modal-body{
+    padding: 8px 28px 4px;
+}
+
+.verif-modal-content .modal-footer{
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 20px 28px 28px;
+    border-top: 1px solid #EEF1F6;
+}
+
+.verif-modal-content .modal-footer form{
+    margin: 0;
+}
+
+/* Tombol close (X) */
+.verif-modal-close{
+    background: none;
+    border: none;
+    color: #94A3B8;
+    font-size: 1.15rem;
+    line-height: 1;
+    padding: 6px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background .15s ease, color .15s ease;
+    flex-shrink: 0;
+}
+
+.verif-modal-close:hover{
+    background: #F1F5F9;
+    color: #334155;
+}
+
+/* Icon lingkaran di atas judul */
+.verif-modal-icon{
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    color: #fff;
+    margin-bottom: 14px;
+}
+
+
+.verif-modal-icon.is-success { background: #1F8A4C; }
+.verif-modal-icon.is-warning { background: #B8860B; }
+
+/* Kotak ringkasan identitas (nama + email) */
+.verif-modal-infobox{
+    background: #F8FAFC;
+    border: 1px solid #EEF1F6;
+    border-radius: 14px;
+    padding: 14px 16px;
+    margin-bottom: 14px;
+}
+
+.verif-modal-infobox strong{
+    display: block;
+    font-size: 0.96rem;
+    font-weight: 700;
+    color: #101828;
+    margin-bottom: 2px;
+}
+
+.verif-modal-infobox small{
+    color: #64748B;
+    font-size: 0.82rem;
+}
+
+/* Kotak peringatan */
+.verif-modal-warning{
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    background: #FBF3DD;
+    color: #8a6508;
+    border-radius: 12px;
+    padding: 14px 16px;
+    font-size: 0.85rem;
+    line-height: 1.55;
+    margin-bottom: 4px;
+}
+
+.verif-modal-warning i{
+    font-size: 1rem;
+    margin-top: 1px;
+    flex-shrink: 0;
+}
+
+.verif-modal-warning.is-danger{
+    background: #FBEAE8;
+    color: #C0392B;
+}
+
+/* Tombol Batal (pill abu-abu, konsisten dgn jr-btn-cancel) */
+.verif-modal-btn-cancel{
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #EEF2F7;
+    color: #22345A;
+    border: none;
+    border-radius: 12px;
+    padding: 10px 20px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    transition: background .15s ease;
+}
+
+.verif-modal-btn-cancel:hover{
+    background: #DCE4F1;
+    color: #22345A;
+}
+
+/* Tombol aksi utama (pill berwarna, ikon check di dalamnya) */
+.verif-modal-btn-confirm{
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #22345A;
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 10px 22px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    transition: background .15s ease;
+}
+
+.verif-modal-btn-confirm:hover{ color: #fff; }
+
+.verif-modal-btn-confirm.is-success { background: #22345A; }
+.verif-modal-btn-confirm.is-success:hover { background: #177a41; }
+
+.verif-modal-btn-confirm.is-danger { background: #22345A; }
+.verif-modal-btn-confirm.is-danger:hover { background: #C0392B; }
+
+/* Tombol aksi utama - varian navy (dipakai utk Reset Password, netral, senada sistem) */
+.verif-modal-btn-confirm.is-navy { background: #22345A; }
+.verif-modal-btn-confirm.is-navy:hover { background: #8a6508; }
+
+/* Kartu "Password Berhasil Direset" (bukan modal — muncul setelah redirect) */
+.verif-card-header.is-success{
+    background: var(--verif-success);
+}
+
+.verif-password-box{
+    background: linear-gradient(135deg, #0F2C4C, #1E4D7B);
+    border-radius: 14px;
+    padding: 20px 22px;
+    text-align: center;
+}
+
+.verif-password-box label{
+    display: block;
+    color: rgba(255, 255, 255, .7);
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    margin-bottom: 8px;
+}
+
+.verif-password-value{
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: .04em;
+    word-break: break-all;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 480px){
+    .verif-modal-content .modal-footer{
+        flex-direction: column-reverse;
+        align-items: stretch;
+    }
+    .verif-modal-btn-cancel,
+    .verif-modal-btn-confirm{
+        justify-content: center;
+        width: 100%;
+    }
+} 
+
+/* ================================================================
+   ==========   MULAI: DROPDOWN URUTKAN (Verifikasi Pendaftaran)  ==
+   ================================================================
+   Disamakan dengan style jr-filter-dropdown (Detail Objek Retribusi)
+   ================================================================ */
+
+   .filter-sort-dropdown{
+    position: relative;
+}
+
+.filter-sort-dropdown .btn-outline.dropdown-toggle{
+    background: #F8FAFC;
+    border: 1.5px solid #E2E8F0;
+    color: #1F2937;
+    font-weight: 600;
+    font-size: 0.88rem;
+    padding: 10px 16px;
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    min-width: 240px;
+    transition: .2s ease;
+}
+
+.filter-sort-dropdown .btn-outline.dropdown-toggle:hover{
+    background: #F8FAFC;
+    border-color: #22345A;
+}
+
+.filter-sort-dropdown .dropdown-toggle::after{
+    margin-left: 6px;
+}
+
+.filter-sort-dropdown .dropdown-menu{
+    border-radius: 10px;
+    border: 1px solid #EEF1F6;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, .08);
+    padding: 6px;
+    min-width: 240px;
+}
+
+.filter-sort-dropdown .dropdown-item{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-radius: 8px;
+    padding: 9px 12px;
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: #334155;
+}
+
+.filter-sort-dropdown .dropdown-item:hover{
+    background: #EEF2F7;
+    color: #22345A;
+}
+
+.filter-sort-dropdown .dropdown-item.active{
+    background: #22345A;
+    color: #fff;
+}
+
+/* ================================================================
+   ==========   SELESAI: DROPDOWN URUTKAN   =========================
+   ================================================================ */
+/* ================================================================
+   ==========   SELESAI: MODAL KONFIRMASI VERIFIKASI   =============
+   ================================================================ */
+
+
+/* ================================================================
+   ==========   PENGATURAN ADMIN (peng-)   ==========================
+   Dipakai di : resources/views/admin/pengaturan/*.blade.php
+   Tema       : navy + gold
+   ================================================================ */
+
+   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+   .peng-profile-top{
+    flex-wrap: wrap !important;
+    row-gap: 16px;
+}
+
+.peng-profile-left{
+    flex-wrap: wrap;
+}
+
+.peng-info-row{
+    flex-wrap: wrap;
+    row-gap: 2px;
+}
+ 
+   .peng-page{
+       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+       color: #1A2B3C;
+       overflow-x: hidden;
+       max-width: 100%;
+       box-sizing: border-box;
+   }
+   
+   .peng-page *{
+       box-sizing: border-box;
+   }
+   
+   .peng-container{
+       max-width: 960px;
+       width: 100%;
+   }
+   
+   /* ---------- Header ---------- */
+   .peng-header{
+       margin-bottom: 24px;
+   }
+   
+   .peng-title{
+       font-weight: 800;
+       font-size: 1.7rem;
+       letter-spacing: -0.02em;
+       color: #101828;
+       margin: 0 0 4px;
+   }
+   
+   .peng-subtitle{
+       color: #64748B;
+       font-size: 0.92rem;
+       margin: 0;
+   }
+   
+   /* ---------- Alert ---------- */
+   .peng-alert{
+       display: flex;
+       align-items: center;
+       gap: 10px;
+       padding: 14px 18px;
+       border-radius: 10px;
+       font-size: 0.88rem;
+       font-weight: 500;
+       margin-bottom: 20px;
+   }
+   
+   .peng-alert-success{
+       background: #E7F6ED;
+       color: #1F8A4C;
+   }
+   
+   /* ---------- Tabs (pill) ---------- */
+   .peng-tabs-pill{
+       display: flex;
+       gap: 10px;
+       border-bottom: none;
+       margin-bottom: 22px;
+       flex-wrap: wrap;
+   }
+   
+   .peng-tab{
+       display: inline-flex;
+       align-items: center;
+       gap: 8px;
+       padding: 10px 16px;
+       font-size: 0.9rem;
+       font-weight: 600;
+       color: #334155;
+       text-decoration: none;
+       background: #fff;
+       border: 1.5px solid #E2E8F0;
+       border-radius: 10px;
+       white-space: nowrap;
+       transition: color .15s ease, border-color .15s ease, background .15s ease;
+   }
+   
+   .peng-tab:hover{
+       border-color: #22345A;
+       color: #22345A;
+   }
+   
+   .peng-tab.active{
+       background: #22345A;
+       border-color: #22345A;
+       color: #fff;
+   }
+   
+   /* ---------- Card ---------- */
+   .peng-card{
+       background: #fff;
+       border-radius: 16px;
+       box-shadow: 0 1px 2px rgba(15, 44, 76, 0.06), 0 6px 20px rgba(15, 44, 76, 0.05);
+       overflow: hidden;
+       width: 100%;
+   }
+   
+   .peng-card-body{
+       padding: 28px;
+       width: 100%;
+   }
+   
+   /* ---------- Profil top (foto, nama, badge, lokasi, tombol simpan) ---------- */
+   .peng-profile-top{
+       display: flex;
+       align-items: flex-start;
+       justify-content: space-between;
+       gap: 20px;
+       background: linear-gradient(180deg, #EEF3FC 0%, #F7F9FC 100%);
+       padding: 24px 28px;
+       border-radius: 16px 16px 0 0;
+       flex-wrap: nowrap;
+       width: 100%;
+   }
+   
+   .peng-profile-left{
+       display: flex;
+       align-items: center;
+       gap: 16px;
+       min-width: 0;
+       flex: 1;
+   }
+   
+   .peng-profile-photo-wrap{
+       position: relative;
+       flex-shrink: 0;
+       width: 72px;
+       height: 72px;
+   }
+   
+   .peng-avatar-photo{
+       width: 72px;
+       height: 72px;
+       border-radius: 12px;
+       object-fit: cover;
+       display: block;
+       border: 1px solid #E2E8F0;
+   }
+   
+   .peng-avatar-fallback{
+       display: flex;
+       align-items: center;
+       justify-content: center;
+       background: linear-gradient(135deg, #22345A, #1E4D7B);
+       color: #fff;
+       font-weight: 700;
+       font-size: 1.6rem;
+   }
+   
+   .peng-photo-upload-btn{
+       position: absolute;
+       bottom: -6px;
+       right: -6px;
+       width: 26px;
+       height: 26px;
+       border-radius: 50%;
+       background: #2E6FF2;
+       color: #fff;
+       display: flex;
+       align-items: center;
+       justify-content: center;
+       font-size: .75rem;
+       cursor: pointer;
+       border: 2px solid #fff;
+       z-index: 2;
+   }
+   
+   .peng-photo-input{
+       display: none;
+   }
+   
+   .peng-profile-info{
+       min-width: 0;
+       overflow: hidden;
+   }
+   
+   .peng-profile-name{
+       font-weight: 800;
+       font-size: 1.25rem;
+       color: #101828;
+       white-space: nowrap;
+       overflow: hidden;
+       text-overflow: ellipsis;
+       max-width: 100%;
+   }
+   
+   .peng-profile-badge{
+       display: inline-block;
+       background: #E4ECFB;
+       color: #22345A;
+       font-size: .72rem;
+       font-weight: 600;
+       padding: 3px 10px;
+       border-radius: 20px;
+       margin: 6px 0;
+   }
+   
+   .peng-profile-location{
+       font-size: .82rem;
+       color: #64748B;
+       display: flex;
+       align-items: center;
+       gap: 6px;
+       white-space: nowrap;
+       overflow: hidden;
+       text-overflow: ellipsis;
+       max-width: 100%;
+   }
+   
+   .peng-profile-top .peng-btn-save{
+       flex-shrink: 0;
+       align-self: center;
+   }
+   
+   /* ---------- Grid form (kiri) + sidebar info (kanan) ---------- */
+   .peng-profile-grid{
+       display: grid;
+       grid-template-columns: minmax(0, 1fr) minmax(0, 320px);
+       gap: 28px;
+       width: 100%;
+   }
+   
+   .peng-profile-form-col{
+       min-width: 0;
+   }
+   
+   .peng-profile-side-col{
+       min-width: 0;
+   }
+   
+   /* ---------- Form fields ---------- */
+   .peng-field{
+       margin-bottom: 18px;
+       width: 100%;
+   }
+   
+   .peng-field label{
+       display: block;
+       font-size: 0.82rem;
+       font-weight: 600;
+       color: #334155;
+       margin-bottom: 6px;
+   }
+   
+   .peng-input{
+       width: 100%;
+       border: 1.5px solid #D9E2F2;
+       border-radius: 10px;
+       padding: 11px 14px;
+       font-size: 0.92rem;
+       color: #1A2B3C;
+       font-family: 'Inter', sans-serif;
+       transition: border-color .2s ease, box-shadow .2s ease;
+   }
+   
+   .peng-input:focus{
+       outline: none;
+       border-color: #22345A;
+       box-shadow: 0 0 0 4px rgba(34, 52, 90, .08);
+   }
+   
+   .peng-input.is-invalid{
+       border-color: #C0392B;
+   }
+   
+   .peng-field-error{
+       color: #C0392B;
+       font-size: 0.8rem;
+       margin-top: 5px;
+   }
+   
+   .peng-select{
+       appearance: none;
+       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%2364748B' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+       background-repeat: no-repeat;
+       background-position: right 14px center;
+       padding-right: 36px;
+       cursor: pointer;
+   }
+   
+   /* ---------- Sidebar: info keanggotaan ---------- */
+   .peng-info-box{
+       border: 1px solid #E2E8F0;
+       border-radius: 14px;
+       padding: 18px 20px;
+       margin-bottom: 18px;
+       width: 100%;
+   }
+   
+   .peng-info-box-title{
+       font-weight: 700;
+       font-size: .85rem;
+       color: #334155;
+       display: flex;
+       align-items: center;
+       gap: 8px;
+       margin-bottom: 14px;
+   }
+   
+   .peng-info-row{
+       display: flex;
+       justify-content: space-between;
+       gap: 10px;
+       font-size: .82rem;
+       color: #64748B;
+       padding: 7px 0;
+       border-bottom: 1px dashed #EEF1F5;
+   }
+   
+   .peng-info-row:last-child{
+       border-bottom: none;
+   }
+   
+   .peng-info-row span{
+       flex-shrink: 0;
+   }
+   
+   .peng-info-row strong{
+       color: #1A2B3C;
+       font-weight: 600;
+       text-align: right;
+   }
+   
+   .peng-session-active{
+       display: flex;
+       align-items: center;
+       gap: 6px;
+       color: #1F8A4C !important;
+   }
+   
+   .peng-dot{
+       width: 7px;
+       height: 7px;
+       border-radius: 50%;
+       background: #1F8A4C;
+       display: inline-block;
+       flex-shrink: 0;
+   }
+   
+   /* ---------- Sidebar: zona berbahaya ---------- */
+   .peng-danger-box{
+       border: 1px solid #F6D9D2;
+       background: #FDF4F2;
+       border-radius: 14px;
+       padding: 18px 20px;
+       width: 100%;
+   }
+   
+   .peng-danger-title{
+       color: #C0392B;
+       font-weight: 700;
+       font-size: .85rem;
+       margin-bottom: 6px;
+   }
+   
+   .peng-danger-text{
+       color: #8a4a42;
+       font-size: .8rem;
+       line-height: 1.5;
+       margin-bottom: 14px;
+   }
+   
+   .peng-btn-danger{
+       border: 1.5px solid #C0392B;
+       background: #fff;
+       color: #C0392B;
+       font-weight: 600;
+       font-size: .82rem;
+       padding: 9px 16px;
+       border-radius: 8px;
+       cursor: pointer;
+       width: 100%;
+       font-family: 'Inter', sans-serif;
+       transition: background .15s ease, color .15s ease;
+   }
+   
+   .peng-btn-danger:hover{
+       background: #C0392B;
+       color: #fff;
+   }
+   
+   /* ---------- Tombol simpan ---------- */
+   .peng-btn-save{
+       display: inline-flex;
+       align-items: center;
+       gap: 8px;
+       background: #22345A;
+       color: #fff;
+       border: none;
+       border-radius: 10px;
+       padding: 11px 24px;
+       font-weight: 600;
+       font-size: 0.9rem;
+       font-family: 'Inter', sans-serif;
+       cursor: pointer;
+       white-space: nowrap;
+       transition: background .15s ease;
+   }
+   
+   .peng-btn-save:hover{
+       background: #16213f;
+       color: #fff;
+   }
+   
+   /* ---------- Responsive ---------- */
+   @media (max-width: 768px){
+       .peng-profile-grid{
+           grid-template-columns: 1fr;
+       }
+   }
+   
+   @media (max-width: 640px){
+       .peng-profile-top{
+           flex-wrap: wrap;
+       }
+       .peng-profile-top .peng-btn-save{
+           width: 100%;
+           justify-content: center;
+           order: 3;
+       }
+       .peng-profile-name,
+       .peng-profile-location{
+           white-space: normal;
+       }
+   }
+   
+   @media (max-width: 576px){
+       .peng-tabs-pill{
+           overflow-x: auto;
+           flex-wrap: nowrap;
+       }
+   }
+   
+   /* ================================================================
+      ==========   SELESAI: PENGATURAN ADMIN   =========================
+      ================================================================ */
+
+
+/* ================================================================
+   ==========   PENGATURAN - KEAMANAN AKUN (peng-)   =================
+   Tambahan khusus untuk halaman Ubah Password
+   Tempel di bagian bawah file css/admin.css
+   ================================================================ */
+
+   .peng-password-section{
+    max-width: 460px;
+    width: 100%;
+}
+
+.peng-section-title{
+    font-weight: 800;
+    font-size: 1.05rem;
+    color: #101828;
+    margin: 0 0 20px;
+}
+
+/* ---------- Box syarat password ---------- */
+.peng-req-box{
+    background: #EEF3FC;
+    border-radius: 12px;
+    padding: 16px 18px;
+    margin: 6px 0 22px;
+}
+
+.peng-req-title{
+    font-weight: 700;
+    font-size: .82rem;
+    color: #22345A;
+    margin-bottom: 10px;
+}
+
+.peng-req-list{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.peng-req-item{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: .82rem;
+    color: #64748B;
+}
+
+.peng-req-icon{
+    font-size: .85rem;
+    color: #94A3B8;
+    flex-shrink: 0;
+}
+
+.peng-req-item.peng-req-done{
+    color: #1F8A4C;
+}
+
+.peng-req-item.peng-req-done .peng-req-icon{
+    color: #1F8A4C;
+}
+
+/* ---------- Tombol simpan di bawah form ---------- */
+.peng-btn-save-bottom{
+    width: auto;
+}
+
+@media (max-width: 640px){
+    .peng-password-section{
+        max-width: 100%;
+    }
+    .peng-btn-save-bottom{
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* ================================================================
+   ==========   SELESAI: KEAMANAN AKUN   =============================
+   ================================================================ */ 
+
+
+/* ================================================================
+   ==========   PENGATURAN - TENTANG SISTEM (peng-)   ================
+   Tambahan khusus untuk halaman Tentang Sistem
+   Tempel di bagian bawah file css/admin.css
+   ================================================================ */
+
+   .peng-about-grid{
+    display: grid;
+    grid-template-columns: minmax(0, 280px) minmax(0, 1fr);
+    gap: 24px;
+    align-items: stretch;
+}
+
+/* ---------- Kolom kiri: brand card ---------- */
+.peng-about-brand{
+    background: linear-gradient(180deg, #F3F6FC 0%, #F8F9FB 100%);
+    border: 1px solid #E7ECF5;
+    border-radius: 16px;
+    padding: 32px 26px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.peng-about-logo{
+    width: 84px;
+    height: 84px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 18px;
+    opacity: .9;
+}
+
+.peng-about-logo img{
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.peng-about-name{
+    font-weight: 800;
+    font-size: 1.35rem;
+    color: #101828;
+    margin-bottom: 6px;
+}
+
+.peng-about-tagline{
+    font-size: .82rem;
+    color: #64748B;
+    line-height: 1.4;
+    max-width: 200px;
+}
+
+.peng-about-divider{
+    display: block;
+    width: 36px;
+    height: 3px;
+    background: #22345A;
+    border-radius: 3px;
+    margin: 18px 0;
+}
+
+.peng-about-desc{
+    font-size: .82rem;
+    color: #64748B;
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* ---------- Kolom kanan ---------- */
+.peng-about-right{
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.peng-about-stats-grid{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+}
+
+.peng-about-stat-box{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    padding: 14px 16px;
+}
+
+.peng-about-stat-icon{
+    width: 34px;
+    height: 34px;
+    flex-shrink: 0;
+    border-radius: 9px;
+    background: #E4ECFB;
+    color: #22345A;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: .95rem;
+}
+
+.peng-about-stat-text{
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.peng-about-stat-label{
+    font-size: .68rem;
+    font-weight: 700;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: #94A3B8;
+}
+
+.peng-about-stat-value{
+    font-size: .95rem;
+    font-weight: 700;
+    color: #101828;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ---------- Banner instansi ---------- */
+.peng-about-banner{
+    position: relative;
+    background: linear-gradient(135deg, #1B2A4A 0%, #22345A 100%);
+    border-radius: 14px;
+    padding: 22px 26px;
+    overflow: hidden;
+    min-height: 92px;
+    display: flex;
+    align-items: center;
+}
+
+.peng-about-banner-bg{
+    position: absolute;
+    top: 12px;
+    right: 18px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+    font-size: .62rem;
+    font-weight: 600;
+    color: rgba(255,255,255,.14);
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    pointer-events: none;
+    line-height: 1.3;
+}
+
+.peng-about-banner-content{
+    position: relative;
+    z-index: 1;
+}
+
+.peng-about-banner-label{
+    font-size: .68rem;
+    font-weight: 700;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,.55);
+    margin-bottom: 6px;
+}
+
+.peng-about-banner-title{
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.3;
+}
+
+.peng-about-banner-icon{
+    position: relative;
+    z-index: 1;
+    margin-left: auto;
+    font-size: 2.1rem;
+    color: rgba(255,255,255,.18);
+}
+
+/* ---------- Mini grid (3 box) ---------- */
+.peng-about-mini-grid{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+}
+
+.peng-about-mini-box{
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    padding: 16px 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 6px;
+}
+
+.peng-about-mini-box i{
+    font-size: 1.15rem;
+    color: #22345A;
+    margin-bottom: 2px;
+}
+
+.peng-about-mini-label{
+    font-size: .68rem;
+    font-weight: 700;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: #94A3B8;
+}
+
+.peng-about-mini-value{
+    font-size: .85rem;
+    font-weight: 700;
+    color: #101828;
+}
+
+/* ---------- Kutipan ---------- */
+.peng-about-quote{
+    margin-top: 22px;
+    background: #EEF3FC;
+    border-radius: 12px;
+    padding: 16px 20px;
+    font-size: .85rem;
+    font-style: italic;
+    color: #334155;
+    line-height: 1.6;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 900px){
+    .peng-about-grid{
+        grid-template-columns: 1fr;
+    }
+    .peng-about-brand{
+        padding: 24px;
+    }
+}
+
+@media (max-width: 640px){
+    .peng-about-stats-grid,
+    .peng-about-mini-grid{
+        grid-template-columns: 1fr 1fr;
+    }
+    .peng-about-mini-grid{
+        grid-template-columns: 1fr;
+    }
+    .peng-about-banner{
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    .peng-about-banner-icon{
+        margin-left: 0;
+    }
+}
+
+/* ================================================================
+   ==========   SELESAI: TENTANG SISTEM   ============================
+   ================================================================ */ 
+
+/* ================================================================
+   ==========   PENGATURAN - PENGATURAN SISTEM (peng-)   =============
+   Tambahan khusus untuk halaman Konfigurasi Sistem
+   Tempel di bagian bawah file css/admin.css
+   ================================================================ */
+
+/* ---------- Header konfigurasi (biru muda, atas card) ---------- */
+.peng-config-top{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    background: linear-gradient(180deg, #EEF3FC 0%, #F7F9FC 100%);
+    padding: 22px 28px;
+    border-radius: 16px 16px 0 0;
+    flex-wrap: wrap;
+}
+
+.peng-config-heading{
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-width: 0;
+}
+
+.peng-config-icon{
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    border-radius: 10px;
+    background: #fff;
+    border: 1.5px solid #D9E2F2;
+    color: #22345A;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.05rem;
+}
+
+.peng-config-title{
+    font-weight: 800;
+    font-size: 1.05rem;
+    color: #101828;
+}
+
+.peng-config-subtitle{
+    font-size: .8rem;
+    color: #64748B;
+    margin-top: 2px;
+}
+
+/* ---------- Grid form (kiri) + logo box (kanan) ---------- */
+.peng-config-grid{
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 320px);
+    gap: 28px;
+    width: 100%;
+}
+
+.peng-config-form-col{
+    min-width: 0;
+}
+
+.peng-config-side-col{
+    min-width: 0;
+}
+
+.peng-textarea{
+    resize: vertical;
+    min-height: 88px;
+    line-height: 1.5;
+    font-family: 'Inter', sans-serif;
+}
+
+/* ---------- Box logo & identitas ---------- */
+.peng-logo-box{
+    background: #EEF3FC;
+    border-radius: 14px;
+    padding: 18px 20px;
+    width: 100%;
+}
+
+.peng-logo-box-title{
+    font-weight: 700;
+    font-size: .88rem;
+    color: #101828;
+    margin-bottom: 16px;
+}
+
+.peng-logo-item{
+    margin-bottom: 16px;
+}
+
+.peng-logo-item:last-child{
+    margin-bottom: 0;
+}
+
+.peng-logo-item-label{
+    font-size: .78rem;
+    color: #64748B;
+    margin-bottom: 8px;
+}
+
+.peng-logo-row{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.peng-logo-preview{
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+    border-radius: 10px;
+    background: #fff;
+    border: 1px solid #D9E2F2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    color: #22345A;
+    font-size: 1.15rem;
+}
+
+.peng-logo-preview img{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.peng-btn-outline{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1.5px solid #D9E2F2;
+    background: #fff;
+    color: #22345A;
+    font-weight: 600;
+    font-size: .8rem;
+    padding: 8px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    white-space: nowrap;
+    font-family: 'Inter', sans-serif;
+    transition: border-color .15s ease, background .15s ease;
+}
+
+.peng-btn-outline:hover{
+    border-color: #22345A;
+    background: #F7F9FC;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 768px){
+    .peng-config-grid{
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 640px){
+    .peng-config-top{
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .peng-config-top .peng-btn-save{
+        width: 100%;
+        justify-content: center;
+    }
+    .peng-logo-row{
+        flex-wrap: wrap;
+    }
+}
+
+/* ================================================================
+   ==========   SELESAI: PENGATURAN SISTEM   ==========================
+   ================================================================ */ 
+
+/* ================================================================
+   ==========   PENGATURAN - NOTIFIKASI (peng-)   ====================
+   Tambahan khusus untuk halaman Pengaturan Notifikasi
+   Tempel di bagian bawah file css/admin.css
+   ================================================================ */
+
+   .peng-notif-list{
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.peng-notif-item{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    border: 1px solid #E2E8F0;
+    border-radius: 14px;
+    padding: 18px 20px;
+    flex-wrap: wrap;
+}
+
+.peng-notif-left{
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    min-width: 0;
+    flex: 1;
+}
+
+.peng-notif-icon{
+    width: 38px;
+    height: 38px;
+    flex-shrink: 0;
+    border-radius: 10px;
+    background: #E4ECFB;
+    color: #22345A;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+}
+
+.peng-notif-text{
+    min-width: 0;
+}
+
+.peng-notif-title{
+    font-weight: 700;
+    font-size: .9rem;
+    color: #101828;
+    margin-bottom: 3px;
+}
+
+.peng-notif-desc{
+    font-size: .8rem;
+    color: #64748B;
+    line-height: 1.5;
+}
+
+.peng-notif-right{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+.peng-switch-label{
+    font-size: .82rem;
+    font-weight: 600;
+    color: #64748B;
+    white-space: nowrap;
+}
+
+/* ---------- Toggle switch ---------- */
+.peng-switch{
+    position: relative;
+    display: inline-block;
+    width: 42px;
+    height: 24px;
+    flex-shrink: 0;
+}
+
+.peng-switch input{
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.peng-switch-slider{
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #CBD5E1;
+    border-radius: 999px;
+    transition: background-color .18s ease;
+}
+
+.peng-switch-slider::before{
+    content: "";
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    left: 3px;
+    top: 3px;
+    background-color: #fff;
+    border-radius: 50%;
+    transition: transform .18s ease;
+    box-shadow: 0 1px 2px rgba(0,0,0,.15);
+}
+
+.peng-switch input:checked + .peng-switch-slider{
+    background-color: #22345A;
+}
+
+.peng-switch input:checked + .peng-switch-slider::before{
+    transform: translateX(18px);
+}
+
+.peng-switch input:focus-visible + .peng-switch-slider{
+    box-shadow: 0 0 0 3px rgba(34, 52, 90, .25);
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 560px){
+    .peng-notif-item{
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .peng-notif-right{
+        align-self: flex-end;
+    }
+}
+
+/* ================================================================
+   ==========   SELESAI: NOTIFIKASI   =================================
+   ================================================================ */

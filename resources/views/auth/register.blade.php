@@ -3,24 +3,40 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Registrasi PRESISI</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" rel="stylesheet">
-    <link href="{{ asset('css/auth.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/auth.css') }}?v={{ filemtime(public_path('css/auth.css')) }}" rel="stylesheet">
 </head>
 
 <body>
 
-    <img src="{{ asset('images/logo-presisi.png') }}" class="logo" alt="Logo PRESISI">
-    <div class="d-flex justify-content-center align-items-center vh-100">
+    <div class="auth-wrap">
         <div class="register-card">
 
-            <div class="register-header">
-                <h4></i>Pendaftaran Akun Perangkat Daerah</h4>
-                <small>Bapenda Provinsi Lampung</small>
+            {{-- Panel kiri: branding, SAMA seperti login --}}
+            <div class="auth-brand">
+                <div class="auth-brand-circle auth-brand-circle-1"></div>
+                <div class="auth-brand-circle auth-brand-circle-2"></div>
+
+                <div class="auth-brand-top">
+                    <div class="auth-brand-logo">
+                        <img src="{{ asset('images/logo-presisi.png') }}" alt="Logo PRESISI">
+                        <span>PRESISI</span>
+                    </div>
+
+                    <div class="auth-brand-title">Pendaftaran Akun<br>Perangkat Daerah</div>
+                    <div class="auth-brand-sub">
+                        Daftarkan perangkat daerah Anda untuk mulai mengelola pelaporan realisasi retribusi.
+                    </div>
+                </div>
+
+                <div class="auth-brand-foot">© 2026 Bapenda Provinsi Lampung</div>
             </div>
 
-            <div class="p-4 p-md-5">
+            {{-- Panel kanan: form registrasi --}}
+            <div class="register-form-side">
                 <form method="POST" action="{{ route('register') }}">
                     @csrf
 
@@ -176,7 +192,7 @@
                     {{-- TOMBOL SUBMIT --}}
                     <div class="text-center mt-5">
                         <button type="submit" class="btn btn-presisi px-5">
-                            Daftar Akun Baru </i>
+                            Daftar Akun Baru
                         </button>
 
                         <div class="mt-3 auth-foot">

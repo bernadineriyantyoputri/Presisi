@@ -5,11 +5,12 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\VerifikasiController;
 use App\Http\Controllers\Admin\LaporanController;
 use App\Http\Controllers\Admin\DataRetribusiController;
-use App\Http\Controllers\Admin\PengaturanController as AdminPengaturanController;
+use App\Http\Controllers\Admin\PengaturanController;
 use App\Http\Controllers\Perangkat\LaporanRetribusiController;
 use App\Http\Controllers\Admin\TargetRetribusiController;
 use App\Http\Controllers\Perangkat\PengaturanController as PerangkatPengaturanController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Perangkat\DashboardController as PerangkatDashboardController; // ⬅️ INI YANG KURANG
 
 /*
 |--------------------------------------------------------------------------
@@ -45,11 +46,12 @@ Route::controller(AuthController::class)->group(function () {
 
 Route::middleware('auth')->group(function () {
 
-    Route::view('/perangkat', 'perangkat.dashboard')
-        ->name('perangkat');
-
     Route::get('/admin', [DashboardController::class, 'index'])
         ->name('admin');
+
+    Route::get('/perangkat/dashboard', [PerangkatDashboardController::class, 'index'])
+        ->name('perangkat.dashboard');
+
 });
 
 /*
@@ -83,8 +85,6 @@ Route::middleware('auth')
             ->name('verifikasi.aktifkan');
         Route::post('/verifikasi/{id}/reset-password', 'resetPassword')
             ->name('verifikasi.reset-password');
-
-
 
     });
 
@@ -194,8 +194,8 @@ Route::middleware('auth')
 
         // Objek
         Route::post('/objek', [DataRetribusiController::class, 'storeObjek'])->name('objek.store');
-        Route::post('/objek-lengkap', [DataRetribusiController::class, 'storeObjekLengkap'])->name('objek.storeFull'); // ← TAMBAHKAN INI
-    
+        Route::post('/objek-lengkap', [DataRetribusiController::class, 'storeObjekLengkap'])->name('objek.storeFull');
+
         // Rincian
         Route::post('/rincian', [DataRetribusiController::class, 'storeRincian'])->name('rincian.store');
         Route::put('/rincian/{id}', [DataRetribusiController::class, 'updateRincian'])->name('rincian.update');
@@ -208,9 +208,6 @@ Route::middleware('auth')
 
         Route::delete('/rincian-bulk', [DataRetribusiController::class, 'bulkDestroyRincian'])->name('rincian.bulkDestroy');
 
-        // PENTING: nama diganti dari 'target.store' -> 'data.target.store'
-        // supaya TIDAK bentrok dengan 'admin.target.store' milik TargetRetribusiController di bawah.
-        // Ini form target-retribusi/index.blade.php (tabel + modal edit) memakai route ini.
         Route::post('/target', [DataRetribusiController::class, 'storeTarget'])->name('data.target.store');
 
         Route::get('/target-retribusi', [TargetRetribusiController::class, 'index'])
@@ -237,19 +234,21 @@ Route::middleware('auth')
 | PENGATURAN ADMIN
 |--------------------------------------------------------------------------
 */
-Route::middleware('auth')
+Route::middleware(['auth', /* middleware admin lainnya */])
     ->prefix('admin/pengaturan')
     ->name('admin.pengaturan.')
-    ->controller(AdminPengaturanController::class)
     ->group(function () {
+        Route::get('profil', [PengaturanController::class, 'profil'])->name('profil');
+        Route::put('profil', [PengaturanController::class, 'updateProfil'])->name('profil.update');
 
-        Route::get('/profil', 'profil')
-            ->name('profil');
-        Route::put('/profil', 'updateProfil')
-            ->name('profil.update');
-        Route::get('/password', 'password')
-            ->name('password');
-        Route::put('/password', 'updatePassword')
-            ->name('password.update');
+        Route::get('password', [PengaturanController::class, 'password'])->name('password');
+        Route::put('password', [PengaturanController::class, 'updatePassword'])->name('password.update');
+
+        Route::get('sistem', [PengaturanController::class, 'sistem'])->name('sistem');
+        Route::put('sistem', [PengaturanController::class, 'updateSistem'])->name('sistem.update');
+
+        Route::get('tentang', [PengaturanController::class, 'tentang'])->name('tentang');
+        Route::get('notifikasi', [PengaturanController::class, 'notifikasi'])->name('notifikasi');
+
+        Route::put('notifikasi', [PengaturanController::class, 'updateNotifikasi'])->name('notifikasi.update');
     });
-

@@ -147,11 +147,8 @@
                                 <td class="lap-cell-muted">{{ $loop->iteration }}</td>
 
                                 <td>
-                                    <strong class="lap-cell-strong">{{ $item->perangkatDaerah->nama_perangkat ?? '-' }}</strong>
-                                    <div class="lap-id-label">
-                                        ID: PD-{{ $item->tahun }}-{{ str_pad($item->perangkatDaerah->id ?? $item->id, 3, '0', STR_PAD_LEFT) }}
-                                    </div>
-                                </td>
+    <strong class="lap-cell-strong">{{ $item->perangkatDaerah->nama_perangkat ?? '-' }}</strong>
+</td>
 
                                 <td class="lap-cell-muted">{{ $item->perangkatDaerah->email ?? '-' }}</td>
 
