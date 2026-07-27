@@ -10,7 +10,7 @@
 
 <a href="{{ route('perangkat.dashboard') }}"
     class="sidebar-menu {{ request()->routeIs('perangkat.dashboard') ? 'active' : '' }}">
-    <i class="bi bi-speedometer2"></i>
+    <i class="bi bi-grid"></i>
     <span>Dashboard</span>
 </a>
 
