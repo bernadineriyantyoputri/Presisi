@@ -6,7 +6,7 @@
 
 @section('content')
 
-    <div class="jr-page">
+    <div>
 
         {{-- ================= BACK LINK ================= --}}
         <a href="{{ route('admin.data.index') }}" class="jr-back-link">
@@ -14,9 +14,9 @@
         </a>
 
         {{-- ================= HEADER ================= --}}
-        <div class="jr-header">
-            <h3 class="jr-title">{{ $jenis->nama_jenis }}</h3>
-            <p class="jr-subtitle">Kelola hierarki data retribusi daerah mulai dari jenis hingga detail objek.</p>
+        <div class="tgt-header page-header">
+            <h1>{{ $jenis->nama_jenis }}</h1>
+            <p>Kelola hierarki data retribusi daerah mulai dari jenis hingga detail objek.</p>
         </div>
 
         @if(session('success'))

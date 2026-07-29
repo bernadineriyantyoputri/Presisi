@@ -2,12 +2,14 @@
 
 @section('content')
 
-<link rel="stylesheet" href="{{ asset('css/admin.css') }}?v={{ filemtime(public_path('css/admin.css')) }}">
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
+@endpush
+
 
 <div class="verif-page">
     <div class="verif-container">
 
-        {{-- ============ HEADER / BREADCRUMB ============ --}}
         <div class="verif-topbar">
             <div>
                 <a href="{{ route('admin.verifikasi') }}" class="verif-back">

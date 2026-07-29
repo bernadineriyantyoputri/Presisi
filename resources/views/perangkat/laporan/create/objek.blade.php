@@ -13,18 +13,6 @@
                     Lengkapi form berikut untuk memproses laporan retribusi daerah bulanan.
                 </p>
             </div>
-
-            <div class="d-flex align-items-center step-wizard-top">
-                <div class="step-top-item active"><div class="step-top-circle">1</div><span class="step-top-label">Jenis</span></div>
-                <div class="step-top-line"></div>
-                <div class="step-top-item active"><div class="step-top-circle">2</div><span class="step-top-label">Objek</span></div>
-                <div class="step-top-line"></div>
-                <div class="step-top-item"><div class="step-top-circle">3</div><span class="step-top-label">Nominal</span></div>
-                <div class="step-top-line"></div>
-                <div class="step-top-item"><div class="step-top-circle">4</div><span class="step-top-label">Ringkasan</span></div>
-                <div class="step-top-line"></div>
-                <div class="step-top-item"><div class="step-top-circle">5</div><span class="step-top-label">Selesai</span></div>
-            </div>
         </div>
 
         @if($errors->any())

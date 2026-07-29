@@ -1,16 +1,15 @@
-
 @extends('layouts.app')
 
 @section('title', 'Detail Laporan Realisasi')
+
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('css/admin.css') }}?v={{ filemtime(public_path('css/admin.css')) }}">
+@endpush
 
 @section('content')
 
 <div class="lapd-page">
 <div class="lapd-container">
-
-    {{-- ===================================================
-         TOP BAR
-    =================================================== --}}
     <div class="lapd-topbar">
         <div>
             <a href="{{ route('admin.laporan.index') }}" class="lapd-back">

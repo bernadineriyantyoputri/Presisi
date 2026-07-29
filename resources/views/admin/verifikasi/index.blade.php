@@ -6,13 +6,11 @@
 
 @section('content')
 
-    {{-- Page Header --}}
-    <div class="page-header">
-        <div>
+    {{-- Header --}}
+        <div class="tgt-header page-header">
             <h1>Verifikasi Pendaftaran Akun</h1>
-            <p>Review dan kelola permohonan pendaftaran akun baru dari Perangkat Daerah.</p>
+            <p>Review dan kelola permohonan pendaftaran akun baru dari Perangkat Daerah</p>
         </div>
-    </div>
 
     {{-- Statistik --}}
     <div class="stats-grid">

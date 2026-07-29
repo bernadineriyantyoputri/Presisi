@@ -524,7 +524,7 @@
 .btn-batal {
     padding: 8px 20px;
     font-size: 14px;
-    border-radius: 8px;
+    border-radius: 12px;
     border: 1px solid #6c757d;
     background: #fff;
     color: #6c757d;
@@ -538,8 +538,6 @@
     border-color: #495057;
 }
 
-/* ===== Style Laporan Realisasi Retribusi ===== */
-/* Tambahkan blok ini ke public/css/perangkat.css */
 
 .judul-laporan {
     text-align: center;
@@ -855,6 +853,7 @@ table.tabel-realisasi tr.total td {
 }
 
 .laporan-table-title {
+    font-size:0,9 rem;
     font-weight: 700;
     color: #1e2d3d;
 }

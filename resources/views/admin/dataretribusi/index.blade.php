@@ -6,12 +6,11 @@
 
 @section('content')
 
-    <div class="page-header">
-        <div>
-            <h1>Manajemen Referensi Retribusi.</h1>
+    {{-- Header --}}
+        <div class="tgt-header page-header">
+            <h1>Manajemen Referensi Retribusi</h1>
             <p>Kelola hierarki data retribusi daerah mulai dari jenis hingga detail objek</p>
         </div>
-    </div>
 
     @if(session('success'))
         <div class="jr-alert jr-alert-success">

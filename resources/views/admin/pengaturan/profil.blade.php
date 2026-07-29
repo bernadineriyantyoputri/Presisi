@@ -56,12 +56,37 @@
                     <div class="peng-profile-left">
                         <div class="peng-profile-photo-wrap">
                             @if($user->foto)
-                                <img src="{{ asset('storage/'.$user->foto) }}" alt="{{ $user->name }}" class="peng-avatar-photo">
-                            @else
-                                <div class="peng-avatar-photo peng-avatar-fallback">
-                                    {{ strtoupper(substr($user->name, 0, 1)) }}
-                                </div>
-                            @endif
+    <img
+        id="fotoPreviewImg"
+        src="{{ asset('storage/'.$user->foto) }}"
+        alt="{{ $user->name }}"
+        class="peng-avatar-photo"
+        style="display:block;"
+    >
+
+    <div
+        id="fotoPreviewFallback"
+        class="peng-avatar-photo peng-avatar-fallback"
+        style="display:none;"
+    >
+        {{ strtoupper(substr($user->name, 0, 1)) }}
+    </div>
+@else
+    <img
+        id="fotoPreviewImg"
+        src=""
+        alt="Preview"
+        class="peng-avatar-photo"
+        style="display:none;"
+    >
+
+    <div
+        id="fotoPreviewFallback"
+        class="peng-avatar-photo peng-avatar-fallback"
+    >
+        {{ strtoupper(substr($user->name, 0, 1)) }}
+    </div>
+@endif
                             <label for="foto" class="peng-photo-upload-btn" title="Ganti foto">
                                 <i class="bi bi-camera-fill"></i>
                             </label>
@@ -191,3 +216,34 @@
 </div>
 
 @endsection
+
+@push('scripts')
+<script>
+    document.getElementById('foto').addEventListener('change', function () {
+    const file = this.files[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+        alert('File harus berupa gambar.');
+        this.value = '';
+        return;
+    }
+
+    if (file.size > 2 * 1024 * 1024) {
+        alert('Ukuran gambar maksimal 2MB.');
+        this.value = '';
+        return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = function (e) {
+        document.getElementById('fotoPreviewImg').src = e.target.result;
+        document.getElementById('fotoPreviewImg').style.display = 'block';
+        document.getElementById('fotoPreviewFallback').style.display = 'none';
+    };
+
+    reader.readAsDataURL(file);
+});
+</script>
+@endpush

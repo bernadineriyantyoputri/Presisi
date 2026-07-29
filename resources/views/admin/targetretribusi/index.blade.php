@@ -9,7 +9,7 @@
         {{-- Header --}}
         <div class="tgt-header page-header">
             <h1>Manajemen Target Retribusi</h1>
-            <p>Kelola target penerimaan retribusi daerah (Murni & Perubahan) setiap tahun.</p>
+            <p>Kelola target penerimaan retribusi daerah setiap tahun</p>
         </div>
 
         {{-- Alert sukses / error --}}

@@ -10,28 +10,6 @@
                 <h4 class="fw-bold mb-1">Input Laporan Retribusi</h4>
                 <p class="text-muted small mb-0">Lengkapi form berikut untuk memproses laporan retribusi daerah bulanan.</p>
             </div>
-
-            <div class="d-flex align-items-center step-wizard-top">
-                <div class="step-top-item active">
-                    <div class="step-top-circle">1</div><span class="step-top-label">Jenis</span>
-                </div>
-                <div class="step-top-line"></div>
-                <div class="step-top-item">
-                    <div class="step-top-circle">2</div><span class="step-top-label">Objek</span>
-                </div>
-                <div class="step-top-line"></div>
-                <div class="step-top-item">
-                    <div class="step-top-circle">3</div><span class="step-top-label">Nominal</span>
-                </div>
-                <div class="step-top-line"></div>
-                <div class="step-top-item">
-                    <div class="step-top-circle">4</div><span class="step-top-label">Ringkasan</span>
-                </div>
-                <div class="step-top-line"></div>
-                <div class="step-top-item">
-                    <div class="step-top-circle">5</div><span class="step-top-label">Selesai</span>
-                </div>
-            </div>
         </div>
 
         @if(session('error'))
@@ -60,30 +38,41 @@
                             <i class="bi bi-calendar3"></i>
                             Periode Laporan
                         </h6>
-                        <div class="row g-3 mt-1">
-                            <div class="col-md-6">
-                                <label class="form-label fw-semibold small">Bulan Masa Retribusi</label>
-                                <select name="bulan" class="form-select" required>
-                                    <option value="">Pilih Bulan</option>
-                                    @foreach(['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'] as $i => $namaBulan)
-                                        <option value="{{ $i + 1 }}" {{ old('bulan') == ($i + 1) ? 'selected' : '' }}>
-                                            {{ $namaBulan }}
-                                        </option>
-                                    @endforeach
-                                </select>
+
+                        @if($bulanTerkunci ?? false)
+                            {{-- Tampilkan sebagai info, bukan input, supaya tidak diubah di uraian ke-2 dst --}}
+                            <div class="alert alert-light border mt-2 mb-0 d-flex align-items-center">
+                                <i class="bi bi-lock-fill me-2 text-muted"></i>
+                                <span>Periode laporan: <strong>{{ $bulanNama }} {{ $tahunTerkunci }}</strong> (mengikuti uraian
+                                    pertama)</span>
                             </div>
-                            <div class="col-md-6">
-                                <label class="form-label fw-semibold small">Tahun</label>
-                                <select name="tahun" class="form-select" required>
-                                    <option value="">Pilih Tahun</option>
-                                    @for($t = now()->year; $t >= now()->year - 3; $t--)
-                                        <option value="{{ $t }}" {{ old('tahun', now()->year) == $t ? 'selected' : '' }}>{{ $t }}
-                                        </option>
-                                    @endfor
-                                </select>
+                        @else
+                            <div class="row g-3 mt-1">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold small">Bulan Masa Retribusi</label>
+                                    <select name="bulan" class="form-select" required>
+                                        <option value="">Pilih Bulan</option>
+                                        @foreach(['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'] as $i => $namaBulan)
+                                            <option value="{{ $i + 1 }}" {{ old('bulan') == ($i + 1) ? 'selected' : '' }}>
+                                                {{ $namaBulan }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold small">Tahun</label>
+                                    <select name="tahun" class="form-select" required>
+                                        <option value="">Pilih Tahun</option>
+                                        @for($t = now()->year; $t >= now()->year - 3; $t--)
+                                            <option value="{{ $t }}" {{ old('tahun', now()->year) == $t ? 'selected' : '' }}>{{ $t }}
+                                            </option>
+                                        @endfor
+                                    </select>
+                                </div>
                             </div>
-                        </div>
+                        @endif
                     </div>
+
 
                     <div class="wizard-card mb-3">
                         <h6 class="section-title">

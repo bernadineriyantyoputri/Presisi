@@ -9,19 +9,7 @@
         <div class="d-flex justify-content-between align-items-start mb-4 flex-wrap gap-3">
             <div>
                 <h4 class="fw-bold mb-1">Input Laporan Retribusi</h4>
-                 <p class="text-muted small mb-0">Lengkapi form berikut untuk memproses laporan retribusi daerah bulanan.</p>
-            </div>
-
-            <div class="d-flex align-items-center step-wizard-top">
-                <div class="step-top-item active"><div class="step-top-circle">1</div><span class="step-top-label">Jenis</span></div>
-                <div class="step-top-line"></div>
-                <div class="step-top-item active"><div class="step-top-circle">2</div><span class="step-top-label">Objek</span></div>
-                <div class="step-top-line"></div>
-                <div class="step-top-item active"><div class="step-top-circle">3</div><span class="step-top-label">Nominal</span></div>
-                <div class="step-top-line"></div>
-                <div class="step-top-item"><div class="step-top-circle">4</div><span class="step-top-label">Ringkasan</span></div>
-                <div class="step-top-line"></div>
-                <div class="step-top-item"><div class="step-top-circle">5</div><span class="step-top-label">Selesai</span></div>
+                <p class="text-muted small mb-0">Lengkapi form berikut untuk memproses laporan retribusi daerah bulanan.</p>
             </div>
         </div>
 
@@ -72,7 +60,7 @@
             </div>
 
             <a href="{{ route('perangkat.laporan.create.objek.show') }}?objek_id={{ $objek->id }}&rincian_id={{ $rincian->id }}"
-               class="ringkasan-edit-link">
+                class="ringkasan-edit-link">
                 <i class="bi bi-pencil me-1"></i> Ubah pilihan objek/rincian/detail
             </a>
         </div>
@@ -105,12 +93,11 @@
                             <label class="form-label fw-semibold small mb-1">Nominal Realisasi (Rp)</label>
                             <div class="input-group">
                                 <span class="input-group-text">Rp</span>
-                                <input type="text" id="nominal_display"
-                                       class="form-control"
-                                       value="{{ old('realisasi_bulan_ini') ? number_format(old('realisasi_bulan_ini'), 0, ',', '.') : '' }}"
-                                       placeholder="Masukkan nominal tanpa titik (contoh: 1000000)">
+                                <input type="text" id="nominal_display" class="form-control"
+                                    value="{{ old('realisasi_bulan_ini') ? number_format(old('realisasi_bulan_ini'), 0, ',', '.') : '' }}"
+                                    placeholder="Masukkan nominal tanpa titik (contoh: 1000000)">
                                 <input type="hidden" name="realisasi_bulan_ini" id="realisasi_bulan_ini"
-                                       value="{{ old('realisasi_bulan_ini') }}">
+                                    value="{{ old('realisasi_bulan_ini') }}">
                             </div>
                         </div>
                     </div>
@@ -120,49 +107,49 @@
                     <div class="form-check mb-0">
                         <input class="form-check-input" type="checkbox" name="konfirmasi" id="konfirmasi" required>
                         <label class="form-check-label small" for="konfirmasi">
-                            Saya menyatakan bahwa data yang dikirim sudah sesuai dengan data yang sebenarnya dan dapat dipertanggungjawabkan kebenarannya.
+                            Saya menyatakan bahwa data yang dikirim sudah sesuai dengan data yang sebenarnya dan dapat
+                            dipertanggungjawabkan kebenarannya.
                         </label>
                     </div>
                 </div>
             </div>
 
-            <div class="d-flex justify-content-end align-items-center">
-                <div class="d-flex gap-2">
-                    <a href="{{ route('perangkat.laporan.create.objek.show') }}?objek_id={{ $objek->id }}&rincian_id={{ $rincian->id }}"
-                       class="btn btn-batal">
-                        Batal
-                    </a>
-                    <button type="submit" class="btn btn-lanjut" id="btnLanjut" disabled>
-                        Selanjutnya <i class="bi bi-arrow-right ms-1"></i>
-                    </button>
-                </div>
+            <div class="d-flex justify-content-between align-items-center mt-4">
+                <a href="{{ route('perangkat.laporan.create.objek.show') }}?objek_id={{ $objek->id }}&rincian_id={{ $rincian->id }}"
+                    class="btn btn-batal">
+                    Batal
+                </a>
+
+                <button type="submit" class="btn btn-lanjut" id="btnLanjut" disabled>
+                    Selanjutnya <i class="bi bi-arrow-right ms-1"></i>
+                </button>
             </div>
         </form>
 
     </div>
 
-@push('scripts')
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    const nominalDisplay = document.getElementById('nominal_display');
-    const nominalHidden = document.getElementById('realisasi_bulan_ini');
-    const btnLanjut = document.getElementById('btnLanjut');
+    @push('scripts')
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const nominalDisplay = document.getElementById('nominal_display');
+                const nominalHidden = document.getElementById('realisasi_bulan_ini');
+                const btnLanjut = document.getElementById('btnLanjut');
 
-    function checkReady() {
-        if (btnLanjut) btnLanjut.disabled = !(nominalHidden && nominalHidden.value);
-    }
+                function checkReady() {
+                    if (btnLanjut) btnLanjut.disabled = !(nominalHidden && nominalHidden.value);
+                }
 
-    if (nominalDisplay) {
-        nominalDisplay.addEventListener('input', function () {
-            const raw = this.value.replace(/\D/g, '');
-            this.value = raw ? new Intl.NumberFormat('id-ID').format(raw) : '';
-            nominalHidden.value = raw;
-            checkReady();
-        });
-    }
+                if (nominalDisplay) {
+                    nominalDisplay.addEventListener('input', function () {
+                        const raw = this.value.replace(/\D/g, '');
+                        this.value = raw ? new Intl.NumberFormat('id-ID').format(raw) : '';
+                        nominalHidden.value = raw;
+                        checkReady();
+                    });
+                }
 
-    checkReady();
-});
-</script>
-@endpush
+                checkReady();
+            });
+        </script>
+    @endpush
 @endsection

@@ -130,7 +130,11 @@ Route::middleware('auth')
         Route::get('/create/nominal', 'nominalShow')->name('create.nominal.show');
         Route::post('/create/nominal', 'nominalStore')->name('create.nominal.store');
 
-        Route::get('/create/confirm', 'confirmShow')->name('create.confirm.show');
+
+Route::get('/create/tambah-uraian', 'tambahUraian')->name('create.tambah-uraian');
+Route::get('/create/daftar-uraian', 'confirmList')->name('create.confirm.list');
+Route::delete('/create/daftar-uraian/{index}', 'hapusUraian')->name('create.uraian.hapus');
+Route::get('/create/ringkasan', 'ringkasanShow')->name('create.ringkasan.show');
 
         Route::post('/store', 'store')->name('store');
 
