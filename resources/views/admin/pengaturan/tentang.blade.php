@@ -33,14 +33,8 @@
             <a href="{{ route('admin.pengaturan.password') }}" class="peng-tab">
                 <i class="bi bi-shield-lock"></i> Keamanan Akun
             </a>
-            <a href="{{ route('admin.pengaturan.sistem') }}" class="peng-tab">
-                <i class="bi bi-gear"></i> Pengaturan Sistem
-            </a>
             <a href="{{ route('admin.pengaturan.tentang') }}" class="peng-tab active">
                 <i class="bi bi-info-circle"></i> Tentang Sistem
-            </a>
-            <a href="{{ route('admin.pengaturan.notifikasi') }}" class="peng-tab">
-                <i class="bi bi-bell"></i> Pengaturan Notifikasi
             </a>
         </div>
 
@@ -95,7 +89,7 @@
                                 </div>
                                 <div class="peng-about-stat-text">
                                     <span class="peng-about-stat-label">Tahun Pembuatan</span>
-                                    <span class="peng-about-stat-value">{{ $tahunPembuatan ?? '2024' }}</span>
+                                    <span class="peng-about-stat-value">2026</span>
                                 </div>
                             </div>
 
@@ -112,13 +106,13 @@
 
                         <div class="peng-about-banner">
                             <div class="peng-about-banner-bg">
-                                <span>{{ $provinsi ?? 'Provinsi Lampung' }}</span>
+                                <span>Provinsi Lampung</span>
                                 <span>Hak Cipta Dilindungi</span>
                                 <span>Undang-Undang</span>
                             </div>
                             <div class="peng-about-banner-content">
                                 <div class="peng-about-banner-label">Instansi Penanggung Jawab</div>
-                                <div class="peng-about-banner-title">{{ $instansi ?? 'Badan Pendapatan Daerah Provinsi Lampung' }}</div>
+                                <div class="peng-about-banner-title">Badan Pendapatan Daerah Provinsi Lampung</div>
                             </div>
                             <div class="peng-about-banner-icon">
                                 <i class="bi bi-bank2"></i>
@@ -128,18 +122,18 @@
                         <div class="peng-about-mini-grid">
                             <div class="peng-about-mini-box">
                                 <i class="bi bi-shield-lock-fill"></i>
-                                <span class="peng-about-mini-label">Enkripsi Data</span>
-                                <span class="peng-about-mini-value">{{ $enkripsiData ?? 'AES-256 Bit' }}</span>
+                                <span class="peng-about-mini-label">Framework</span>
+                                <span class="peng-about-mini-value">Laravel</span>
                             </div>
                             <div class="peng-about-mini-box">
                                 <i class="bi bi-hdd-network-fill"></i>
-                                <span class="peng-about-mini-label">Infrastruktur</span>
-                                <span class="peng-about-mini-value">{{ $infrastruktur ?? 'Cloud Hosted' }}</span>
+                                <span class="peng-about-mini-label">Database</span>
+                                <span class="peng-about-mini-value">PostgreSQL</span>
                             </div>
                             <div class="peng-about-mini-box">
                                 <i class="bi bi-arrow-repeat"></i>
                                 <span class="peng-about-mini-label">Last Update</span>
-                                <span class="peng-about-mini-value">{{ $lastUpdate ?? 'July 2026' }}</span>
+                                <span class="peng-about-mini-value">July 2026</span>
                             </div>
                         </div>
 

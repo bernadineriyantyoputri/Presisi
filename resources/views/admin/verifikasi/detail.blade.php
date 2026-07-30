@@ -60,7 +60,7 @@
             </div>
         </div>
 
-        {{-- ============ PASSWORD BARU (tampil sekali saja, setelah reset) ============ --}}
+        {{--  PASSWORD BARU (tampil sekali saja, setelah reset)  --}}
         @if(session('password_baru'))
             <div class="verif-card mb-4">
                 <div class="verif-card-header is-success">
@@ -82,7 +82,7 @@
             </div>
         @endif
 
-        {{-- ============ LETTERHEAD / IDENTITY CARD ============ --}}
+        {{--  LETTERHEAD / IDENTITY CARD  --}}
         <div class="verif-letterhead">
             <div class="verif-letterhead-rule"></div>
 
@@ -113,7 +113,7 @@
             </div>
         </div>
 
-        {{-- ============ INFORMASI LENGKAP ============ --}}
+        {{--  INFORMASI LENGKAP  --}}
         <div class="verif-card">
             <div class="verif-card-header">
                 <i class="bi bi-file-earmark-text"></i>
@@ -191,9 +191,6 @@
     </div>
 </div>
 
-{{-- ================================================================
-     MODAL: Verifikasi (ACC)
-================================================================ --}}
 <div class="modal fade" id="accModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content verif-modal-content">
@@ -234,9 +231,6 @@
     </div>
 </div>
 
-{{-- ================================================================
-     MODAL: Tolak Permohonan
-================================================================ --}}
 <div class="modal fade" id="tolakModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content verif-modal-content">
@@ -277,9 +271,6 @@
     </div>
 </div>
 
-{{-- ================================================================
-     MODAL: Nonaktifkan Akun
-================================================================ --}}
 <div class="modal fade" id="nonaktifModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content verif-modal-content">
@@ -319,9 +310,7 @@
     </div>
 </div>
 
-{{-- ================================================================
-     MODAL: Aktifkan Kembali Akun
-================================================================ --}}
+
 <div class="modal fade" id="aktifModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content verif-modal-content">
@@ -357,9 +346,6 @@
     </div>
 </div>
 
-{{-- ================================================================
-     MODAL: Reset Password
-================================================================ --}}
 <div class="modal fade" id="resetPasswordModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content verif-modal-content">

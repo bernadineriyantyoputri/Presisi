@@ -248,11 +248,5 @@ Route::middleware(['auth', /* middleware admin lainnya */])
         Route::get('password', [PengaturanController::class, 'password'])->name('password');
         Route::put('password', [PengaturanController::class, 'updatePassword'])->name('password.update');
 
-        Route::get('sistem', [PengaturanController::class, 'sistem'])->name('sistem');
-        Route::put('sistem', [PengaturanController::class, 'updateSistem'])->name('sistem.update');
-
         Route::get('tentang', [PengaturanController::class, 'tentang'])->name('tentang');
-        Route::get('notifikasi', [PengaturanController::class, 'notifikasi'])->name('notifikasi');
-
-        Route::put('notifikasi', [PengaturanController::class, 'updateNotifikasi'])->name('notifikasi.update');
     });

@@ -11,16 +11,17 @@ class User extends Authenticatable
     use HasFactory, Notifiable;
 
     protected $fillable = [
-        'name',
-        'email',
-        'password',
-        'jabatan',
-        'no_telepon',
-        'foto',
-        'unit_kerja',
-        'lokasi_kantor',
-        'id_pegawai',
-    ];
+    'name',
+    'email',
+    'password',
+    'jabatan',
+    'no_telepon',
+    'foto',
+    'unit_kerja',
+    'lokasi_kantor',
+    'id_pegawai',
+    'last_login_at',
+];
     
     protected $hidden = [
         'password',
@@ -28,12 +29,13 @@ class User extends Authenticatable
     ];
 
     protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
-    }
+{
+    return [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+        'last_login_at' => 'datetime',
+    ];
+}
 
     public function perangkatDaerah()
     {

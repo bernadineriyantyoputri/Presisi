@@ -5249,11 +5249,33 @@ table.tgt-table {
     padding: 0;
 }
 
-.verif-page{
-        padding: 0;
-    }
-    .verif-container{
-        max-width: none;
-        margin: 0;
-        padding: 0;
-    }
+.verif-page {
+    padding: 0;
+}
+
+.verif-container {
+    max-width: none;
+    margin: 0;
+    padding: 0;
+}
+
+.peng-password-wrap {
+    position: relative;
+}
+
+.peng-password-wrap .peng-input {
+    padding-right: 40px;
+}
+
+.peng-toggle-password {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #6b7280;
+}
+
+.peng-toggle-password:hover {
+    color: #374151;
+}

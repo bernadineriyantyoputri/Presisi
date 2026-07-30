@@ -12,11 +12,10 @@ class TargetRetribusiController extends Controller
 {
     public function index(Request $request)
     {
-        // Dropdown "Tahun Anggaran" sekarang cukup kirim tahun saja (mis. "2026")
         $tahun = (int) $request->input('tahun', now()->year);
 
-        $jenisId = $request->jenis_id;
-        $search = $request->search;
+        $jenisId = $request->input('jenis_id');
+        $search = trim((string) $request->input('search', ''));
 
         $jenisRetribusi = JenisRetribusi::orderBy('nama_jenis')->get();
 
@@ -26,24 +25,25 @@ class TargetRetribusiController extends Controller
             'target',
         ]);
 
-        if ($jenisId) {
+        if (!empty($jenisId)) {
             $query->whereHas('objek', function ($q) use ($jenisId) {
                 $q->where('jenis_id', $jenisId);
             });
         }
 
-        if ($search) {
+        if ($search !== '') {
             $query->where(function ($q) use ($search) {
-                $q->where('nama_rincian', 'like', "%{$search}%")
+                $q->where('nama_rincian', 'ilike', '%' . $search . '%')
                     ->orWhereHas('detail', function ($q2) use ($search) {
-                        $q2->where('nama_detail', 'like', "%{$search}%");
+                        $q2->where('nama_detail', 'ilike', '%' . $search . '%');
+                    })
+                    ->orWhereHas('objek', function ($q3) use ($search) {
+                        $q3->where('nama_objek', 'ilike', '%' . $search . '%');
                     });
             });
         }
-
         $rincians = $query->get();
 
-        // Semua target pada tahun yang dipilih (untuk kartu statistik)
         $targets = TargetRetribusi::where('tahun', $tahun)->get();
 
         return view('admin.targetretribusi.index', compact(
@@ -51,10 +51,10 @@ class TargetRetribusiController extends Controller
             'targets',
             'tahun',
             'jenisRetribusi',
-            'jenisId'
+            'jenisId',
+            'search'
         ));
     }
-
     public function store(Request $request)
     {
         // Normalisasi "" -> null SEBELUM validasi, supaya rule tidak menolak/salah baca nilai kosong

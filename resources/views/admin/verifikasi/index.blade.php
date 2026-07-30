@@ -98,7 +98,7 @@
                         <tr>
                             <td><strong>{{ $item->nama_perangkat ?? '-' }}</strong></td>
 
-                            <td>{{ $item->created_at ? $item->created_at->format('d M Y, H:i') : '-' }}</td>
+                            <td>{{ $item->created_at ? $item->created_at->setTimezone('Asia/Jakarta')->format('d M Y, H:i') : '-' }}</td>
 
                             <td>
                                 @if($item->status_verifikasi == 'Terverifikasi')

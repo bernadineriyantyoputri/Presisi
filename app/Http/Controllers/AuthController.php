@@ -81,6 +81,8 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
+            Auth::user()->update(['last_login_at' => now()]);
+
             if (Auth::user()->role == 'admin_perangkat') {
                 $perangkat = Auth::user()->perangkatDaerah;
 

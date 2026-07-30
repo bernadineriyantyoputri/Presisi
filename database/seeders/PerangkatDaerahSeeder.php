@@ -45,7 +45,7 @@ class PerangkatDaerahSeeder extends Seeder
         foreach ($perangkatDaerah as $index => $nama) {
 
             // Email dibuat otomatis
-            $email = 'pd' . ($index + 1) . '@presisi.go.id';
+            $email = 'pd' . ($index + 1) . '@gmail.com';
 
             $user = User::firstOrCreate(
                 [

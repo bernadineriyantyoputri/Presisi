@@ -101,8 +101,8 @@
                         <select name="tahun" class="form-select" onchange="this.form.submit()">
                             @php
                                 $tahunSekarang = (int) date('Y');
-                                $tahunMulai = $tahunSekarang + 1;
-                                $tahunSelesai = $tahunSekarang - 5;
+                                $tahunSelesai = $tahunSekarang - 1;
+                                $tahunMulai = $tahunSekarang + 5;
                             @endphp
 
                             @for($tahunOpt = $tahunMulai; $tahunOpt >= $tahunSelesai; $tahunOpt--)
