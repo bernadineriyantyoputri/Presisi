@@ -166,7 +166,7 @@
 
                         <div class="wizard-footer d-flex justify-content-end">
                             <button type="submit" class="btn-lanjut">
-                                <i class="bi bi-save me-1"></i> Simpan Perubahan
+                                Simpan Perubahan
                             </button>
                         </div>
                     </form>

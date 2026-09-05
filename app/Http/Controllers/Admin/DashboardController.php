@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\ActivityLog;
 use App\Models\LaporanDetail;
 use App\Models\LaporanRetribusi;
 use App\Models\DetailRetribusi;
@@ -46,15 +45,12 @@ class DashboardController extends Controller
             ? round(($totalRealisasi / $totalTarget) * 100)
             : 0;
 
-        $aktivitasTerbaru = ActivityLog::latest()->take(5)->get();
-
         return view('admin.dashboardadmin', compact(
             'akunBaruCount',
             'akunTerverifikasiCount',
             'laporanDiverifikasiCount',
             'dataRetribusiCount',
             'targetPersen',
-            'aktivitasTerbaru'
         ));
     }
 }

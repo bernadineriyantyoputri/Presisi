@@ -33,9 +33,6 @@
                 <a href="{{ route('admin.pengaturan.password') }}" class="peng-tab active">
                     <i class="bi bi-shield-lock"></i> Keamanan Akun
                 </a>
-                <a href="{{ route('admin.pengaturan.tentang') }}" class="peng-tab">
-                    <i class="bi bi-info-circle"></i> Tentang Sistem
-                </a>
             </div>
 
             {{-- Card --}}

@@ -33,9 +33,6 @@
                 <a href="{{ route('admin.pengaturan.password') }}" class="peng-tab">
                     <i class="bi bi-shield-lock"></i> Keamanan Akun
                 </a>
-                <a href="{{ route('admin.pengaturan.tentang') }}" class="peng-tab">
-                    <i class="bi bi-info-circle"></i> Tentang Sistem
-                </a>
             </div>
 
             {{-- Card --}}
@@ -130,17 +127,6 @@
                                             <span class="peng-dot"></span> Desktop
                                         </strong>
                                     </div>
-                                </div>
-
-                                <div class="peng-danger-box">
-                                    <div class="peng-danger-title">Zona Berbahaya</div>
-                                    <p class="peng-danger-text">
-                                        Aksi di bawah ini bersifat permanen dan memerlukan verifikasi otentikasi ganda.
-                                    </p>
-                                    <button type="button" class="peng-btn-danger"
-                                        onclick="alert('Fitur ini belum tersedia.')">
-                                        Nonaktifkan Akun Sementara
-                                    </button>
                                 </div>
 
                             </div>

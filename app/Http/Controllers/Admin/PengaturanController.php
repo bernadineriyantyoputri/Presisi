@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
-use App\Models\ActivityLog;
 use App\Models\PengaturanSistem;
 
 
@@ -37,11 +36,6 @@ class PengaturanController extends Controller
         ]);
 
         $user->update($validated);
-
-        ActivityLog::create([
-            'aktivitas'  => 'Update Profil Admin',
-            'deskripsi'  => 'Profil admin ' . $user->name . ' berhasil diperbarui.',
-        ]);
 
         return redirect()
             ->route('admin.pengaturan.profil')
@@ -77,11 +71,6 @@ class PengaturanController extends Controller
 
         $user->update([
             'password' => Hash::make($validated['password_baru']),
-        ]);
-
-        ActivityLog::create([
-            'aktivitas'  => 'Ganti Password Admin',
-            'deskripsi'  => 'Password admin ' . $user->name . ' berhasil diubah.',
         ]);
 
         return redirect()
@@ -133,11 +122,6 @@ class PengaturanController extends Controller
 
         $pengaturan->update($validated);
 
-        ActivityLog::create([
-            'aktivitas' => 'Update Konfigurasi Sistem',
-            'deskripsi' => 'Konfigurasi sistem PRESISI berhasil diperbarui.',
-        ]);
-
         return redirect()
             ->route('admin.pengaturan.sistem')
             ->with('success', 'Konfigurasi sistem berhasil disimpan.');
@@ -174,11 +158,6 @@ class PengaturanController extends Controller
             'notif_target_belum_tercapai' => $request->has('target_belum_tercapai'),
             'notif_perubahan_data'        => $request->has('perubahan_data'),
             'notif_pengingat_laporan'     => $request->has('pengingat_laporan'),
-        ]);
-    
-        ActivityLog::create([
-            'aktivitas' => 'Update Pengaturan Notifikasi',
-            'deskripsi' => 'Pengaturan notifikasi berhasil diperbarui.',
         ]);
     
         return redirect()

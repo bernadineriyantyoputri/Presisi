@@ -194,25 +194,16 @@
                 </div>
             </div>
 
-            <div class="form-card">
-                <form id="contactForm" novalidate>
-                    <div class="field">
-                        <label for="nama">Nama Lengkap</label>
-                        <input type="text" id="nama" name="nama" placeholder="Masukkan nama anda" required>
-                    </div>
-                    <div class="field">
-                        <label for="emailDinas">Email Dinas</label>
-                        <input type="email" id="emailDinas" name="emailDinas" placeholder="nama@instansi.go.id"
-                            required>
-                    </div>
-                    <div class="field">
-                        <label for="pesan">Pesan</label>
-                        <textarea id="pesan" name="pesan" placeholder="Tuliskan pertanyaan Anda..." required></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-dark btn-block">Kirim Pesan</button>
-
-                </form>
+            <div class="contact-map">
+                <iframe
+                    src="https://www.google.com/maps?q=Badan+Pendapatan+Daerah+Provinsi+Lampung,+Jl.+Sultan+Hasanudin+No.45,+Bandar+Lampung&output=embed"
+                    width="100%" height="100%" style="border:0; border-radius: 12px; min-height: 350px;"
+                    allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
             </div>
+        </div>
+
+
         </div>
     </section>
 
@@ -328,7 +319,6 @@
                 contactForm.reportValidity();
                 return;
             }
-            // TODO: ganti bagian ini dengan pemanggilan API/endpoint backend anda
             formNote.textContent = 'Pesan terkirim. Terima kasih telah menghubungi kami.';
             formNote.style.color = '#1a4a8f';
             contactForm.reset();

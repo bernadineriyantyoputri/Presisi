@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\PerangkatDaerah;
-use App\Models\ActivityLog;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use App\Models\User;
@@ -39,7 +38,6 @@ class VerifikasiController extends Controller
         $perangkat->tanggal_verifikasi = now();
         $perangkat->save();
 
-        ActivityLog::akunDiverifikasi($perangkat->nama_perangkat);
 
         return redirect()->back()
             ->with('success', 'Data berhasil diverifikasi');
@@ -52,8 +50,6 @@ class VerifikasiController extends Controller
         $perangkat->status_verifikasi = 'Ditolak';
         $perangkat->save();
 
-        ActivityLog::akunDitolak($perangkat->nama_perangkat);
-
         return redirect()->back()
             ->with('success', 'Permohonan berhasil ditolak');
     }
@@ -65,7 +61,6 @@ class VerifikasiController extends Controller
         $perangkat->is_active = false;
         $perangkat->save();
 
-        ActivityLog::akunDinonaktifkan($perangkat->nama_perangkat);
 
         return redirect()->back()
             ->with('success', 'Akun berhasil dinonaktifkan');
@@ -77,8 +72,6 @@ class VerifikasiController extends Controller
 
         $perangkat->is_active = true;
         $perangkat->save();
-
-        ActivityLog::akunDiaktifkanKembali($perangkat->nama_perangkat);
 
         return redirect()->back()
             ->with('success', 'Akun berhasil diaktifkan kembali');
@@ -94,10 +87,6 @@ class VerifikasiController extends Controller
         $user->password = Hash::make($passwordBaru);
         $user->save();
 
-        ActivityLog::create([
-            'aktivitas' => 'Reset Password',
-            'deskripsi' => 'Password akun ' . $perangkat->nama_perangkat . ' berhasil direset.',
-        ]);
 
         return back()->with([
             'success' => 'Password berhasil direset.',
