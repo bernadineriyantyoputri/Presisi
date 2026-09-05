@@ -33,17 +33,8 @@ class PengaturanController extends Controller
                 'max:255',
                 Rule::unique('users', 'email')->ignore($user->id),
             ],
-            'jabatan'     => 'nullable|string|max:255',
             'no_telepon'  => 'nullable|string|max:20',
-            'foto'        => 'nullable|image|max:2048',
         ]);
-
-        if ($request->hasFile('foto')) {
-            if ($user->foto) {
-                Storage::disk('public')->delete($user->foto);
-            }
-            $validated['foto'] = $request->file('foto')->store('profil', 'public');
-        }
 
         $user->update($validated);
 

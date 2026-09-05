@@ -15,7 +15,7 @@ class PerangkatDaerah extends Model
         'pangkat_golongan',
         'nip',
         'bendahara_penerimaan',
-        'no_hp',
+        'no_telepon',
         'email',
         'status_verifikasi'
     ];

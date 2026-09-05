@@ -28,7 +28,7 @@ class AuthController extends Controller
             'pangkat_golongan' => 'required',
             'nip' => 'required|min:18|',
             'bendahara_penerimaan' => 'required',
-            'no_hp' => 'required',
+            'no_telepon' => 'required',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:6|confirmed',
         ]);
@@ -51,7 +51,7 @@ class AuthController extends Controller
                 'pangkat_golongan' => $request->pangkat_golongan,
                 'nip' => $request->nip,
                 'bendahara_penerimaan' => $request->bendahara_penerimaan,
-                'no_hp' => $request->no_hp,
+                'no_telepon' => $request->no_telepon,
                 'email' => $request->email,
                 'status_verifikasi' => 'Pending',
                 'is_active' => true,

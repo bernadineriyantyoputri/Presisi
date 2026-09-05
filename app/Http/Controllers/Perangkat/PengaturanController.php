@@ -24,7 +24,7 @@ class PengaturanController extends Controller
             'pangkat_golongan' => 'required|max:100',
             'nip' => 'required|max:30',
             'bendahara_penerimaan' => 'required|max:255',
-            'no_hp' => 'required|max:20',
+            'no_telepon' => 'required|max:20',
         ]);
 
         $perangkat = Auth::user()->perangkatDaerah;
@@ -34,7 +34,7 @@ class PengaturanController extends Controller
             'pangkat_golongan' => $request->pangkat_golongan,
             'nip' => $request->nip,
             'bendahara_penerimaan' => $request->bendahara_penerimaan,
-            'no_hp' => $request->no_hp,
+            'no_telepon' => $request->no_telepon,
         ]);
 
         return redirect()

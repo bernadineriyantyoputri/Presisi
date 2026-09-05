@@ -45,30 +45,13 @@
                     @csrf
                     @method('PUT')
 
-                    {{-- ===== Bagian atas: foto + nama + badge + lokasi + tombol simpan ===== --}}
+                    {{-- ===== Bagian atas: avatar nama + badge + lokasi + tombol simpan ===== --}}
                     <div class="peng-profile-top">
                         <div class="peng-profile-left">
                             <div class="peng-profile-photo-wrap">
-                                @if($user->foto)
-                                    <img id="fotoPreviewImg" src="{{ asset('storage/' . $user->foto) }}" alt="{{ $user->name }}"
-                                        class="peng-avatar-photo" style="display:block;">
-
-                                    <div id="fotoPreviewFallback" class="peng-avatar-photo peng-avatar-fallback"
-                                        style="display:none;">
-                                        {{ strtoupper(substr($user->name, 0, 1)) }}
-                                    </div>
-                                @else
-                                    <img id="fotoPreviewImg" src="" alt="Preview" class="peng-avatar-photo"
-                                        style="display:none;">
-
-                                    <div id="fotoPreviewFallback" class="peng-avatar-photo peng-avatar-fallback">
-                                        {{ strtoupper(substr($user->name, 0, 1)) }}
-                                    </div>
-                                @endif
-                                <label for="foto" class="peng-photo-upload-btn" title="Ganti foto">
-                                    <i class="bi bi-camera-fill"></i>
-                                </label>
-                                <input type="file" name="foto" id="foto" accept="image/*" class="peng-photo-input">
+                                <div class="peng-avatar-photo peng-avatar-fallback">
+                                    {{ strtoupper(substr($user->name, 0, 1)) }}
+                                </div>
                             </div>
 
                             <div class="peng-profile-info">
@@ -123,28 +106,6 @@
                                     @enderror
                                 </div>
 
-                                <div class="peng-field">
-                                    <label for="jabatan">Jabatan</label>
-                                    <select name="jabatan" id="jabatan" class="peng-input peng-select">
-                                        @php
-                                            $daftarJabatan = [
-                                                'Kepala Badan',
-                                                'Sekretaris',
-                                                'Kepala Bidang Pengelolaan Data',
-                                                'Kepala Bidang Pendapatan Asli Daerah',
-                                                'Kepala Sub Bagian',
-                                                'Staf Administrator',
-                                            ];
-                                            $jabatanAktif = old('jabatan', $user->jabatan);
-                                        @endphp
-                                        <option value="">Pilih Jabatan</option>
-                                        @foreach($daftarJabatan as $j)
-                                            <option value="{{ $j }}" {{ $jabatanAktif === $j ? 'selected' : '' }}>{{ $j }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-
                             </div>
 
                             {{-- Kolom kanan: info keanggotaan + zona berbahaya --}}
@@ -195,34 +156,3 @@
     </div>
 
 @endsection
-
-@push('scripts')
-    <script>
-        document.getElementById('foto').addEventListener('change', function () {
-            const file = this.files[0];
-            if (!file) return;
-
-            if (!file.type.startsWith('image/')) {
-                alert('File harus berupa gambar.');
-                this.value = '';
-                return;
-            }
-
-            if (file.size > 2 * 1024 * 1024) {
-                alert('Ukuran gambar maksimal 2MB.');
-                this.value = '';
-                return;
-            }
-
-            const reader = new FileReader();
-
-            reader.onload = function (e) {
-                document.getElementById('fotoPreviewImg').src = e.target.result;
-                document.getElementById('fotoPreviewImg').style.display = 'block';
-                document.getElementById('fotoPreviewFallback').style.display = 'none';
-            };
-
-            reader.readAsDataURL(file);
-        });
-    </script>
-@endpush

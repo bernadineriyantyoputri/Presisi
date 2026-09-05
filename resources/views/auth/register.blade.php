@@ -136,10 +136,10 @@
                                 </div>
                                 <div class="col-6">
                                     <label>No. Handphone</label>
-                                    <input type="text" name="no_hp"
-                                        class="form-control @error('no_hp') is-invalid @enderror"
-                                        placeholder="0812XXXXXXXX" value="{{ old('no_hp') }}">
-                                    @error('no_hp')
+                                    <input type="text" name="no_telepon"
+                                        class="form-control @error('no_telepon') is-invalid @enderror"
+                                        placeholder="0812XXXXXXXX" value="{{ old('no_telepon') }}">
+                                    @error('no_telepon')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>

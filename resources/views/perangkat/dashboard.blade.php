@@ -86,7 +86,6 @@
 <script>
     function updateClock() {
         const now = new Date();
-        // Convert ke WIB (UTC+7)
         const wibString = now.toLocaleTimeString('en-GB', {
             timeZone: 'Asia/Jakarta',
             hour: '2-digit',

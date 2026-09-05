@@ -116,9 +116,9 @@
                     </div>
 
                     <div class="lapd-field">
-                        <label>Nomor HP</label>
+                        <label>Nomor Telepon</label>
                         <div class="lapd-value lapd-value-mono">
-                            {{ $laporan->perangkatDaerah->no_hp ?? '-' }}
+                            {{ $laporan->perangkatDaerah->no_telepon ?? '-' }}
                         </div>
                     </div>
                 </div>

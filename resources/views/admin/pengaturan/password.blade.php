@@ -45,21 +45,13 @@
                     @csrf
                     @method('PUT')
 
-                    {{-- ===== Bagian atas: foto + nama + badge + lokasi + tombol simpan ===== --}}
+                    {{-- ===== Bagian atas: avatar nama + badge + lokasi + tombol simpan ===== --}}
                     <div class="peng-profile-top">
                         <div class="peng-profile-left">
                             <div class="peng-profile-photo-wrap">
-                                @if($user->foto)
-                                    <img src="{{ asset('storage/' . $user->foto) }}" alt="{{ $user->name }}"
-                                        class="peng-avatar-photo">
-                                @else
-                                    <div class="peng-avatar-photo peng-avatar-fallback">
-                                        {{ strtoupper(substr($user->name, 0, 1)) }}
-                                    </div>
-                                @endif
-                                <span class="peng-photo-upload-btn" title="Ganti foto">
-                                    <i class="bi bi-camera-fill"></i>
-                                </span>
+                                <div class="peng-avatar-photo peng-avatar-fallback">
+                                    {{ strtoupper(substr($user->name, 0, 1)) }}
+                                </div>
                             </div>
 
                             <div class="peng-profile-info">

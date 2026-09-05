@@ -164,8 +164,8 @@
                         </div>
 
                         <div class="verif-field">
-                            <label>Nomor HP</label>
-                            <div class="verif-value verif-value-mono">{{ $perangkat->no_hp }}</div>
+                            <label>Nomor Telepon</label>
+                            <div class="verif-value verif-value-mono">{{ $perangkat->no_telepon }}</div>
                         </div>
 
                         <div class="verif-field">

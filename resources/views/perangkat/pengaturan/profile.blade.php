@@ -159,8 +159,8 @@
                                 <label class="form-label fw-semibold">
                                     No. Handphone
                                 </label>
-                                <input type="text" name="no_hp" class="form-control"
-                                    value="{{ old('no_hp', $perangkat->no_hp) }}">
+                                <input type="text" name="no_telepon" class="form-control"
+                                    value="{{ old('no_telepon', $perangkat->no_telepon) }}">
                             </div>
                         </div>
 

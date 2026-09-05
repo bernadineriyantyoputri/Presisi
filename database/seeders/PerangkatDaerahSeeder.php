@@ -68,7 +68,7 @@ class PerangkatDaerahSeeder extends Seeder
                     'pangkat_golongan' => '-',
                     'nip' => '-',
                     'bendahara_penerimaan' => '-',
-                    'no_hp' => '-',
+                    'no_telepon' => '-',
                     'email' => $email,
                     'status_verifikasi' => 'true',
                 ]
