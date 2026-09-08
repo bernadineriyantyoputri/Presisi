@@ -27,7 +27,6 @@ class DataRetribusiController extends Controller
         $jenis = JenisRetribusi::with('objekRetribusi')
             ->findOrFail($id);
 
-        // hanya tampilkan objek yang masih punya rincian (Opsi A)
         $objekList = $jenis->objekRetribusi()
             ->whereHas('rincian')
             ->get();
@@ -36,7 +35,6 @@ class DataRetribusiController extends Controller
             ? $objekList->firstWhere('id', $request->objek)
             : $objekList->first();
 
-        // basis-nya rincian, dengan semua detail-nya di-load sekaligus
         $data = $selectedObjek
             ? RincianRetribusi::with('detail', 'objek')
                 ->where('objek_id', $selectedObjek->id)
@@ -144,8 +142,6 @@ class DataRetribusiController extends Controller
 
         if ($namaDetail === '') {
 
-            // Tidak memiliki detail
-            // Hapus semua detail lama jika ada
             if ($detailList->isNotEmpty()) {
                 $rincian->detail()->delete();
             }
@@ -184,13 +180,10 @@ class DataRetribusiController extends Controller
         $rincian = RincianRetribusi::with('objek')->findOrFail($id);
         $objek = $rincian->objek;
 
-        // hapus semua detail dulu
         $rincian->detail()->delete();
 
-        // hapus rincian-nya
         $rincian->delete();
 
-        // kalau objek sudah tidak punya rincian lain, hapus juga objeknya
         if ($objek && $objek->rincian()->count() === 0) {
             $objek->delete();
         }
@@ -273,33 +266,36 @@ class DataRetribusiController extends Controller
     }
 
     public function storeObjekLengkap(Request $request)
-    {
-        $request->validate([
-            'jenis_id' => 'required|exists:jenis_retribusi,id',
-            'nama_objek' => 'required|string|max:255',
-            'nama_rincian' => 'required|string|max:255',
-            'nama_detail' => 'required|string|max:255',
-        ]);
+{
+    $request->validate([
+        'jenis_id' => 'required|exists:jenis_retribusi,id',
+        'nama_objek' => 'required|string|max:255',
+        'nama_rincian' => 'required|string|max:255',
+        'nama_detail' => 'nullable|string|max:255', // ← tidak wajib lagi
+    ]);
 
-        $objek = ObjekRetribusi::create([
-            'jenis_id' => $request->jenis_id,
-            'nama_objek' => $request->nama_objek,
-        ]);
+    $objek = ObjekRetribusi::create([
+        'jenis_id' => $request->jenis_id,
+        'nama_objek' => $request->nama_objek,
+    ]);
 
-        $rincian = $objek->rincian()->create([
-            'nama_rincian' => $request->nama_rincian,
-        ]);
+    $rincian = $objek->rincian()->create([
+        'nama_rincian' => $request->nama_rincian,
+    ]);
 
+    $namaDetail = trim($request->nama_detail ?? '');
+
+    if ($namaDetail !== '') {
         $rincian->detail()->create([
-            'nama_detail' => $request->nama_detail,
+            'nama_detail' => $namaDetail,
         ]);
-
-        return back()->with('success', 'Objek retribusi berhasil ditambahkan.');
     }
+
+    return back()->with('success', 'Objek retribusi berhasil ditambahkan.');
+}
 
     public function storeTarget(Request $request)
     {
-        // Normalisasi "" -> null SEBELUM validasi
         $request->merge([
             'rincian_id' => $request->rincian_id ?: null,
             'detail_id' => $request->detail_id ?: null,
@@ -313,7 +309,6 @@ class DataRetribusiController extends Controller
             'target_nominal' => 'required|numeric|min:0',
         ]);
 
-        // Sesuaikan nama kolom ini dengan yang benar di migration ('target' atau 'target_nominal')
         $kolom = $validated['jenis'] === 'perubahan' ? 'target_perubahan' : 'target_nominal';
 
         TargetRetribusi::updateOrCreate(

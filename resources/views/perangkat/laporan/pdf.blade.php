@@ -45,19 +45,26 @@
                 @php
                     $grandTotal += $d->total_realisasi;
 
-                    $namaObjekUtama = $d->detailRetribusi?->nama_detail
+                    // Semua nama diambil dari snapshot, BUKAN dari relasi master data.
+                    // Fallback ke relasi hanya untuk laporan lama sebelum kolom snapshot ada.
+                    $namaObjekUtama = $d->nama_detail_snapshot
+                        ?? $d->nama_rincian_snapshot
+                        ?? $d->detailRetribusi?->nama_detail
                         ?? $d->rincian?->nama_rincian
                         ?? '-';
-                    $namaRincianSub = $d->detailRetribusi ? $d->detailRetribusi?->rincian?->nama_rincian : null;
 
-                    // Ambil target: prioritas dari detail_retribusi_id, fallback ke rincian_id
+                    $namaRincianSub = $d->nama_detail_snapshot
+                        ? $d->nama_rincian_snapshot
+                        : null;
+
+                    // Target juga mutlak dari snapshot
                     $targetNominal = $d->target_snapshot ?? 0;
 
                     $grandTarget += $targetNominal;
 
-                    $capaian = $targetNominal > 0
-                        ? round(($d->total_realisasi / $targetNominal) * 100, 2)
-                        : null;
+                    // Persentase pakai kolom snapshot yang sudah dihitung saat submit,
+                    // bukan dihitung ulang di sini
+                    $capaian = $d->persentase;
                 @endphp
                 <tr>
                     <td class="no">{{ $no++ }}</td>

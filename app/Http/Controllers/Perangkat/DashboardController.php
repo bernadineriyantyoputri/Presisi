@@ -21,7 +21,6 @@ class DashboardController extends Controller
 
         $query = LaporanRetribusi::where('perangkat_daerah_id', $perangkatDaerah->id);
 
-        // ----- Status laporan bulan ini -----
         $bulanIni = now()->format('n');
         $tahunIni = now()->format('Y');
 
@@ -36,16 +35,10 @@ class DashboardController extends Controller
             default => 'Draft',
         };
 
-        // ----- Total laporan tahun ini -----
         $totalLaporanTahunIni = (clone $query)
             ->where('tahun', $tahunIni)
             ->count();
 
-        // ----- Realisasi terhadap target -----
-        // Ambil detail laporan (submit/terverifikasi) tahun ini, lalu ambil
-        // HANYA laporan bulan terakhir per rincian/detail (karena total_realisasi
-        // sudah kumulatif dari bulan-bulan sebelumnya — kalau dijumlah semua
-        // bulan akan dobel hitung).
         $detailTerbaruPerItem = (clone $query)
             ->where('tahun', $tahunIni)
             ->whereIn('status', ['submit', 'terverifikasi'])
@@ -58,9 +51,6 @@ class DashboardController extends Controller
 
         $totalRealisasi = $detailTerbaruPerItem->sum('total_realisasi');
 
-        // Ambil target yang BERLAKU SEKARANG untuk tiap rincian/detail yang
-        // muncul di atas (bukan pakai target_snapshot yang bisa basi kalau
-        // target diubah/di-reset setelah laporan disubmit).
         $targetList = TargetRetribusi::where('tahun', $tahunIni)->get()
             ->keyBy(fn ($t) => $t->rincian_id . '-' . ($t->detail_id ?? 'null'));
 
@@ -81,7 +71,6 @@ class DashboardController extends Controller
             ? round(($totalRealisasi / $totalTarget) * 100, 2)
             : 0;
 
-        // ----- Laporan terbaru (5 terakhir) -----
         $laporanTerbaru = (clone $query)
             ->withSum('laporanDetail as jumlah', 'total_realisasi')
             ->orderByDesc('tahun')
@@ -95,7 +84,6 @@ class DashboardController extends Controller
                 return $laporan;
             });
 
-        // ----- Sapaan berdasarkan jam (WIB, bukan timezone default server) -----
         $jam = now()->timezone('Asia/Jakarta')->format('H');
         $sapaan = match (true) {
             $jam < 11 => 'Selamat Pagi',

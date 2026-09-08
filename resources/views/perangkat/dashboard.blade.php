@@ -4,7 +4,6 @@
 
 @section('content')
 <div class="dashboard-perangkat">
-
     <div class="header-card mb-4">
         <div>
             <h2 class="judul-halaman mb-1">{{ $sapaan ?? 'Selamat pagi' }}, {{ $namaInstansi ?? $akun->name }}</h2>

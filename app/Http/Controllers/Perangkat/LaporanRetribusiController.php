@@ -17,8 +17,8 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class LaporanRetribusiController extends Controller
 {
-    const SESSION_KEY = 'wizard_laporan';       // draft uraian yg sedang diisi
-    const SESSION_LIST_KEY = 'wizard_uraian_list'; // keranjang uraian yg sudah selesai
+    const SESSION_KEY = 'wizard_laporan';       
+    const SESSION_LIST_KEY = 'wizard_uraian_list'; 
 
     private array $namaBulan = [
         1 => 'Januari', 
@@ -55,7 +55,6 @@ class LaporanRetribusiController extends Controller
 
     public function create()
     {
-        // Titik mulai laporan baru dari nol -> reset kedua session
         session()->forget(self::SESSION_KEY);
         session()->forget(self::SESSION_LIST_KEY);
 
@@ -64,8 +63,6 @@ class LaporanRetribusiController extends Controller
         return view('perangkat.laporan.create.jenis', compact('jenisRetribusi'));
     }
 
-    // Dipanggil dari halaman confirmList saat user klik "Tambah Uraian Lagi"
-    // Bulan/tahun dikunci ke uraian pertama, jenis tetap bisa dipilih ulang.
     public function tambahUraian()
 {
     $uraianList = session(self::SESSION_LIST_KEY, []);
@@ -96,8 +93,6 @@ class LaporanRetribusiController extends Controller
             'jenis_retribusi_id' => 'required|exists:jenis_retribusi,id',
         ];
 
-        // Kalau ini uraian pertama, bulan/tahun wajib diisi dari form.
-        // Kalau uraian ke-2 dst, bulan/tahun sudah ada di session (terkunci), tidak wajib dari input.
         if (empty($uraianList)) {
             $rules['bulan'] = 'required|integer|min:1|max:12';
             $rules['tahun'] = 'required|integer|min:2000|max:2099';
@@ -121,7 +116,6 @@ class LaporanRetribusiController extends Controller
         return redirect()->route('perangkat.laporan.create.objek.show');
     }
 
-    //step 2 show objek
     public function showObjek(Request $request)
     {
         $wizard = session(self::SESSION_KEY, []);
@@ -201,8 +195,6 @@ class LaporanRetribusiController extends Controller
         return redirect()->route('perangkat.laporan.create.nominal.show');
     }
 
-    // step 3 isi nominal
-
     public function nominalShow()
     {
         $wizard = session(self::SESSION_KEY, []);
@@ -245,7 +237,6 @@ class LaporanRetribusiController extends Controller
                 ->with('error', 'Sesi telah berakhir, silakan mulai dari awal.');
         }
 
-        // Cek duplikat rincian/detail dalam keranjang (tidak boleh input objek yang sama 2x)
         $uraianList = session(self::SESSION_LIST_KEY, []);
         $rincianId = $request->rincian_id;
         $detailId = $request->detail_retribusi_id ?: null;
@@ -259,17 +250,14 @@ class LaporanRetribusiController extends Controller
                 ->with('error', 'Objek retribusi ini sudah ditambahkan ke laporan. Silakan pilih objek lain atau hapus dulu dari daftar.');
         }
 
-        // Simpan uraian lengkap ke draft
         $wizard['objek_id'] = $request->objek_id;
         $wizard['rincian_id'] = $request->rincian_id;
         $wizard['detail_retribusi_id'] = $detailId;
         $wizard['realisasi_bulan_ini'] = $request->realisasi_bulan_ini;
 
-        // Push draft ke keranjang
         $uraianList[] = $wizard;
         session([self::SESSION_LIST_KEY => $uraianList]);
 
-        // Reset draft per-uraian, tapi bulan/tahun tetap dipertahankan
         session([self::SESSION_KEY => [
             'bulan' => $wizard['bulan'],
             'tahun' => $wizard['tahun'],
@@ -292,7 +280,6 @@ class LaporanRetribusiController extends Controller
         $bulanNama = $this->namaBulan[$uraianList[0]['bulan']] ?? '-';
         $tahun = $uraianList[0]['tahun'];
 
-        // Lengkapi tiap item dengan data relasi untuk ditampilkan (nama objek, rincian, dll)
         $items = collect($uraianList)->map(function ($u, $i) {
             return [
                 'index' => $i,
@@ -322,7 +309,6 @@ class LaporanRetribusiController extends Controller
 
         session([self::SESSION_LIST_KEY => $uraianList]);
 
-        // Kalau habis semua, balik ke awal
         if (empty($uraianList)) {
             session()->forget(self::SESSION_KEY);
             session()->forget(self::SESSION_LIST_KEY);
@@ -332,7 +318,7 @@ class LaporanRetribusiController extends Controller
 
         return back()->with('success', 'Uraian berhasil dihapus.');
     }
-    // ringkasan akhir sebelum submit (Step 4)
+
     public function ringkasanShow()
     {
         $uraianList = session(self::SESSION_LIST_KEY, []);
@@ -360,7 +346,6 @@ class LaporanRetribusiController extends Controller
         return view('perangkat.laporan.confirm', compact('items', 'bulanNama', 'tahun', 'total'));
     }
 
-    // ============ STORE FINAL — loop semua uraian ============
 
     public function store(Request $request)
     {
@@ -380,7 +365,6 @@ class LaporanRetribusiController extends Controller
         try {
             $perangkat = $this->getPerangkat();
 
-            // Cek duplikasi ke DB untuk SEMUA uraian dulu, sebelum insert apapun
             if (!$isDraft) {
                 foreach ($uraianList as $u) {
                     $exists = LaporanRetribusi::where('perangkat_daerah_id', $perangkat->id)
@@ -406,7 +390,6 @@ class LaporanRetribusiController extends Controller
                 }
             }
 
-            // Buat 1 header laporan
             $laporan = LaporanRetribusi::create([
                 'perangkat_daerah_id' => $perangkat->id,
                 'bulan' => $bulan,
@@ -415,7 +398,6 @@ class LaporanRetribusiController extends Controller
                 'tanggal_submit' => $isDraft ? null : now(),
             ]);
 
-            // Loop, buat 1 LaporanDetail per uraian
             foreach ($uraianList as $u) {
                 $this->buatLaporanDetail($laporan, $u, $perangkat);
             }
@@ -441,9 +423,6 @@ class LaporanRetribusiController extends Controller
                 ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
-
-    // Logic hitung realisasi_bulan_lalu, target_snapshot, persentase
-    // dipindah ke sini dari store() lama, supaya bisa dipanggil berulang dalam loop.
     private function buatLaporanDetail(LaporanRetribusi $laporan, array $u, $perangkat)
     {
         $rincianId = $u['rincian_id'];
@@ -482,6 +461,11 @@ class LaporanRetribusiController extends Controller
             ? round(($total / $targetNominal) * 100, 2)
             : 0;
 
+        $jenis   = JenisRetribusi::find($u['jenis_retribusi_id']);
+        $objek   = ObjekRetribusi::find($u['objek_id']);
+        $rincian = RincianRetribusi::find($rincianId);
+        $detail  = $detailId ? DetailRetribusi::find($detailId) : null;
+
         return LaporanDetail::create([
             'laporan_id' => $laporan->id,
             'rincian_id' => $rincianId,
@@ -492,10 +476,13 @@ class LaporanRetribusiController extends Controller
             'persentase' => $persentase,
             'target_snapshot' => $targetNominal,
             'target_aktif_snapshot' => $targetRow->target_aktif ?? null,
+
+            'nama_jenis_snapshot' => $jenis->nama_jenis ?? '-',
+            'nama_objek_snapshot' => $objek->nama_objek ?? '-',
+            'nama_rincian_snapshot' => $rincian->nama_rincian ?? '-',
+            'nama_detail_snapshot' => $detail->nama_detail ?? null,
         ]);
     }
-
-    // ============ SISANYA TIDAK BERUBAH ============
 
     public function selesai($id)
     {

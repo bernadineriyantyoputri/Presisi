@@ -12,7 +12,6 @@ class DatabaseSeeder extends Seeder
             JenisRetribusiSeeder::class,
             ObjekRetribusiSeeder::class,
             RincianRetribusiSeeder::class,
-            TargetRetribusiSeeder::class,
             PerangkatDaerahSeeder::class,
             LaporanRetribusiSeeder::class,
             LaporanDetailSeeder::class,

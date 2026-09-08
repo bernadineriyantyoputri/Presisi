@@ -18,6 +18,13 @@ class LaporanDetail extends Model
         'persentase',
         'target_snapshot',
         'target_aktif_snapshot',
+
+        // snapshot nama — dibekukan saat laporan dibuat,
+        // supaya tidak ikut berubah kalau master data (jenis/objek/rincian/detail) diedit admin
+        'nama_jenis_snapshot',
+        'nama_objek_snapshot',
+        'nama_rincian_snapshot',
+        'nama_detail_snapshot',
     ];
 
     public function laporan()
