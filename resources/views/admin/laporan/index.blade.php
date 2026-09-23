@@ -19,10 +19,6 @@
             </div>
 
             <div class="lap-actions">
-                <button class="lap-btn lap-btn-outline">
-                    <i class="bi bi-download"></i>
-                    Export Data
-                </button>
 
                 <a href="{{ route('admin.laporan.index') }}" class="lap-btn lap-btn-navy">
                     <i class="bi bi-arrow-clockwise"></i>

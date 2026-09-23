@@ -47,12 +47,12 @@
                     <i class="bi bi-plus-lg"></i> Tambah Objek
                 </button>
             </div>
-
             {{-- Dropdown filter objek retribusi --}}
             @if($objekList->isNotEmpty())
                 <div class="jr-filter-dropdown dropdown mb-3">
                     <button class="btn jr-dropdown-toggle dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                        <span><i class="bi bi-funnel me-1"></i> {{ $selectedObjek->nama_objek ?? 'Pilih Objek Retribusi' }}</span>
+                        <span><i class="bi bi-funnel me-1"></i>
+                            {{ $selectedObjek->nama_objek ?? 'Pilih Objek Retribusi' }}</span>
                     </button>
                     <ul class="dropdown-menu">
                         @foreach($objekList as $objek)
@@ -126,8 +126,8 @@
                                             </div>
                                             <div class="modal-body">
                                                 <label class="form-label">Nama Objek Retribusi</label>
-                                                <input type="text" class="form-control"
-                                                    value="{{ $rincian->objek->nama_objek ?? '-' }}" disabled>
+                                                <input type="text" name="nama_objek" class="form-control"
+                                                    value="{{ $rincian->objek->nama_objek ?? '-' }}" required>
 
                                                 <label class="form-label mt-3">Nama Rincian</label>
                                                 <input type="text" name="nama_rincian" class="form-control"
@@ -149,8 +149,7 @@
                                                     rows="4" {{ $rincian->detail->isEmpty() ? 'style=display:none;' : '' }}>{{ optional($rincian->detail->first())->nama_detail }}</textarea>
                                             </div>
                                             <div class="modal-footer">
-                                                <button type="button" class="btn jr-btn-cancel"
-                                                    data-bs-dismiss="modal">
+                                                <button type="button" class="btn jr-btn-cancel" data-bs-dismiss="modal">
                                                     <i class="bi bi-x-circle me-1"></i> Batal
                                                 </button>
                                                 <button type="submit" class="btn jr-btn-save">
@@ -185,8 +184,7 @@
                                                 </p>
                                             </div>
                                             <div class="modal-footer">
-                                                <button type="button" class="btn jr-btn-cancel"
-                                                    data-bs-dismiss="modal">
+                                                <button type="button" class="btn jr-btn-cancel" data-bs-dismiss="modal">
                                                     <i class="bi bi-x-circle me-1"></i> Batal
                                                 </button>
                                                 <button type="submit" class="btn btn-danger">

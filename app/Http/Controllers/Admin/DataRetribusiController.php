@@ -19,7 +19,7 @@ class DataRetribusiController extends Controller
             ->orderBy('nama_jenis')
             ->get();
 
-        return view('admin.dataretribusi.index', compact('data')); 
+        return view('admin.dataretribusi.index', compact('data'));
     }
 
     public function showJenis(Request $request, $id)
@@ -106,6 +106,7 @@ class DataRetribusiController extends Controller
         return back()->with('success', 'Objek Retribusi berhasil ditambahkan.');
     }
 
+
     public function storeRincian(Request $request)
     {
         $request->validate([
@@ -124,13 +125,18 @@ class DataRetribusiController extends Controller
     public function updateRincian(Request $request, $id)
     {
         $request->validate([
+            'nama_objek' => 'required|string|max:255',
             'nama_rincian' => 'required|string|max:255',
             'nama_detail' => 'nullable|string|max:255',
         ]);
 
-        $rincian = RincianRetribusi::with('detail')->findOrFail($id);
+        $rincian = RincianRetribusi::with('detail', 'objek')->findOrFail($id);
 
-        // Update nama rincian
+        if ($rincian->objek) {
+            $rincian->objek->update([
+                'nama_objek' => $request->nama_objek,
+            ]);
+        }
         $rincian->update([
             'nama_rincian' => $request->nama_rincian,
         ]);
@@ -163,7 +169,6 @@ class DataRetribusiController extends Controller
 
             } else {
 
-                // Belum ada detail, buat baru
                 $rincian->detail()->create([
                     'nama_detail' => $namaDetail,
                 ]);
@@ -265,34 +270,49 @@ class DataRetribusiController extends Controller
         return back()->with('success', 'Jenis retribusi berhasil diperbarui.');
     }
 
-    public function storeObjekLengkap(Request $request)
-{
-    $request->validate([
-        'jenis_id' => 'required|exists:jenis_retribusi,id',
-        'nama_objek' => 'required|string|max:255',
-        'nama_rincian' => 'required|string|max:255',
-        'nama_detail' => 'nullable|string|max:255', // ← tidak wajib lagi
-    ]);
-
-    $objek = ObjekRetribusi::create([
-        'jenis_id' => $request->jenis_id,
-        'nama_objek' => $request->nama_objek,
-    ]);
-
-    $rincian = $objek->rincian()->create([
-        'nama_rincian' => $request->nama_rincian,
-    ]);
-
-    $namaDetail = trim($request->nama_detail ?? '');
-
-    if ($namaDetail !== '') {
-        $rincian->detail()->create([
-            'nama_detail' => $namaDetail,
+    public function updateObjek(Request $request, ObjekRetribusi $objek)
+    {
+        $request->validate([
+            'jenis_id' => 'required|exists:jenis_retribusi,id',
+            'nama_objek' => 'required|string|max:255',
         ]);
+
+        $objek->update([
+            'jenis_id' => $request->jenis_id,
+            'nama_objek' => $request->nama_objek,
+        ]);
+
+        return back()->with('success', 'Objek retribusi berhasil diperbarui.');
     }
 
-    return back()->with('success', 'Objek retribusi berhasil ditambahkan.');
-}
+    public function storeObjekLengkap(Request $request)
+    {
+        $request->validate([
+            'jenis_id' => 'required|exists:jenis_retribusi,id',
+            'nama_objek' => 'required|string|max:255',
+            'nama_rincian' => 'required|string|max:255',
+            'nama_detail' => 'nullable|string|max:255', // ← tidak wajib lagi
+        ]);
+
+        $objek = ObjekRetribusi::create([
+            'jenis_id' => $request->jenis_id,
+            'nama_objek' => $request->nama_objek,
+        ]);
+
+        $rincian = $objek->rincian()->create([
+            'nama_rincian' => $request->nama_rincian,
+        ]);
+
+        $namaDetail = trim($request->nama_detail ?? '');
+
+        if ($namaDetail !== '') {
+            $rincian->detail()->create([
+                'nama_detail' => $namaDetail,
+            ]);
+        }
+
+        return back()->with('success', 'Objek retribusi berhasil ditambahkan.');
+    }
 
     public function storeTarget(Request $request)
     {

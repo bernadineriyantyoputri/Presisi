@@ -10,7 +10,7 @@ use App\Http\Controllers\Perangkat\LaporanRetribusiController;
 use App\Http\Controllers\Admin\TargetRetribusiController;
 use App\Http\Controllers\Perangkat\PengaturanController as PerangkatPengaturanController;
 use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\Perangkat\DashboardController as PerangkatDashboardController; // ⬅️ INI YANG KURANG
+use App\Http\Controllers\Perangkat\DashboardController as PerangkatDashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -131,10 +131,10 @@ Route::middleware('auth')
         Route::post('/create/nominal', 'nominalStore')->name('create.nominal.store');
 
 
-Route::get('/create/tambah-uraian', 'tambahUraian')->name('create.tambah-uraian');
-Route::get('/create/daftar-uraian', 'confirmList')->name('create.confirm.list');
-Route::delete('/create/daftar-uraian/{index}', 'hapusUraian')->name('create.uraian.hapus');
-Route::get('/create/ringkasan', 'ringkasanShow')->name('create.ringkasan.show');
+        Route::get('/create/tambah-uraian', 'tambahUraian')->name('create.tambah-uraian');
+        Route::get('/create/daftar-uraian', 'confirmList')->name('create.confirm.list');
+        Route::delete('/create/daftar-uraian/{index}', 'hapusUraian')->name('create.uraian.hapus');
+        Route::get('/create/ringkasan', 'ringkasanShow')->name('create.ringkasan.show');
 
         Route::post('/store', 'store')->name('store');
 
@@ -199,6 +199,7 @@ Route::middleware('auth')
         // Objek
         Route::post('/objek', [DataRetribusiController::class, 'storeObjek'])->name('objek.store');
         Route::post('/objek-lengkap', [DataRetribusiController::class, 'storeObjekLengkap'])->name('objek.storeFull');
+        Route::put('/objek/{objek}', [DataRetribusiController::class, 'updateObjek'])->name('objek.update');
 
         // Rincian
         Route::post('/rincian', [DataRetribusiController::class, 'storeRincian'])->name('rincian.store');
