@@ -95,12 +95,25 @@ class DataRetribusiController extends Controller
     {
         $request->validate([
             'jenis_id' => 'required|exists:jenis_retribusi,id',
-            'nama_objek' => 'required|string|max:255',
+            'nama_objek' => [
+                'required',
+                'string',
+                'max:255',
+                function ($attribute, $value, $fail) use ($request) {
+                    $exists = ObjekRetribusi::where('jenis_id', $request->jenis_id)
+                        ->whereRaw('LOWER(TRIM(nama_objek)) = ?', [strtolower(trim($value))])
+                        ->exists();
+
+                    if ($exists) {
+                        $fail('Nama objek retribusi tersebut sudah ada pada jenis retribusi ini.');
+                    }
+                },
+            ],
         ]);
 
         ObjekRetribusi::create([
             'jenis_id' => $request->jenis_id,
-            'nama_objek' => $request->nama_objek,
+            'nama_objek' => trim($request->nama_objek),
         ]);
 
         return back()->with('success', 'Objek Retribusi berhasil ditambahkan.');
@@ -285,14 +298,29 @@ class DataRetribusiController extends Controller
     {
         $request->validate([
             'jenis_id' => 'required|exists:jenis_retribusi,id',
-            'nama_objek' => 'required|string|max:255',
+
+            'nama_objek' => [
+                'required',
+                'string',
+                'max:255',
+                function ($attribute, $value, $fail) use ($request) {
+                    $exists = ObjekRetribusi::where('jenis_id', $request->jenis_id)
+                        ->whereRaw('LOWER(TRIM(nama_objek)) = ?', [strtolower(trim($value))])
+                        ->exists();
+
+                    if ($exists) {
+                        $fail('Nama objek retribusi tersebut sudah ada pada jenis retribusi ini.');
+                    }
+                },
+            ],
+
             'nama_rincian' => 'required|string|max:255',
-            'nama_detail' => 'nullable|string|max:255', // ← tidak wajib lagi
+            'nama_detail' => 'nullable|string|max:255',
         ]);
 
         $objek = ObjekRetribusi::create([
             'jenis_id' => $request->jenis_id,
-            'nama_objek' => $request->nama_objek,
+            'nama_objek' => trim($request->nama_objek),
         ]);
 
         $rincian = $objek->rincian()->create([
