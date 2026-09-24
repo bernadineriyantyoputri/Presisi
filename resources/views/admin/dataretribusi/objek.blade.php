@@ -48,24 +48,52 @@
                 </button>
             </div>
             {{-- Dropdown filter objek retribusi --}}
-            @if($objekList->isNotEmpty())
-                <div class="jr-filter-dropdown dropdown mb-3">
-                    <button class="btn jr-dropdown-toggle dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                        <span><i class="bi bi-funnel me-1"></i>
-                            {{ $selectedObjek->nama_objek ?? 'Pilih Objek Retribusi' }}</span>
-                    </button>
-                    <ul class="dropdown-menu">
-                        @foreach($objekList as $objek)
-                            <li>
-                                <a class="dropdown-item {{ ($selectedObjek->id ?? null) == $objek->id ? 'active' : '' }}"
-                                    href="{{ route('admin.data.jenis', ['jenis' => $jenis->id, 'objek' => $objek->id]) }}">
-                                    {{ $objek->nama_objek }}
-                                </a>
-                            </li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
+
+{{-- Dropdown filter objek + tombol tambah rincian --}}
+@if($objekList->isNotEmpty())
+    <div class="d-flex align-items-center justify-content-between gap-2 mb-3 w-100">
+
+        {{-- Dropdown Objek --}}
+        <div class="jr-filter-dropdown dropdown">
+            <button class="btn jr-dropdown-toggle dropdown-toggle"
+                type="button"
+                data-bs-toggle="dropdown">
+                <span>
+                    <i class="bi bi-funnel me-1"></i>
+                    {{ $selectedObjek->nama_objek ?? 'Pilih Objek Retribusi' }}
+                </span>
+            </button>
+
+            <ul class="dropdown-menu">
+                @foreach($objekList as $objek)
+                    <li>
+                        <a class="dropdown-item {{ ($selectedObjek->id ?? null) == $objek->id ? 'active' : '' }}"
+                            href="{{ route('admin.data.jenis', [
+                                'jenis' => $jenis->id,
+                                'objek' => $objek->id
+                            ]) }}">
+                            {{ $objek->nama_objek }}
+                        </a>
+                    </li>
+                @endforeach
+            </ul>
+        </div>
+
+        {{-- Tombol Tambah Rincian --}}
+        @if($selectedObjek)
+            <button type="button"
+                class="btn jr-btn-add"
+                data-bs-toggle="modal"
+                data-bs-target="#modalTambahRincian">
+
+                <i class="bi bi-plus-lg"></i>
+                Tambah Rincian
+            </button>
+        @endif
+
+    </div>
+@endif
+
 
             {{-- Tabel Rincian & Detail --}}
             <div class="table-responsive">
@@ -268,6 +296,90 @@
             </form>
         </div>
     </div>
+{{-- ================= MODAL: TAMBAH RINCIAN ================= --}}
+@if($selectedObjek)
+    <div class="modal fade" id="modalTambahRincian" tabindex="-1">
+        <div class="modal-dialog">
+
+            <form action="{{ route('admin.rincian.store') }}" method="POST">
+                @csrf
+
+                {{-- ID objek yang sedang dipilih --}}
+                <input type="hidden"
+                    name="objek_id"
+                    value="{{ $selectedObjek->id }}">
+
+                <div class="modal-content jr-modal-content">
+
+                    <div class="modal-header">
+                        <div>
+                            <h5 class="modal-title">
+                                Tambah Rincian Objek Retribusi
+                            </h5>
+
+                            <p class="jr-modal-subtitle mb-0">
+                                Tambahkan rincian baru pada objek retribusi yang dipilih.
+                            </p>
+                        </div>
+
+                        <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal">
+                        </button>
+                    </div>
+
+                    <div class="modal-body">
+
+                        {{-- Objek yang dipilih --}}
+                        <label class="form-label">
+                            Objek Retribusi
+                        </label>
+
+                        <input type="text"
+                            class="form-control"
+                            value="{{ $selectedObjek->nama_objek }}"
+                            readonly>
+
+                        {{-- Nama rincian --}}
+                        <label class="form-label mt-3">
+                            Nama Rincian
+                            <span class="text-danger">*</span>
+                        </label>
+
+                        <input type="text"
+                            name="nama_rincian"
+                            class="form-control"
+                            placeholder="Masukkan nama rincian"
+                            required>
+
+                    </div>
+
+                    <div class="modal-footer">
+
+                        <button type="button"
+                            class="btn jr-btn-cancel"
+                            data-bs-dismiss="modal">
+
+                            <i class="bi bi-x-circle me-1"></i>
+                            Batal
+                        </button>
+
+                        <button type="submit"
+                            class="btn jr-btn-save">
+
+                            <i class="bi bi-check-circle me-1"></i>
+                            Simpan
+                        </button>
+
+                    </div>
+
+                </div>
+            </form>
+
+        </div>
+    </div>
+@endif
+
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {

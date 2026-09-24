@@ -143,7 +143,6 @@ class DataRetribusiController extends Controller
 
         $namaDetail = trim($request->nama_detail ?? '');
 
-        // Ambil semua detail milik rincian
         $detailList = $rincian->detail;
 
         if ($namaDetail === '') {
@@ -154,15 +153,12 @@ class DataRetribusiController extends Controller
 
         } else {
 
-            // Memiliki detail
             if ($detailList->isNotEmpty()) {
 
-                // Update detail pertama
                 $detailList->first()->update([
                     'nama_detail' => $namaDetail,
                 ]);
 
-                // Hapus detail lainnya jika ada
                 if ($detailList->count() > 1) {
                     $detailList->slice(1)->each->delete();
                 }
