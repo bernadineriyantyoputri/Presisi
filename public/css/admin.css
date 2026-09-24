@@ -2897,23 +2897,18 @@ td {
 /* ================================================================
    ==========   SELESAI: JR-CARD FOOTER   ==========================
    ================================================================ */
-
-
 /* ================================================================
-   ================================================================
-   ==========   MULAI: DETAIL OBJEK RETRIBUSI (jr-table-*)   =======
-   ================================================================
-   Paste blok ini di bagian PALING BAWAH file public/css/admin.css.
-   Halaman terkait : resources/views/admin/dataretribusi/objek.blade.php
+   DETAIL OBJEK RETRIBUSI
    ================================================================ */
 
-/* ---------- Title & subtitle (disamakan dgn halaman Verifikasi) ---------- */
+/* ---------- Title & subtitle ---------- */
+
 .jr-title {
     font-family: 'Inter', sans-serif;
     font-size: 1.7rem;
     font-weight: 800;
     letter-spacing: -0.02em;
-    color: #101828;
+    color: var(--lap-navy-900);
     margin: 10px 0 4px;
 }
 
@@ -2924,6 +2919,7 @@ td {
 }
 
 /* ---------- Back link ---------- */
+
 .jr-back-link {
     display: inline-flex;
     align-items: center;
@@ -2937,10 +2933,11 @@ td {
 }
 
 .jr-back-link:hover {
-    color: #22345A;
+    color: var(--lap-navy-900);
 }
 
-/* ---------- Alert danger (belum ada sebelumnya) ---------- */
+/* ---------- Alert danger ---------- */
+
 .jr-alert-danger {
     background: #FBEAE8;
     color: #C0392B;
@@ -2948,6 +2945,7 @@ td {
 }
 
 /* ---------- Table card ---------- */
+
 .jr-table-card {
     background: #fff;
     border-radius: 16px;
@@ -2969,7 +2967,7 @@ td {
 .jr-table-title {
     font-size: 1.05rem;
     font-weight: 700;
-    color: #1F2937;
+    color: var(--lap-navy-900);
     margin: 0 0 4px;
 }
 
@@ -2983,7 +2981,7 @@ td {
     display: inline-flex;
     align-items: center;
     background: #EAF0F6;
-    color: #1E4D7B;
+    color: var(--lap-navy-900);
     font-size: 0.76rem;
     font-weight: 700;
     padding: 4px 10px;
@@ -2992,6 +2990,7 @@ td {
 }
 
 /* ---------- Filter dropdown ---------- */
+
 .jr-filter-dropdown .jr-dropdown-toggle {
     background: #F8FAFC;
     border: 1.5px solid #E2E8F0;
@@ -3009,7 +3008,7 @@ td {
 }
 
 .jr-filter-dropdown .jr-dropdown-toggle:hover {
-    border-color: #22345A;
+    border-color: var(--lap-navy-900);
 }
 
 .jr-filter-dropdown .dropdown-menu {
@@ -3030,15 +3029,16 @@ td {
 
 .jr-filter-dropdown .dropdown-item:hover {
     background: #EEF2F7;
-    color: #22345A;
+    color: var(--lap-navy-900);
 }
 
 .jr-filter-dropdown .dropdown-item.active {
-    background: #22345A;
+    background: var(--lap-navy-900);
     color: #fff;
 }
 
 /* ---------- Table ---------- */
+
 .table-responsive {
     border-radius: 12px;
     overflow: hidden;
@@ -3053,8 +3053,8 @@ table.jr-table {
 }
 
 .jr-table thead th {
-    background: #F8FAFC;
-    color: #64748B;
+    background: #f1f6fd;
+    color: var(--lap-navy-900);
     font-size: 0.72rem;
     font-weight: 700;
     text-transform: uppercase;
@@ -3081,7 +3081,7 @@ table.jr-table {
 }
 
 .jr-table-link {
-    color: #22345A;
+    color: var(--lap-navy-900);
     font-weight: 600;
     text-decoration: none;
 }
@@ -3091,6 +3091,7 @@ table.jr-table {
 }
 
 /* ---------- Icon action buttons ---------- */
+
 .jr-icon-btn {
     width: 34px;
     height: 34px;
@@ -3107,14 +3108,13 @@ table.jr-table {
 
 .jr-icon-btn-edit:hover {
     background: #F3F4F6;
-    color: #374151;
+    color: var(--lap-navy-900);
 }
 
 .jr-icon-btn-delete:hover {
     background: #FEF2F2;
     color: #DC2626;
 }
-
 /* ---------- Modal subtitle (belum ada sebelumnya) ---------- */
 .jr-modal-subtitle {
     font-size: 0.82rem;
@@ -5297,4 +5297,93 @@ table.tgt-table {
     height: 100%;
     object-fit: cover;
     display: block;
+}
+
+.detail-list {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.detail-item {
+    min-height: 34px;
+    display: flex;
+    align-items: center;
+    padding: 7px 10px;
+    background: #F8FAFC;
+    border: 1px solid #EEF1F6;
+    border-radius: 8px;
+    color: #475467;
+    font-size: .84rem;
+}
+
+.detail-action-list {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.detail-action-item {
+    min-height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+}
+
+.modal {
+    z-index: 1060 !important;
+}
+
+.modal-backdrop {
+    z-index: 1050 !important;
+}
+
+.modal-dialog {
+    position: relative;
+    z-index: 1061;
+}
+/* =========================================================
+   DROPDOWN FILTER OBJEK RETRIBUSI
+========================================================= */
+
+.jr-filter-dropdown .dropdown-menu {
+    max-height: 250px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 8px;
+}
+
+/* Item dropdown */
+.jr-filter-dropdown .dropdown-item {
+    color: #333;
+    background-color: transparent;
+    padding: 9px 12px;
+    margin-bottom: 4px;
+    border-radius: 6px;
+    line-height: 1.4;
+}
+
+/* Item terakhir tidak perlu jarak bawah */
+.jr-filter-dropdown .dropdown-item:last-child {
+    margin-bottom: 0;
+}
+
+/* Hover */
+.jr-filter-dropdown .dropdown-item:hover {
+    color: #333;
+    background-color: #f1f3f5;
+}
+
+/* Objek yang sedang aktif - BIRU DONGKER */
+.jr-filter-dropdown .dropdown-item.active,
+.jr-filter-dropdown .dropdown-item:active {
+    color: #fff !important;
+    background-color: #22345A !important;
+}
+
+/* Hover pada item aktif */
+.jr-filter-dropdown .dropdown-item.active:hover {
+    color: #fff !important;
+    background-color: #22345A !important;
 }

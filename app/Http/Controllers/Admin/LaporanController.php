@@ -13,7 +13,6 @@ class LaporanController extends Controller
     public function index(Request $request)
     {
         $perangkatDaerahList = PerangkatDaerah::orderBy('nama_perangkat')->get();
-        $jenisRetribusiList = JenisRetribusi::orderBy('nama_jenis')->get();
 
         $query = LaporanRetribusi::with([
             'perangkatDaerah',
@@ -26,12 +25,6 @@ class LaporanController extends Controller
             });
         }
 
-        if ($request->filled('jenis_retribusi')) {
-            $jenisId = $request->jenis_retribusi;
-            $query->whereHas('laporanDetail.rincian.objek', function ($q) use ($jenisId) {
-                $q->where('jenis_id', $jenisId);
-            });
-        }
 
         if ($request->filled('bulan')) {
             $query->where('bulan', $request->bulan);
@@ -43,7 +36,7 @@ class LaporanController extends Controller
 
         $laporan = $query->latest()->paginate(10)->withQueryString();
 
-        return view('admin.laporan.index', compact('laporan', 'jenisRetribusiList', 'perangkatDaerahList'));
+        return view('admin.laporan.index', compact('laporan', 'perangkatDaerahList'));
     }
 
     public function detail($id)

@@ -268,12 +268,10 @@ class DataRetribusiController extends Controller
     {
         $request->validate([
             'nama_jenis' => 'required|string|max:255',
-            'deskripsi' => 'nullable|string',
         ]);
 
         $jenis->update([
             'nama_jenis' => $request->nama_jenis,
-            'deskripsi' => $request->deskripsi,
         ]);
 
         return back()->with('success', 'Jenis retribusi berhasil diperbarui.');
@@ -326,14 +324,6 @@ class DataRetribusiController extends Controller
         $rincian = $objek->rincian()->create([
             'nama_rincian' => $request->nama_rincian,
         ]);
-
-        $namaDetail = trim($request->nama_detail ?? '');
-
-        if ($namaDetail !== '') {
-            $rincian->detail()->create([
-                'nama_detail' => $namaDetail,
-            ]);
-        }
 
         return back()->with('success', 'Objek retribusi berhasil ditambahkan.');
     }

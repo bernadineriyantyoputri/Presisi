@@ -23,9 +23,8 @@ class DashboardController extends Controller
             ->where('tanggal_verifikasi', '>=', $sevenDaysAgo)
             ->count();
 
-        $laporanDiverifikasiCount = LaporanRetribusi::where('status', 'disetujui')
-            ->where('updated_at', '>=', $sevenDaysAgo)
-            ->count();
+        $laporanMasukCount = LaporanRetribusi::where('created_at', '>=', $sevenDaysAgo)
+    ->count();
 
         $dataRetribusiCount = DetailRetribusi::count();
 
@@ -46,11 +45,11 @@ class DashboardController extends Controller
             : 0;
 
         return view('admin.dashboardadmin', compact(
-            'akunBaruCount',
-            'akunTerverifikasiCount',
-            'laporanDiverifikasiCount',
-            'dataRetribusiCount',
-            'targetPersen',
-        ));
+    'akunBaruCount',
+    'akunTerverifikasiCount',
+    'laporanMasukCount',
+    'dataRetribusiCount',
+    'targetPersen',
+));
     }
 }

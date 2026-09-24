@@ -208,8 +208,11 @@ Route::middleware('auth')
 
         // Detail
         Route::post('/detail', [DataRetribusiController::class, 'storeDetail'])->name('detail.store');
-        Route::put('/detail/{id}', [DataRetribusiController::class, 'updateDetail'])->name('detail.update');
-        Route::delete('/detail/{id}', [DataRetribusiController::class, 'destroyDetail'])->name('detail.destroy');
+        Route::put('/detail/{detail}', [DataRetribusiController::class, 'updateDetail'])
+    ->name('detail.update');
+
+Route::delete('/detail/{detail}', [DataRetribusiController::class, 'destroyDetail'])
+    ->name('detail.destroy');
 
         Route::delete('/rincian-bulk', [DataRetribusiController::class, 'bulkDestroyRincian'])->name('rincian.bulkDestroy');
 

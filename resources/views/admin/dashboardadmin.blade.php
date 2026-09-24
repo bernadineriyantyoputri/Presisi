@@ -34,15 +34,15 @@
                 </div>
 
                 <div class="db-summary-item">
-                    <div class="db-icon-box db-icon-purple">
-                        <i class="bi bi-file-earmark-text-fill"></i>
-                    </div>
-                    <div class="db-summary-label">Laporan Diverifikasi</div>
-                    <div class="db-summary-value">
-                        {{ $laporanDiverifikasiCount ?? 18 }} <span>Laporan</span>
-                    </div>
-                    <div class="db-summary-caption">7 hari terakhir</div>
-                </div>
+    <div class="db-icon-box db-icon-purple">
+        <i class="bi bi-file-earmark-text-fill"></i>
+    </div>
+    <div class="db-summary-label">Laporan Masuk</div>
+    <div class="db-summary-value">
+        {{ $laporanMasukCount ?? 0 }} <span>Laporan</span>
+    </div>
+    <div class="db-summary-caption">7 hari terakhir</div>
+</div>
 
                 <div class="db-summary-item">
                     <div class="db-icon-box db-icon-orange">
@@ -129,7 +129,6 @@
                     </div>
                     <i class="bi bi-arrow-right db-action-arrow"></i>
                 </a>
-
             </div>
         </div>
     </div>
