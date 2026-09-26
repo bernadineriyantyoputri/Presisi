@@ -66,7 +66,21 @@ class DataRetribusiController extends Controller
     public function storeJenis(Request $request)
     {
         $request->validate([
-            'nama_jenis' => 'required|string|max:255',
+            'nama_jenis' => [
+                'required',
+                'string',
+                'max:255',
+                function ($attribute, $value, $fail) {
+                    $exists = JenisRetribusi::whereRaw(
+                        'LOWER(TRIM(nama_jenis)) = ?',
+                        [strtolower(trim($value))]
+                    )->exists();
+
+                    if ($exists) {
+                        $fail('Nama jenis retribusi tersebut sudah ada.');
+                    }
+                },
+            ],
         ]);
 
         JenisRetribusi::create([
@@ -123,14 +137,33 @@ class DataRetribusiController extends Controller
     public function storeRincian(Request $request)
     {
         $request->validate([
-            'objek_id' => 'required',
-            'nama_rincian' => 'required',
+            'objek_id' => 'required|exists:objek_retribusi,id',
+
+            'nama_rincian' => [
+                'required',
+                'string',
+                'max:255',
+                function ($attribute, $value, $fail) use ($request) {
+                    $exists = RincianRetribusi::where('objek_id', $request->objek_id)
+                        ->whereRaw(
+                            'LOWER(TRIM(nama_rincian)) = ?',
+                            [strtolower(trim($value))]
+                        )
+                        ->exists();
+
+                    if ($exists) {
+                        $fail('Nama rincian retribusi tersebut sudah ada pada objek ini.');
+                    }
+                },
+            ],
         ]);
 
         RincianRetribusi::create([
             'objek_id' => $request->objek_id,
-            'nama_rincian' => $request->nama_rincian,
+            'nama_rincian' => trim($request->nama_rincian),
         ]);
+
+
 
         return back()->with('success', 'Rincian berhasil ditambahkan');
     }
@@ -231,13 +264,30 @@ class DataRetribusiController extends Controller
     public function storeDetail(Request $request)
     {
         $request->validate([
-            'rincian_id' => 'required',
-            'nama_detail' => 'required',
+            'rincian_id' => 'required|exists:rincian_retribusi,id',
+
+            'nama_detail' => [
+                'required',
+                'string',
+                'max:255',
+                function ($attribute, $value, $fail) use ($request) {
+                    $exists = DetailRetribusi::where('rincian_id', $request->rincian_id)
+                        ->whereRaw(
+                            'LOWER(TRIM(nama_detail)) = ?',
+                            [strtolower(trim($value))]
+                        )
+                        ->exists();
+
+                    if ($exists) {
+                        $fail('Nama detail retribusi tersebut sudah ada pada rincian ini.');
+                    }
+                },
+            ],
         ]);
 
         DetailRetribusi::create([
             'rincian_id' => $request->rincian_id,
-            'nama_detail' => $request->nama_detail,
+            'nama_detail' => trim($request->nama_detail),
         ]);
 
         return back()->with('success', 'Detail berhasil ditambahkan');
@@ -312,7 +362,30 @@ class DataRetribusiController extends Controller
                 },
             ],
 
-            'nama_rincian' => 'required|string|max:255',
+            'nama_rincian' => [
+                'required',
+                'string',
+                'max:255',
+                function ($attribute, $value, $fail) use ($request) {
+                    $exists = RincianRetribusi::whereHas('objek', function ($query) use ($request) {
+                        $query->where('jenis_id', $request->jenis_id)
+                            ->whereRaw(
+                                'LOWER(TRIM(nama_objek)) = ?',
+                                [strtolower(trim($request->nama_objek))]
+                            );
+                    })
+                        ->whereRaw(
+                            'LOWER(TRIM(nama_rincian)) = ?',
+                            [strtolower(trim($value))]
+                        )
+                        ->exists();
+
+                    if ($exists) {
+                        $fail('Nama rincian retribusi tersebut sudah ada pada objek ini.');
+                    }
+                },
+            ],
+
             'nama_detail' => 'nullable|string|max:255',
         ]);
 

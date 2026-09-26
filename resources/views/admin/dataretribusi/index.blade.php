@@ -7,22 +7,31 @@
 @section('content')
 
     {{-- Header --}}
-        <div class="tgt-header page-header">
-            <h1>Manajemen Referensi Retribusi</h1>
-            <p>Kelola hierarki data retribusi daerah mulai dari jenis hingga detail objek</p>
-        </div>
+    <div class="tgt-header page-header">
+        <h1>Manajemen Referensi Retribusi</h1>
+        <p>Kelola hierarki data retribusi daerah mulai dari jenis hingga detail objek</p>
+    </div>
 
-    @if(session('success'))
-        <div class="jr-alert jr-alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
+   @if(session('success'))
+    <div class="jr-alert jr-alert-success">
+        <i class="bi bi-check-circle me-2"></i>
+        {{ session('success') }}
+    </div>
+@endif
 
-    @if(session('error'))
-        <div class="jr-alert jr-alert-danger">
-            {{ session('error') }}
-        </div>
-    @endif
+@if(session('error'))
+    <div class="jr-alert jr-alert-danger">
+        <i class="bi bi-exclamation-circle me-2"></i>
+        {{ session('error') }}
+    </div>
+@endif
+
+@if($errors->has('nama_jenis'))
+    <div class="jr-alert jr-alert-danger">
+        <i class="bi bi-exclamation-circle me-2"></i>
+        {{ $errors->first('nama_jenis') }}
+    </div>
+@endif
 
     {{-- ================= SECTION: JENIS RETRIBUSI DAERAH ================= --}}
     <div class="jr-section">
@@ -44,25 +53,24 @@
 
             @foreach($data as $jenis)
 
-            @php
-            $itemCount = $jenis->objek_retribusi_count ?? 0;
-            @endphp
+                @php
+                    $itemCount = $jenis->objek_retribusi_count ?? 0;
+                @endphp
 
                 <div class="jr-card">
 
                     <div class="jr-card-top">
                         <div class="jr-icon-box" style="background-color: {{ $jenis->warna ?? '#E7EAF3' }};">
                             <i class="bi 
-                                @if($jenis->nama_jenis == 'Jasa Umum')
-                                    bi-bank2
-                                @elseif($jenis->nama_jenis == 'Jasa Usaha')
-                                    bi-shop-window
-                                @elseif($jenis->nama_jenis == 'Jasa Perizinan Tertentu')
-                                    bi-patch-check
-                                @else
-                                    bi-grid
-                                @endif"
-                                style="color: {{ $jenis->warna_icon ?? '#22345A' }};">
+                                        @if($jenis->nama_jenis == 'Jasa Umum')
+                                            bi-bank2
+                                        @elseif($jenis->nama_jenis == 'Jasa Usaha')
+                                            bi-shop-window
+                                        @elseif($jenis->nama_jenis == 'Jasa Perizinan Tertentu')
+                                            bi-patch-check
+                                        @else
+                                            bi-grid
+                                        @endif" style="color: {{ $jenis->warna_icon ?? '#22345A' }};">
                             </i>
                         </div>
 
@@ -96,7 +104,7 @@
 
                 {{-- Modal Edit Jenis --}}
                 <div class="modal fade" id="modalEditJenis{{ $jenis->id }}" tabindex="-1">
-                <div class="modal-dialog">
+                    <div class="modal-dialog">
                         <form action="{{ route('admin.jenis.update', $jenis->id) }}" method="POST">
                             @csrf
                             @method('PUT')
@@ -111,7 +119,8 @@
                                 <div class="modal-body">
                                     <div class="mb-4">
                                         <label class="form-label">Nama Jenis Retribusi</label>
-                                        <input type="text" name="nama_jenis" class="form-control" value="{{ $jenis->nama_jenis }}" required>
+                                        <input type="text" name="nama_jenis" class="form-control"
+                                            value="{{ $jenis->nama_jenis }}" required>
                                     </div>
                                 </div>
                                 <div class="modal-footer">
@@ -139,8 +148,10 @@
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                 </div>
                                 <div class="modal-body">
-                                    <p>Apakah Anda yakin ingin menghapus jenis retribusi <strong>{{ $jenis->nama_jenis }}</strong>?</p>
-                                    <p class="text-danger small mb-0">Tindakan ini tidak dapat dibatalkan dan dapat memengaruhi data terkait di bawahnya.</p>
+                                    <p>Apakah Anda yakin ingin menghapus jenis retribusi
+                                        <strong>{{ $jenis->nama_jenis }}</strong>?</p>
+                                    <p class="text-danger small mb-0">Tindakan ini tidak dapat dibatalkan dan dapat memengaruhi
+                                        data terkait di bawahnya.</p>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
@@ -159,7 +170,7 @@
 
     {{-- ================= MODAL: TAMBAH JENIS ================= --}}
     <div class="modal fade" id="modalJenis" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
+        <div class="modal-dialog">
             <form action="{{ route('admin.jenis.store') }}" method="POST">
                 @csrf
                 <div class="modal-content jr-modal-content">
@@ -172,9 +183,15 @@
                     </div>
                     <div class="modal-body">
                         <div class="mb-4">
-                            <label class="form-label">Nama Jenis Retribusi</label>
-                            <input type="text" name="nama_jenis" class="form-control" placeholder="Contoh : Jasa Umum" required>
-                        </div>
+    <label class="form-label">Nama Jenis Retribusi</label>
+
+    <input type="text"
+           name="nama_jenis"
+           class="form-control"
+           value="{{ old('nama_jenis') }}"
+           placeholder="Contoh : Jasa Umum"
+           required>
+</div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn jr-btn-cancel" data-bs-dismiss="modal">
@@ -187,6 +204,6 @@
                 </div>
             </form>
         </div>
-    </div> 
+    </div>
 
 @endsection

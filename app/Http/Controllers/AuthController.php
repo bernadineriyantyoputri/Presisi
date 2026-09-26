@@ -26,11 +26,15 @@ class AuthController extends Controller
             'nama_perangkat' => 'required',
             'kepala_perangkat' => 'required',
             'pangkat_golongan' => 'required',
-            'nip' => 'required|min:18|',
+            'nip' => 'required|min:18|unique:perangkat_daerah,nip',
             'bendahara_penerimaan' => 'required',
-            'no_telepon' => 'required',
-            'email' => 'required|email|unique:users,email',
+            'no_telepon' => 'required|unique:perangkat_daerah,no_telepon',
+            'email' => 'required|email|unique:users,email|unique:perangkat_daerah,email',
             'password' => 'required|min:6|confirmed',
+        ], [
+            'nip.unique' => 'NIP tersebut sudah terdaftar.',
+            'no_telepon.unique' => 'Nomor telepon tersebut sudah terdaftar.',
+            'email.unique' => 'Email tersebut sudah terdaftar.',
         ]);
 
         try {
@@ -117,10 +121,8 @@ class AuthController extends Controller
                         'Akun Anda telah dinonaktifkan. Silakan hubungi Admin Bapenda.'
                     );
                 }
-
                 return redirect()->route('perangkat.dashboard');
             }
-
             return redirect('/admin');
         }
 

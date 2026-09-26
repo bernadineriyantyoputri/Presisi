@@ -49,27 +49,23 @@ class DashboardController extends Controller
             ->flatten()
             ->unique(fn ($d) => $d->rincian_id . '-' . $d->detail_retribusi_id);
 
-        $totalRealisasi = $detailTerbaruPerItem->sum('total_realisasi');
+        $laporanTerakhir = (clone $query)
+            ->whereIn('status', ['submit', 'terverifikasi'])
+            ->with('details')
+            ->orderByDesc('tahun')
+            ->orderByDesc('bulan')
+            ->first();
 
-        $targetList = TargetRetribusi::where('tahun', $tahunIni)->get()
-            ->keyBy(fn ($t) => $t->rincian_id . '-' . ($t->detail_id ?? 'null'));
+        $realisasiTarget = 0;
 
-        $totalTarget = $detailTerbaruPerItem->sum(function ($d) use ($targetList) {
-            $key = $d->rincian_id . '-' . ($d->detail_retribusi_id ?? 'null');
-            $target = $targetList->get($key);
+        if ($laporanTerakhir) {
+            $grandTarget = $laporanTerakhir->details->sum('target_snapshot');
+            $grandTotal = $laporanTerakhir->details->sum('total_realisasi');
 
-            if (!$target) {
-                return 0;
+            $realisasiTarget = $grandTarget > 0
+                ? round(($grandTotal / $grandTarget) * 100, 2)
+                : 0;
             }
-
-            return $target->target_aktif === 'perubahan'
-                ? ($target->target_perubahan ?? 0)
-                : ($target->target_nominal ?? 0);
-        });
-
-        $realisasiTarget = $totalTarget > 0
-            ? round(($totalRealisasi / $totalTarget) * 100, 2)
-            : 0;
 
         $laporanTerbaru = (clone $query)
             ->withSum('laporanDetail as jumlah', 'total_realisasi')

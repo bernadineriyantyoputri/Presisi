@@ -173,16 +173,5 @@
         </div>
     </div>
 
-    {{-- Footer Info --}}
-    <div class="audit-banner">
-        <div class="audit-left">
-            <div class="audit-icon"><i class="bi bi-patch-check-fill"></i></div>
-            <div>
-                <h4>Integritas Data Terjamin</h4>
-                <p>Seluruh pendaftaran diproses melalui enkripsi 256-bit dan validasi NIP Kepala Daerah.</p>
-            </div>
-        </div>
-        <button type="button" class="btn-audit">Lihat Laporan Audit</button>
-    </div>
 
 @endsection
